@@ -11,6 +11,9 @@ html {
     overflow: hidden;
 
     overscroll-behavior: none;
+
+    --board-light: #efd7c1;
+    --board-dark: #ac7a67;
 }
 
 body {
@@ -18,9 +21,13 @@ body {
 
     display: grid;
     place-items: center;
+
+    font-family: sans-serif; /* find better font */
 }
 
 .board {
+    position: relative;
+
     width: 512px;
     height: 512px;
 
@@ -29,7 +36,64 @@ body {
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: repeat(8, 1fr);
 
-    background: repeating-conic-gradient(#efd7c1 0 25%, #ac7a67 0 50%) 0 0 / 25% 25%;
+    background: repeating-conic-gradient(var(--board-dark) 0 25%, var(--board-light) 0 50%) 0 0 / 25% 25%;
+}
+
+.files {
+    position: absolute;
+    
+    bottom: 0;
+
+    width: 100%;
+    height: 12.5%;
+    
+    display: flex;
+}
+
+.files > div {
+    width: 12.5%;
+
+    display: grid;
+
+    place-items: end;
+
+    padding: 2px 4px;
+}
+
+.files > div:nth-child(even) {
+    color: var(--board-dark);
+}
+
+.files > div:nth-child(odd) {
+    color: var(--board-light);
+}
+
+.ranks {
+    position: absolute;
+
+    left: 0;
+
+    width: 12.5%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.ranks > div {
+    height: 12.5%;
+
+    display: grid;
+
+    padding: 2px 4px;
+}
+
+.ranks > div:nth-child(even) {
+    color: var(--board-dark);
+}
+
+.ranks > div:nth-child(odd) {
+    color: var(--board-light);
 }
 
 .cell {
@@ -38,8 +102,10 @@ body {
 }
 
 .cell-img {
-    width: 48px;
-    height: 48px;
+    width: 60px;
+    height: 60px;
 
     user-select: none;
+
+    z-index: 10;
 }
