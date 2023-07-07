@@ -3,7 +3,10 @@
     "version": "0.0.1",
     "description": "chess",
     "main": "dist/index.js",
-    "scripts": {},
+    "scripts": {
+        "app:watch": "tsc -w app/index.ts --target esnext --module esnext",
+        "core:watch": "tsc -w"
+    },
     "keywords": [],
     "author": "kelsny <cursors.owo.uwu@gmail.com>",
     "license": "MIT",
