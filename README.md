@@ -10,5 +10,12 @@ https://www.chessprogramming.org/Board_Representation > https://www.chessprogram
 
 - https://www.chessprogramming.org
 
-
 - https://www.wbec-ridderkerk.nl/html/UCIProtocol.html
+
+- https://github.com/SebLague/Chess-AI
+
+- https://www.youtube.com/watch?v=DpXy041BIlA
+
+- https://www.youtube.com/watch?v=U4ogK0MIzqk
+
+- https://www.youtube.com/watch?v=_vqlIPDR2TU

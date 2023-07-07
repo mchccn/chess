@@ -7,7 +7,7 @@
         "app:watch": "tsc -w app/index.ts --target esnext --module esnext",
         "core:watch": "tsc -w"
     },
-    "keywords": [],
+    "keywords": ["chess"],
     "author": "kelsny <cursors.owo.uwu@gmail.com>",
     "license": "MIT",
     "devDependencies": {

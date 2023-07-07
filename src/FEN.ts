@@ -35,7 +35,7 @@ export class FEN {
 
         const sideToMove = colorToMove === "w" ? Piece.White : Piece.Black;
 
-        const enPassantFile = enPassantTarget === "-" ? -1 : BoardRepresentation.fileNames.indexOf(enPassantTarget[0]);
+        const enPassantFile = enPassantTarget === "-" ? 0 : BoardRepresentation.fileNames.indexOf(enPassantTarget[0]) + 1;
 
         const halfmoves = Number(halfmoveClock);
 
@@ -65,7 +65,7 @@ export type FENInfo = {
     squares: number[];
     /** the side to move (Piece.White or Piece.Black) */
     sideToMove: number;
-    /** the file of the en passant target square (-1 if there is no target) */
+    /** the file of the en passant target square (0 if there is no target) */
     enPassantFile: number;
     /** number of halfmoves (50-move draw rule) */
     halfmoves: number;
