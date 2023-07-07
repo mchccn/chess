@@ -1,0 +1,45 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+html {
+    height: 100%;
+
+    overflow: hidden;
+
+    overscroll-behavior: none;
+}
+
+body {
+    height: 100%;
+
+    display: grid;
+    place-items: center;
+}
+
+.board {
+    width: 512px;
+    height: 512px;
+
+    display: grid;
+
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+
+    background: repeating-conic-gradient(#efd7c1 0 25%, #ac7a67 0 50%) 0 0 / 25% 25%;
+}
+
+.cell {
+    display: grid;
+    place-items: center;
+}
+
+.cell-img {
+    width: 48px;
+    height: 48px;
+
+    user-select: none;
+}
