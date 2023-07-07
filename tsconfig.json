@@ -3,7 +3,6 @@
         "target": "esnext",
         "module": "esnext",
         "outDir": "dist",
-        "declaration": true,
         "moduleResolution": "node",
         "resolveJsonModule": true,
         "esModuleInterop": true,
