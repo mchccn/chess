@@ -3,9 +3,7 @@
     "version": "0.0.1",
     "description": "chess",
     "main": "dist/index.js",
-    "scripts": {
-        "wiki": "tsc wiki.ts --target esnext --module esnext --allowSyntheticDefaultImports && node wiki.js && rm wiki.js"
-    },
+    "scripts": {},
     "keywords": [],
     "author": "kelsny <cursors.owo.uwu@gmail.com>",
     "license": "MIT",
