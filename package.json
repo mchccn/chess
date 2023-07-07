@@ -1,0 +1,17 @@
+{
+    "name": "@kelsny/chess",
+    "version": "0.0.1",
+    "description": "chess",
+    "main": "dist/index.js",
+    "scripts": {
+        "wiki": "tsc wiki.ts --target esnext --module esnext --allowSyntheticDefaultImports && node wiki.js && rm wiki.js"
+    },
+    "keywords": [],
+    "author": "kelsny <cursors.owo.uwu@gmail.com>",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/node": "^20.4.0",
+        "typescript": "^5.1.6"
+    },
+    "type": "module"
+}
