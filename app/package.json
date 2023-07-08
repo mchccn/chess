@@ -1,0 +1,22 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack -w"
+  },
+  "keywords": [],
+  "author": "kelly <cursors.owo.uwu@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/ws": "^8.5.5",
+    "ts-loader": "^9.4.4",
+    "typescript": "^5.1.6",
+    "webpack": "^5.88.1",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "ws": "^8.13.0"
+  }
+}

@@ -4,8 +4,7 @@
     "description": "chess",
     "main": "dist/index.js",
     "scripts": {
-        "app:watch": "cd app && tsc -w",
-        "core:watch": "tsc -w"
+        "watch": "tsc -w"
     },
     "keywords": ["chess"],
     "author": "kelsny <cursors.owo.uwu@gmail.com>",

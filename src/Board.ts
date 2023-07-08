@@ -17,9 +17,15 @@ export class Board {
 
     #gameStateHistory: number[] = [];
 
-    constructor () {}
+    #readonly = false;
+
+    constructor (opts?: { readonly?: boolean }) {
+        this.#readonly = opts?.readonly ?? false;
+    }
 
     makeMove(move: Move) {
+        if (this.#readonly) throw new Error("this board is readonly");
+
         this.#squares[move.targetSquare] = this.#squares[move.startSquare];
         this.#squares[move.startSquare] = Piece.None;
     }

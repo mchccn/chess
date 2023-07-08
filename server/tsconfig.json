@@ -3,7 +3,6 @@
         "target": "esnext",
         "module": "esnext",
         "outDir": "dist",
-        "sourceMap": true,
         "moduleResolution": "node",
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,

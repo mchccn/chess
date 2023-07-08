@@ -23,6 +23,27 @@ export class MoveGenerator {
             return distance === 2;
         });
     });
+
+    // king moves one square in every direction
+    static readonly kingOffsets = this.directionOffsets;
+    static readonly kingOffsetsForSquare: number[][] = [...Array(64).keys()].map((i) => {
+        const ifile = i & 0b111;
+        const irank = 7 - (i >> 3);
+
+        return this.kingOffsets.filter((offset) => {
+            const j = i + offset;
+
+            if (j < 0 || j > 63) return false;
+
+            const jfile = j & 0b111;
+            const jrank = 7 - (j >> 3);
+
+            const distance = Math.max(Math.abs(ifile - jfile), Math.abs(irank - jrank));
+
+            return distance === 1;
+        });
+    });
+
     
     static readonly squaresToEdge: [
         north: number,
@@ -57,8 +78,10 @@ export class MoveGenerator {
             // skip if there is no piece or the piece is an enemy piece
             if (!piece || !Piece.isColor(piece, board.colorToMove)) continue;
 
+            // rook, bishop, queen
             if (Piece.isSlidingPiece(piece)) moves.push(...this.#generateSlidingMoves(board, startSquare, piece));
-            if (Piece.isType(piece, Piece.Knight)) moves.push(...this.#generateKnightMoves(board, startSquare, piece));
+            if (Piece.isType(piece, Piece.Knight)) moves.push(...this.#generateKnightMoves(board, startSquare));
+            if (Piece.isType(piece, Piece.King)) moves.push(...this.#generateKingMoves(board, startSquare));
         }
 
         return moves;
@@ -88,10 +111,28 @@ export class MoveGenerator {
         return moves;
     }
 
-    static #generateKnightMoves(board: Board, startSquare: number, piece: number) {
+    static #generateKnightMoves(board: Board, startSquare: number) {
         const moves: Move[] = [];
         
         for (const offset of this.knightOffsetsForSquare[startSquare]) {
+            const targetSquare = startSquare + offset;
+            const pieceOnTarget = board.squares[targetSquare];
+
+            // can't move here if it's a friendly piece
+            if (pieceOnTarget && Piece.isColor(pieceOnTarget, board.colorToMove)) continue;
+
+            moves.push(new Move(startSquare, targetSquare));
+        }
+
+        return moves;
+    }
+
+    static #generateKingMoves(board: Board, startSquare: number) {
+        const moves: Move[] = [];
+
+        // check castling
+
+        for (const offset of this.kingOffsetsForSquare[startSquare]) {
             const targetSquare = startSquare + offset;
             const pieceOnTarget = board.squares[targetSquare];
 
