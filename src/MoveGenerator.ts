@@ -4,6 +4,25 @@ import { Piece } from "./Piece.js";
 
 export class MoveGenerator {
     static readonly directionOffsets = [8, -8, -1, 1, 7, -7, 9, -9];
+
+    static readonly knightOffsets = [15, 17, -17, -15, 10, -6, 6, -10];
+    static readonly knightOffsetsForSquare: number[][] = [...Array(64).keys()].map((i) => {
+        const ifile = i & 0b111;
+        const irank = 7 - (i >> 3);
+
+        return this.knightOffsets.filter((offset) => {
+            const j = i + offset;
+
+            if (j < 0 || j > 63) return false;
+
+            const jfile = j & 0b111;
+            const jrank = 7 - (j >> 3);
+
+            const distance = Math.max(Math.abs(ifile - jfile), Math.abs(irank - jrank));
+
+            return distance === 2;
+        });
+    });
     
     static readonly squaresToEdge: [
         north: number,
@@ -39,6 +58,7 @@ export class MoveGenerator {
             if (!piece || !Piece.isColor(piece, board.colorToMove)) continue;
 
             if (Piece.isSlidingPiece(piece)) moves.push(...this.#generateSlidingMoves(board, startSquare, piece));
+            if (Piece.isType(piece, Piece.Knight)) moves.push(...this.#generateKnightMoves(board, startSquare, piece));
         }
 
         return moves;
@@ -63,6 +83,22 @@ export class MoveGenerator {
                 // captured enemy piece
                 if (pieceOnTarget && !Piece.isColor(pieceOnTarget, board.colorToMove)) break;
             }
+        }
+
+        return moves;
+    }
+
+    static #generateKnightMoves(board: Board, startSquare: number, piece: number) {
+        const moves: Move[] = [];
+        
+        for (const offset of this.knightOffsetsForSquare[startSquare]) {
+            const targetSquare = startSquare + offset;
+            const pieceOnTarget = board.squares[targetSquare];
+
+            // can't move here if it's a friendly piece
+            if (pieceOnTarget && Piece.isColor(pieceOnTarget, board.colorToMove)) continue;
+
+            moves.push(new Move(startSquare, targetSquare));
         }
 
         return moves;

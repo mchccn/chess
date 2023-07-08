@@ -8,7 +8,8 @@ setup();
 // starting position fen "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 // sliding pieces move generation test fen "8/8/4Q3/8/3B4/8/2R5/8 w KQkq - 0 1"
 
-const board = new Board().loadPosition("8/8/4Q3/8/3B4/8/pR2p3/8 w KQkq - 0 1");
+// const board = new Board().loadStartingPosition();
+const board = new Board().loadPosition("8/3N4/4Q3/8/3B4/8/pR2p3/8 w KQkq - 0 1");
 
 const boardElement = document.querySelector(".board")!;
 
