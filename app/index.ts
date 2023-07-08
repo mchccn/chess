@@ -44,7 +44,11 @@ for (let i = 0; i < 64; i++) {
     const imgElement = document.createElement("img");
     imgElement.classList.add("cell-img");
     imgElement.draggable = false;
-    imgElement.src = "assets/pieces/" + iconMap[board.squares[i]];
+
+    const rank = i >> 3;
+    const file = i & 0b111;
+
+    imgElement.src = "assets/pieces/" + iconMap[board.squares[(7 - rank) * 8 + file]];
 
     cellElement.append(imgElement);
     boardElement.append(cellElement);

@@ -17,7 +17,7 @@
         "noImplicitReturns": true,
         "skipDefaultLibCheck": true,
         "skipLibCheck": true,
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
     },
     "include": ["src/**/*.ts"],
     "exclude": ["node_modules"]

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
 *,
 *::before,
 *::after {
@@ -14,6 +16,10 @@ html {
 
     --board-light: #efd7c1;
     --board-dark: #ac7a67;
+    --board-light-highlight: #df3d4d;
+    --board-dark-highlight: #b22731;
+    --board-light-selected: #f6b150;
+    --board-dark-selected: #ea7527;
 }
 
 body {
@@ -22,7 +28,7 @@ body {
     display: grid;
     place-items: center;
 
-    font-family: sans-serif; /* find better font */
+    font-family: "Poppins", sans-serif;
 }
 
 .board {
@@ -58,6 +64,10 @@ body {
     place-items: end;
 
     padding: 2px 4px;
+
+    font-size: 12px;
+
+    user-select: none;
 }
 
 .files > div:nth-child(even) {
@@ -86,6 +96,10 @@ body {
     display: grid;
 
     padding: 2px 4px;
+
+    font-size: 12px;
+
+    user-select: none;
 }
 
 .ranks > div:nth-child(even) {
@@ -102,8 +116,8 @@ body {
 }
 
 .cell-img {
-    width: 60px;
-    height: 60px;
+    width: 64px;
+    height: 64px;
 
     user-select: none;
 

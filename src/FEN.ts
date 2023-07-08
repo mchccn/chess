@@ -39,7 +39,12 @@ export class FEN {
                 const pieceColor = char.toUpperCase() === char ? Piece.White : Piece.Black; 
                 const pieceType = this.#symbolToType[char.toLowerCase()];
 
-                squares[cell++] = pieceColor | pieceType;
+                const rank = cell >> 3
+                const file = cell & 0b111;
+
+                squares[(7 - rank) * 8 + file] = pieceColor | pieceType;
+
+                cell++;
             }
         }
 
@@ -72,7 +77,7 @@ export class FEN {
     static toFENString(board: Board): string {
         let fen = "";
 
-        for (let rank = 0; rank < 8; rank++) {
+        for (let rank = 7; rank >= 0; rank--) {
             for (let file = 0; file < 8; file++) {
                 const cell = board.squares[rank * 8 + file];
 
@@ -90,7 +95,7 @@ export class FEN {
                 }
             }
 
-            if (rank !== 7) fen += "/"
+            if (rank) fen += "/"
         }
 
         fen += " ";
@@ -144,4 +149,4 @@ export type FENInfo = {
     blackCastleKingside: boolean;
     /** black can castle queenside */
     blackCastleQueenside: boolean;
-}
+};
