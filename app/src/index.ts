@@ -1,4 +1,5 @@
-import { Board, BoardRepresentation, MoveGenerator, Piece } from "../dist/index.js";
+import { Move } from "../../dist/Move.js";
+import { Board, BoardRepresentation, MoveGenerator, Piece } from "../../dist/index.js";
 
 const iconMap = {
     [Piece.None]: "none.svg",
@@ -19,7 +20,7 @@ const iconMap = {
 // starting position fen "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 // sliding pieces move generation test fen "8/8/4Q3/8/3B4/8/2R5/8 w KQkq - 0 1"
 
-const board = new Board().loadPosition("8/8/4Q3/8/3B4/8/2R5/8 w KQkq - 0 1");
+const board = new Board().loadPosition("8/8/4Q3/8/3B4/8/pR2p3/8 w KQkq - 0 1");
 
 const filesElement = document.querySelector(".files")!;
 const ranksElement = document.querySelector(".ranks")!;
@@ -40,12 +41,9 @@ for (const r of BoardRepresentation.rankNames) {
 
 const boardElement = document.querySelector(".board")!;
 
-const moves = MoveGenerator.generateMoves(board);
-
-console.log(moves.map((m) => ({ start: m.startSquare, target: m.targetSquare })))
-
 const state = {
     selected: -1,
+    moves: MoveGenerator.generateMoves(board),
 };
 
 function render() {
@@ -76,7 +74,7 @@ function render() {
             cellElement.classList.add(isLightSquare ? "light-selected" : "dark-selected")
         }
 
-        if (moves.some((move) => move.startSquare === state.selected && move.targetSquare === index)) {
+        if (state.moves.some((move) => Move.equals(move, new Move(state.selected, index)))) {
             cellElement.classList.add(isLightSquare ? "light-highlighted" : "dark-highlighted");
         }
     }
@@ -91,19 +89,39 @@ boardElement.addEventListener("click", (e) => {
 
     if (!cell) return;
 
+    // selected the same cell
     if (state.selected === Number(cell.dataset.index)) {
         state.selected = -1;
-
-        render();
     } else {
-        state.selected = Number(cell.dataset.index);
+        const index = Number(cell.dataset.index);
 
-        if (board.squares[state.selected] === Piece.None || !Piece.isColor(board.squares[state.selected], board.colorToMove)) {
+        const attemptedMove = state.moves.find((move) => Move.equals(move, new Move(state.selected, Number(cell.dataset.index))));
+
+        if (attemptedMove) {
+            // made a move, deselect cell
             state.selected = -1;
 
-            render();
+            if (attemptedMove.moveFlag === Move.Flag.Castling) {
+                new Audio("assets/sounds/castle.mp3").play();
+            } else if (attemptedMove.isPromotion) {
+                new Audio("assets/sounds/move-promote.mp3").play();
+            } else if (attemptedMove.moveFlag === Move.Flag.EnPassantCapture || (board.squares[attemptedMove.targetSquare] && !Piece.isColor(board.squares[attemptedMove.targetSquare], board.colorToMove))) {
+                new Audio("assets/sounds/capture.mp3").play();
+            } else {
+                new Audio("assets/sounds/move-self.mp3").play();
+            }
+
+            // move on board
+            board.makeMove(attemptedMove);
+
+            state.moves = MoveGenerator.generateMoves(board);
+        } else if (board.squares[index] === Piece.None || !Piece.isColor(board.squares[index], board.colorToMove)) {
+            // can't select enemy piece or empty cell
+            state.selected = -1;
         } else {
-            render();
+            state.selected = index;
         }
     }
+
+    render();
 });

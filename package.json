@@ -4,7 +4,7 @@
     "description": "chess",
     "main": "dist/index.js",
     "scripts": {
-        "app:watch": "tsc -w app/index.ts --target esnext --module esnext",
+        "app:watch": "cd app && tsc -w",
         "core:watch": "tsc -w"
     },
     "keywords": ["chess"],
