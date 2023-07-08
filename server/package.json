@@ -14,6 +14,7 @@
   "dependencies": {
     "@fastify/static": "^6.10.2",
     "@fastify/websocket": "^8.1.0",
+    "dotenv": "^16.3.1",
     "fastify": "^4.19.2"
   },
   "devDependencies": {

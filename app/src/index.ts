@@ -4,6 +4,15 @@ import { iconMap } from "./iconMap.js";
 import { setup } from "./setup.js";
 import { ws } from "./ws.js";
 
+ws.addEventListener("open", () => {
+    ws.send("uci");
+});
+
+// implement UCI
+ws.addEventListener("message", ({ data: message }) => {
+    console.log(message);
+});
+
 setup();
 
 // starting position fen "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
