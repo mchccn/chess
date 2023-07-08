@@ -1,4 +1,5 @@
 import { FEN } from "./FEN.js";
+import { Move } from "./Move.js";
 import { Piece } from "./Piece.js";
 
 export class Board {
@@ -17,6 +18,11 @@ export class Board {
     #gameStateHistory: number[] = [];
 
     constructor () {}
+
+    makeMove(move: Move) {
+        this.#squares[move.targetSquare] = this.#squares[move.startSquare];
+        this.#squares[move.startSquare] = Piece.None;
+    }
 
     get squares() {
         return [...this.#squares];

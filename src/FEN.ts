@@ -39,10 +39,10 @@ export class FEN {
                 const pieceColor = char.toUpperCase() === char ? Piece.White : Piece.Black; 
                 const pieceType = this.#symbolToType[char.toLowerCase()];
 
-                const rank = cell >> 3
+                const rank = 7 - (cell >> 3);
                 const file = cell & 0b111;
 
-                squares[(7 - rank) * 8 + file] = pieceColor | pieceType;
+                squares[rank * 8 + file] = pieceColor | pieceType;
 
                 cell++;
             }
