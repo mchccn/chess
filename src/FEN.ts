@@ -24,7 +24,7 @@ export class FEN {
     };
 
     static fromFENString(fen: string): FENInfo {
-        const [positions, colorToMove, castlingRights, enPassantTarget, halfmoveClock, fullmoveNumber] = fen.split(" ");
+        const [positions, sideToMove, castlingRights, enPassantTarget, halfmoveClock, fullmoveNumber] = fen.split(" ");
 
         const squares = new Array<number>(64).fill(0);
 
@@ -48,7 +48,7 @@ export class FEN {
             }
         }
 
-        const sideToMove = colorToMove === "w" ? Piece.White : Piece.Black;
+        const colorToMove = sideToMove === "w" ? Piece.White : Piece.Black;
 
         const enPassantFile = enPassantTarget === "-" ? 0 : BoardRepresentation.fileNames.indexOf(enPassantTarget[0]) + 1;
 
@@ -63,7 +63,7 @@ export class FEN {
 
         return {
             squares,
-            sideToMove,
+            colorToMove,
             enPassantFile,
             halfmoves,
             fullmoves,
@@ -99,7 +99,7 @@ export class FEN {
         }
 
         fen += " ";
-        fen += board.sideToMove === Piece.White ? "w" : "b";
+        fen += board.colorToMove === Piece.White ? "w" : "b";
 
         fen += " ";
         fen += (board.currentGameState >> 0 & 1) === 1 ? "K" : "";
@@ -115,7 +115,7 @@ export class FEN {
         if (!enPassantFile) {
             fen += "-";
         } else {
-            const enPassantRank = board.sideToMove === Piece.White ? 6 : 3;
+            const enPassantRank = board.colorToMove === Piece.White ? 6 : 3;
             
             fen += BoardRepresentation.fileNames[enPassantFile - 1] + enPassantRank;
         }
@@ -134,7 +134,7 @@ export type FENInfo = {
     /** the piece positions on the board */
     squares: number[];
     /** the side to move (Piece.White or Piece.Black) */
-    sideToMove: number;
+    colorToMove: number;
     /** the file of the en passant target square (0 if there is no target) */
     enPassantFile: number;
     /** number of halfmoves (50-move draw rule) */

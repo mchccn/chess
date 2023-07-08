@@ -4,7 +4,7 @@ import { Piece } from "./Piece.js";
 export class Board {
     #squares = new Array<number>(64).fill(0);
     
-    #sideToMove = 0;
+    #colorToMove = 0;
     
     #plyCount = 0;
 
@@ -22,8 +22,8 @@ export class Board {
         return [...this.#squares];
     }
 
-    get sideToMove() {
-        return this.#sideToMove;
+    get colorToMove() {
+        return this.#colorToMove;
     }
 
     get plyCount() {
@@ -48,8 +48,8 @@ export class Board {
         const info = FEN.fromFENString(fen);
 
         this.#squares = info.squares;
-        this.#sideToMove = info.sideToMove;
-        this.#plyCount = (info.fullmoves - 1) * 2 + (info.sideToMove === Piece.White ? 0 : 1);
+        this.#colorToMove = info.colorToMove;
+        this.#plyCount = (info.fullmoves - 1) * 2 + (info.colorToMove === Piece.White ? 0 : 1);
         this.#fiftyMoveCounter = info.halfmoves;
 
         const whiteCastlingRights = ((info.whiteCastleKingside) ? 1 << 0 : 0) | ((info.whiteCastleQueenside) ? 1 << 1 : 0);
