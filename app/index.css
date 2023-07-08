@@ -16,8 +16,8 @@ html {
 
     --board-light: #efd7c1;
     --board-dark: #ac7a67;
-    --board-light-highlight: #df3d4d;
-    --board-dark-highlight: #b22731;
+    --board-light-highlighted: #df3d4d;
+    --board-dark-highlighted: #b22731;
     --board-light-selected: #f6b150;
     --board-dark-selected: #ea7527;
 }
@@ -31,6 +31,30 @@ body {
     font-family: "Poppins", sans-serif;
 }
 
+.light {
+    background-color: var(--board-light);
+}
+
+.dark {
+    background-color: var(--board-dark);
+}
+
+.light-highlighted {
+    background-color: var(--board-light-highlighted);
+}
+
+.dark-highlighted {
+    background-color: var(--board-dark-highlighted);
+}
+
+.light-selected {
+    background-color: var(--board-light-selected);
+}
+
+.dark-selected {
+    background-color: var(--board-dark-selected);
+}
+
 .board {
     position: relative;
 
@@ -41,8 +65,6 @@ body {
 
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: repeat(8, 1fr);
-
-    background: repeating-conic-gradient(var(--board-dark) 0 25%, var(--board-light) 0 50%) 0 0 / 25% 25%;
 }
 
 .files {
