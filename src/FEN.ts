@@ -1,3 +1,4 @@
+import { Board } from "./Board.js";
 import { BoardRepresentation } from "./BoardRepresentation.js";
 import { Piece } from "./Piece.js";
 
@@ -11,6 +12,15 @@ export class FEN {
         b: Piece.Bishop,
         r: Piece.Rook,
         q: Piece.Queen,
+    };
+
+    static readonly #typeToSymbol: Record<number, string> = {
+        [Piece.King  ]: "k",
+        [Piece.Pawn  ]: "p",
+        [Piece.Knight]: "n",
+        [Piece.Bishop]: "b",
+        [Piece.Rook  ]: "r",
+        [Piece.Queen ]: "q",
     };
 
     static fromFENString(fen: string): FENInfo {
@@ -57,6 +67,61 @@ export class FEN {
             blackCastleKingside,
             blackCastleQueenside,
         };
+    }
+
+    static toFENString(board: Board): string {
+        let fen = "";
+
+        for (let rank = 0; rank < 8; rank++) {
+            for (let file = 0; file < 8; file++) {
+                const cell = board.squares[rank * 8 + file];
+
+                const j = file;
+
+                while (!board.squares[rank * 8 + file] && file < 8) file++;
+
+                if (file !== j) {
+                    fen += file-- - j;
+                } else {
+                    const type = Piece.getType(cell);
+                    const casing = Piece.getColor(cell) === Piece.White ? "toUpperCase" : "toLowerCase";
+
+                    fen += this.#typeToSymbol[type][casing]();
+                }
+            }
+
+            if (rank !== 7) fen += "/"
+        }
+
+        fen += " ";
+        fen += board.sideToMove === Piece.White ? "w" : "b";
+
+        fen += " ";
+        fen += (board.currentGameState >> 0 & 1) === 1 ? "K" : "";
+        fen += (board.currentGameState >> 1 & 1) === 1 ? "Q" : "";
+        fen += (board.currentGameState >> 2 & 1) === 1 ? "k" : "";
+        fen += (board.currentGameState >> 3 & 1) === 1 ? "q" : "";
+        fen += (board.currentGameState & 0b1111) === 0 ? "-" : "";
+
+        const enPassantFile = board.currentGameState >> 4 & 0b1111;
+
+        fen += " ";
+
+        if (!enPassantFile) {
+            fen += "-";
+        } else {
+            const enPassantRank = board.sideToMove === Piece.White ? 6 : 3;
+            
+            fen += BoardRepresentation.fileNames[enPassantFile - 1] + enPassantRank;
+        }
+
+        fen += " ";
+        fen += board.fiftyMoveCounter;
+
+        fen += " ";
+        fen += Math.floor(board.plyCount / 2) + 1;
+
+        return fen;
     }
 }
 

@@ -3,9 +3,9 @@ export class Piece {
     static readonly King   = 0b00001;
     static readonly Pawn   = 0b00010;
     static readonly Knight = 0b00011;
-    static readonly Bishop = 0b00100;
-    static readonly Rook   = 0b00101;
-    static readonly Queen  = 0b00110;
+    static readonly Bishop = 0b00101;
+    static readonly Rook   = 0b00110;
+    static readonly Queen  = 0b00111;
 
     static readonly White  = 0b01000;
     static readonly Black  = 0b10000;

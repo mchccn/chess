@@ -1,9 +1,6 @@
-import { Board, BoardRepresentation, FEN, Piece } from "../dist/index.js";
+import { Board, BoardRepresentation, Piece } from "../dist/index.js";
 
-const board = new Board();
-
-//@ts-ignore
-board.squares = FEN.fromFENString(FEN.startingPosition).squares;
+const board = new Board().loadStartingPosition();
 
 const iconMap = {
     [Piece.None]: "none.svg",
