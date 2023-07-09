@@ -10,8 +10,8 @@ setup();
 // sliding pieces move generation test fen "8/8/4Q3/8/3B4/8/2R5/8 w KQkq - 0 1"
 
 // this variable holds the original state of the board
-// const startpos = "startpos";
-const startpos = "K7/3N4/4Q3/8/3B4/8/pR2p3/8 w KQkq - 0 1";
+const startpos = "startpos";
+// const startpos = "K7/3N4/4Q3/8/3B4/8/pR2p3/8 w KQkq - 0 1";
 
 // const board = new Board().loadStartingPosition();
 const board = new Board().loadPosition(startpos);
