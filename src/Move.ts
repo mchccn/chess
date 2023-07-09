@@ -1,6 +1,5 @@
-import { Board } from "./Board.js";
-import { BoardRepresentation } from "./BoardRepresentation.js";
-import { Piece } from "./Piece.js";
+import { Board, BoardRepresentation, Piece } from "./index.js";
+
 
 export class Move {
     static readonly Flag = {

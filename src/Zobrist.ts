@@ -1,17 +1,16 @@
-import { Board } from "./Board.js";
-import { Piece } from "./Piece.js";
+import { Board, Piece } from "./index.js";
 
 export class Zobrist {
     static filename = "zobrist.txt";
 
     // piece type, piece color, square index (8, 2, 64)
-    static readonly piecesArray: bigint[][][] = [];
+    static readonly piecesArray: [bigint[], bigint[]][] = [];
     // 16 possible states of castling rights
     static readonly castlingRights: bigint[] = [];
     // 8 files + no en passant file = 8 + 1 -> 9
     static readonly enPassantFile: bigint[] = [];
-    // this is added only when it is black's turn
-    static readonly isBlacksTurn: bigint = this.#randomU64();
+    // used every turn
+    static readonly sideToMove: bigint = this.#randomU64();
 
     static {
         for (let pieceIndex = 0; pieceIndex < 8; pieceIndex++) {
@@ -44,7 +43,7 @@ export class Zobrist {
 
         zobristKey ^= this.enPassantFile[enPassantIndex];
 
-        if (board.colorToMove === Piece.Black) zobristKey ^= this.isBlacksTurn;
+        if (board.colorToMove === Piece.Black) zobristKey ^= this.sideToMove;
 
         zobristKey ^= this.castlingRights[board.currentGameState & 0b1111];
 

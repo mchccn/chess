@@ -1,6 +1,4 @@
-import { Board } from "./Board.js";
-import { BoardRepresentation } from "./BoardRepresentation.js";
-import { Piece } from "./Piece.js";
+import { Board, BoardRepresentation, Piece } from "./index.js";
 
 export class FEN {
     static readonly startingPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";

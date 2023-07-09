@@ -1,6 +1,4 @@
-import { Board } from "./Board.js";
-import { Move } from "./Move.js";
-import { Piece } from "./Piece.js";
+import { Board, Move, Piece } from "./index.js";
 
 export class MoveGenerator {
     static readonly directionOffsets = [8, -8, -1, 1, 7, -7, 9, -9];
