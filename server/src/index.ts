@@ -9,7 +9,20 @@ import url from "url";
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const app = fastify({ logger: { file: `logs/${Date.now()}.log` } });
+// const logger = { file: `logs/${Date.now()}.log` };
+const logger = {
+    level: "trace",
+    transport: {
+        target: "pino-pretty",
+        options: {
+            translateTime: true,
+            ignore: "pid,hostname,reqId,responseTime,req,res",
+            messageFormat: "{msg} [{req.method} {req.url}]",
+        },
+    },
+};
+
+const app = fastify({ logger, disableRequestLogging: true });
 
 app.register(fastifyWebsocket);
 
@@ -26,28 +39,32 @@ app.register((app, _, done) => {
             silent: true,
         });
 
-        conn.socket.on("error", (error) => app.log.error(error, "error in ws"));
+        engineProcess.stderr!.on("data", (data) => app.log.error("error in worker: " + data))
 
-        engineProcess.on("error", (error) => app.log.error(error, "error in worker"));
+        conn.socket.on("error", (error) => app.log.error("error in ws: " + error.message));
+
+        engineProcess.on("error", (error) =>
+            app.log.error("error in worker: " + error.message),
+        );
 
         conn.socket.on("message", (message) => engineProcess.send(message));
 
         engineProcess.on("message", (message) => {
             const { data } = message as { data: number[] };
-            
+
             const response = typeof message === "string" ? message : Buffer.from(data).toString("utf8");
-            
+
             conn.socket.send(response);
         });
 
         conn.socket.on("close", (code) => {
-            app.log.info(code, "ws closed");
+            app.log.info("ws closed with code: " + code);
 
             engineProcess.kill();
         });
 
         engineProcess.on("close", (code) => {
-            app.log.info(code, "worker closed");
+            app.log.info("worker closed with code: " + code);
 
             conn.socket.close();
 

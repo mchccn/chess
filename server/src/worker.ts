@@ -90,10 +90,12 @@ process.on("message", (message) => {
             return;
         };
         case "position": {
-            if (args[0] === "startpos") board.loadStartingPosition();
-            else board.loadPosition(args.slice(0, 6).join(" "));            
+            if (args[0] === "startpos") (board.loadStartingPosition(), args.shift());
+            else board.loadPosition(args.splice(0, 6).join(" "));
+            
+            args.shift(); // remove "moves"
 
-            for (const lan of (args[0] === "startpos" ? args.slice(1) : args.slice(6))) {
+            for (const lan of args) {
                 const move = Move.parseMove(lan, board);
 
                 board.makeMove(move);
