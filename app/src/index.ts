@@ -153,7 +153,7 @@ boardElement.addEventListener("click", (e) => {
                 new Audio("assets/sounds/castle.mp3").play();
             } else if (attemptedMove.isPromotion) {
                 new Audio("assets/sounds/move-promote.mp3").play();
-            } else if (attemptedMove.moveFlag === Move.Flag.EnPassantCapture || (board.squares[attemptedMove.targetSquare] && !Piece.isColor(board.squares[attemptedMove.targetSquare], board.colorToMove))) {
+            } else if (attemptedMove.moveFlag === Move.Flag.EnPassantCapture || (board.squares[attemptedMove.targetSquare] !== Piece.None && !Piece.isColor(board.squares[attemptedMove.targetSquare], board.colorToMove))) {
                 new Audio("assets/sounds/capture.mp3").play();
             } else {
                 new Audio("assets/sounds/move-self.mp3").play();

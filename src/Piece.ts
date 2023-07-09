@@ -18,14 +18,10 @@ export class Piece {
     }
 
     static getColor(piece: number) {
-        if (piece === Piece.None) throw new TypeError("cannot get color of Piece.None");
-
         return piece & this.#colorMask;
     }
 
     static getType(piece: number) {
-        if (piece === Piece.None) throw new TypeError("cannot get type of Piece.None");
-
         return piece & this.#typeMask;
     }
 
@@ -34,20 +30,14 @@ export class Piece {
     }
 
     static isRookOrQueen(piece: number) {
-        if (piece === Piece.None) throw new TypeError("cannot get type of Piece.None");
-
         return (piece & 0b110) === 0b110;
     }
 
     static isBishopOrQueen(piece: number) {
-        if (piece === Piece.None) throw new TypeError("cannot get type of Piece.None");
-
         return (piece & 0b101) === 0b101;
     }
 
     static isSlidingPiece(piece: number) {
-        if (piece === Piece.None) throw new TypeError("cannot get type of Piece.None");
-        
         return (piece & 0b100) !== 0;
     }
 }

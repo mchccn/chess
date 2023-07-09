@@ -76,7 +76,7 @@ export class MoveGenerator {
             const piece = board.squares[startSquare];
 
             // skip if there is no piece or the piece is an enemy piece
-            if (!piece || !Piece.isColor(piece, board.colorToMove)) continue;
+            if (piece === Piece.None || !Piece.isColor(piece, board.colorToMove)) continue;
 
             // rook, bishop, queen
             if (Piece.isSlidingPiece(piece)) moves.push(...this.#generateSlidingMoves(board, startSquare, piece));
@@ -99,12 +99,12 @@ export class MoveGenerator {
                 const pieceOnTarget = board.squares[targetSquare];
 
                 // blocked by friendly piece
-                if (pieceOnTarget && Piece.isColor(pieceOnTarget, board.colorToMove)) break;
+                if (pieceOnTarget !== Piece.None && Piece.isColor(pieceOnTarget, board.colorToMove)) break;
 
                 moves.push(new Move(startSquare, targetSquare));
 
                 // captured enemy piece
-                if (pieceOnTarget && !Piece.isColor(pieceOnTarget, board.colorToMove)) break;
+                if (pieceOnTarget !== Piece.None && !Piece.isColor(pieceOnTarget, board.colorToMove)) break;
             }
         }
 
@@ -119,7 +119,7 @@ export class MoveGenerator {
             const pieceOnTarget = board.squares[targetSquare];
 
             // can't move here if it's a friendly piece
-            if (pieceOnTarget && Piece.isColor(pieceOnTarget, board.colorToMove)) continue;
+            if (pieceOnTarget !== Piece.None && Piece.isColor(pieceOnTarget, board.colorToMove)) continue;
 
             moves.push(new Move(startSquare, targetSquare));
         }
@@ -137,7 +137,7 @@ export class MoveGenerator {
             const pieceOnTarget = board.squares[targetSquare];
 
             // can't move here if it's a friendly piece
-            if (pieceOnTarget && Piece.isColor(pieceOnTarget, board.colorToMove)) continue;
+            if (pieceOnTarget !== Piece.None && Piece.isColor(pieceOnTarget, board.colorToMove)) continue;
 
             moves.push(new Move(startSquare, targetSquare));
         }

@@ -3,6 +3,9 @@ import { Move } from "./Move.js";
 import { Piece } from "./Piece.js";
 
 export class Board {
+    static readonly whiteIndex = 0;
+    static readonly blackIndex = 1;
+
     #squares = new Array<number>(64).fill(0);
     
     #colorToMove = 0;
@@ -20,8 +23,46 @@ export class Board {
     constructor () {}
 
     makeMove(move: Move) {
-        this.#squares[move.targetSquare] = this.#squares[move.startSquare];
-        this.#squares[move.startSquare] = Piece.None;
+        const enPassantFile     = (this.#currentGameState >> 4) & 0b1111;
+        const castlingRights    = (this.#currentGameState >> 0) & 0b1111;
+        let   newCastlingRights = castlingRights;
+        
+        this.#currentGameState  = 0;
+
+        const movedFrom         = move.startSquare ;
+        const movedTo           = move.targetSquare;
+        const pieceOnStart      = this.#squares[move.startSquare ];
+        const pieceOnTarget     = this.#squares[move.targetSquare];
+        const pieceOnStartType  = Piece.getType(pieceOnStart );
+        const pieceOnTargetType = Piece.getType(pieceOnTarget);
+
+        this.#currentGameState |= pieceOnTargetType << 8;
+        
+        // if (capturedPieceType !== 0 && move.moveFlag !== Move.Flag.EnPassantCapture) {
+        //     zobrist ^= 
+        //     ZobristKey ^= Zobrist.piecesArray[capturedPieceType, opponentColourIndex, moveTo];
+        //     GetPieceList (capturedPieceType, opponentColourIndex).RemovePieceAtSquare (moveTo);
+        // }
+
+        if (move.moveFlag === Move.Flag.None) {
+            this.#squares[move.targetSquare] = this.#squares[move.startSquare];
+            this.#squares[move.startSquare] = Piece.None;
+        } else {
+            
+        }
+
+        this.#plyCount++;
+        this.#fiftyMoveCounter++;
+        
+        // reset fifty move counter if a pawn was pushed or if a capture was made
+        if (Piece.isType(pieceOnStart, Piece.Pawn) || (pieceOnTarget !== Piece.None && !Piece.isColor(pieceOnTarget, this.#colorToMove)))
+            this.#fiftyMoveCounter = 0;
+
+        this.#colorToMove = this.#colorToMove === Piece.White ? Piece.Black : Piece.White;
+    }
+
+    unmakeMove(move: Move) {
+        // ?
     }
 
     get squares() {
