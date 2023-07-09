@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Mono&family=Poppins&display=swap');
 
 *,
 *::before,
@@ -29,6 +29,27 @@ body {
     place-items: center;
 
     font-family: "Poppins", sans-serif;
+}
+
+.log {
+    font-family: "Fira Mono", monospace;
+
+    white-space: pre;
+
+    background: rgba(255, 255, 255, 0.75);
+
+    position: fixed;
+    
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+
+    z-index: 100;
+
+    display: none;
+
+    padding: 8px;
 }
 
 .light {

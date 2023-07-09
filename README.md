@@ -2,6 +2,8 @@
 
 chess
 
+i know shits really messy in app/ and server/ but src/ is where it really shines :D
+
 **cpw breadcrumb trail**
 
 https://www.chessprogramming.org/Board_Representation > https://www.chessprogramming.org/Move_Generation > https://www.chessprogramming.org/Encoding_Moves > https://www.chessprogramming.org/Perft

@@ -35,7 +35,7 @@ app.register((app, _, done) => {
         engineProcess.on("message", (message) => {
             const { data } = message as { data: number[] };
             
-            const response = Buffer.from(data).toString("utf8");
+            const response = typeof message === "string" ? message : Buffer.from(data).toString("utf8");
             
             conn.socket.send(response);
         });
@@ -49,7 +49,7 @@ app.register((app, _, done) => {
         engineProcess.on("close", (code) => {
             app.log.info(code, "worker closed");
 
-            conn.socket.close(code ?? undefined);
+            conn.socket.close();
 
             engineProcess.kill();
         });

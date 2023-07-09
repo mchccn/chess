@@ -3,9 +3,7 @@
     "version": "0.0.1",
     "description": "chess",
     "main": "dist/index.js",
-    "scripts": {
-        "watch": "tsc -w"
-    },
+    "scripts": {},
     "keywords": ["chess"],
     "author": "kelsny <cursors.owo.uwu@gmail.com>",
     "license": "MIT",

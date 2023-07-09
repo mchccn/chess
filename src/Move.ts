@@ -1,3 +1,4 @@
+import { Board } from "./Board.js";
 import { BoardRepresentation } from "./BoardRepresentation.js";
 import { Piece } from "./Piece.js";
 
@@ -55,7 +56,48 @@ export class Move {
     }
 
     get name() {
-        return BoardRepresentation.squareName(this.startSquare) + BoardRepresentation.squareName(this.targetSquare);
+        let name = BoardRepresentation.squareName(this.startSquare) + BoardRepresentation.squareName(this.targetSquare);
+
+        if (this.isPromotion) {
+            if (this.moveFlag === Move.Flag.PromoteToQueen) name += "q";
+            if (this.moveFlag === Move.Flag.PromoteToRook) name += "r";
+            if (this.moveFlag === Move.Flag.PromoteToBishop) name += "b";
+            if (this.moveFlag === Move.Flag.PromoteToKnight) name += "n";
+        }
+
+        return name;
+    }
+
+    static #moveRegex = /^(?<start>[a-h][1-8])(?<target>[a-h][1-8])(?<promotion>q|r|b|n)?$/
+
+    // board is needed for context (for castling/en passant/double pawn push)
+    static parseMove(move: string, board: Board) {
+        if (!this.#moveRegex.test(move)) return this.invalidMove();
+
+        const { start, target, promotion } = move.match(this.#moveRegex)!.groups!;
+
+        const startFile  = BoardRepresentation.fileNames.indexOf(start[0]);
+        const startRank  = BoardRepresentation.rankNames.indexOf(start[1]);
+
+        const targetFile = BoardRepresentation.fileNames.indexOf(target[0]);
+        const targetRank = BoardRepresentation.rankNames.indexOf(target[1]);
+
+        let moveFlag = 0;
+
+        if (promotion) {
+            if (promotion === "q") moveFlag = Move.Flag.PromoteToQueen;
+            if (promotion === "r") moveFlag = Move.Flag.PromoteToRook;
+            if (promotion === "b") moveFlag = Move.Flag.PromoteToBishop;
+            if (promotion === "n") moveFlag = Move.Flag.PromoteToKnight;
+        } else {
+            // check for castling/en passant/double pawn push using board
+        }
+
+        return new Move(
+            BoardRepresentation.indexFromCoord(startFile, startRank),
+            BoardRepresentation.indexFromCoord(targetFile, targetRank),
+            moveFlag,
+        );
     }
 
     static equals(a: Move, b: Move) {
