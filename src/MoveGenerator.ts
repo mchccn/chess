@@ -46,14 +46,14 @@ export class MoveGenerator {
 
     
     static readonly squaresToEdge: [
-        north: number,
-        south: number,
-        west: number,
-        east: number,
-        minNW: number,
-        minSE: number, 
-        minNE: number,
-        minSW: number,
+        north : number,
+        south : number,
+        west  : number,
+        east  : number,
+        minNW : number,
+        minSE : number, 
+        minNE : number,
+        minSW : number,
     ][] = [...Array(64).keys()].map((i) => {
         const north = 7 - (i >> 3);
         const south = i >> 3;

@@ -59,8 +59,8 @@ export class Move {
         let name = BoardRepresentation.squareName(this.startSquare) + BoardRepresentation.squareName(this.targetSquare);
 
         if (this.isPromotion) {
-            if (this.moveFlag === Move.Flag.PromoteToQueen) name += "q";
-            if (this.moveFlag === Move.Flag.PromoteToRook) name += "r";
+            if (this.moveFlag === Move.Flag.PromoteToQueen ) name += "q";
+            if (this.moveFlag === Move.Flag.PromoteToRook  ) name += "r";
             if (this.moveFlag === Move.Flag.PromoteToBishop) name += "b";
             if (this.moveFlag === Move.Flag.PromoteToKnight) name += "n";
         }
@@ -85,8 +85,8 @@ export class Move {
         let moveFlag = 0;
 
         if (promotion) {
-            if (promotion === "q") moveFlag = Move.Flag.PromoteToQueen;
-            if (promotion === "r") moveFlag = Move.Flag.PromoteToRook;
+            if (promotion === "q") moveFlag = Move.Flag.PromoteToQueen ;
+            if (promotion === "r") moveFlag = Move.Flag.PromoteToRook  ;
             if (promotion === "b") moveFlag = Move.Flag.PromoteToBishop;
             if (promotion === "n") moveFlag = Move.Flag.PromoteToKnight;
         } else {
