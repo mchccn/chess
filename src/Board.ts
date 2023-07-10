@@ -299,7 +299,7 @@ export class Board {
     }
 
     loadPosition(fen: string) {
-        const info = FEN.fromFENString(fen === "startpos" ? FEN.startingPosition : fen);
+        const info = FEN.fromFENString(fen);
 
         this.#squares = info.squares;
         this.#colorToMove = info.colorToMove;

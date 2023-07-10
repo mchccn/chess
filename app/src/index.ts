@@ -1,5 +1,5 @@
 import { Move } from "../../dist/Move.js";
-import { Board, BoardRepresentation, MoveGenerator, Piece } from "../../dist/index.js";
+import { Board, BoardRepresentation, FEN, MoveGenerator, Piece } from "../../dist/index.js";
 import { iconMap } from "./iconMap.js";
 import { logElement, setup } from "./setup.js";
 import { ws } from "./ws.js";
@@ -10,7 +10,7 @@ setup();
 // sliding pieces move generation test fen "8/8/4Q3/8/3B4/8/2R5/8 w KQkq - 0 1"
 
 // this variable holds the original state of the board
-const startpos = "startpos";
+const startpos = FEN.startingPosition;
 // const startpos = "K7/3N4/4Q3/8/3B4/8/pR2p3/8 w KQkq - 0 1";
 
 // const board = new Board().loadStartingPosition();
@@ -45,7 +45,7 @@ ws.addEventListener("message", ({ data: message }) => {
         };
         case "readyok": {
             ws.send("ucinewgame\n");
-            ws.send(`position ${startpos}\n`);
+            ws.send(`position fen ${startpos}\n`);
             break;
         };
         case "id": {
@@ -129,7 +129,7 @@ function makeMoveOnBoard(move: Move) {
     state.movesMade.push(move);
 
     // send to server
-    ws.send(`position ${startpos} moves ${state.movesMade.map((move) => move.name).join(" ")}\n`);
+    ws.send(`position fen ${startpos} moves ${state.movesMade.map((move) => move.name).join(" ")}\n`);
 }
 
 boardElement.addEventListener("mousedown", (e) => {});

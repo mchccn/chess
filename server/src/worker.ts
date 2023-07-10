@@ -91,7 +91,7 @@ process.on("message", (message) => {
         };
         case "position": {
             if (args[0] === "startpos") (board.loadStartingPosition(), args.shift());
-            else board.loadPosition(args.splice(0, 6).join(" "));
+            else board.loadPosition(args.splice(1, 7).join(" "));
             
             args.shift(); // remove "moves"
 
