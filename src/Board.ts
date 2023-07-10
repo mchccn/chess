@@ -1,5 +1,7 @@
-import { BoardRepresentation, FEN, Move, Piece, Zobrist } from "./index.js";
+import { appendFileSync, createWriteStream } from "fs";
+import { BoardRepresentation, FEN, Move, Piece, PieceList, Zobrist } from "./index.js";
 
+const DEBUG_WRITE_STREAM = createWriteStream("./log");
 
 export class Board {
     static readonly whiteIndex               = 0;
@@ -22,16 +24,50 @@ export class Board {
     /** counted in ply, so when it reaches 100 the game is a draw */
     #fiftyMoveCounter = 0;
 
-    /** 7 | 6 | 4 | 4  - 0000000 | 000000 | 0000 | 0000 - fifty move counter (in ply) | captured piece (1 extra bit) | en passant file | castling rights */
+    /** 7 | 3 | 4 | 4  - 0000000 | 000 | 0000 | 0000 - fifty move counter (in ply) | captured piece type | en passant file | castling rights */
     #currentGameState = 0;
 
     #gameStateHistory: number[] = [];
 
     #zobristKey = 0n;
 
+    readonly kingSquare: [number, number] = [-1, -1];
+    readonly pawns: [PieceList, PieceList] = [new PieceList(), new PieceList()];
+    readonly knights: [PieceList, PieceList] = [new PieceList(), new PieceList()];
+    readonly bishops: [PieceList, PieceList] = [new PieceList(), new PieceList()];
+    readonly rooks: [PieceList, PieceList] = [new PieceList(), new PieceList()];
+    readonly queens: [PieceList, PieceList] = [new PieceList(), new PieceList()];
+
+    #allPieceLists: PieceList[] = [
+        PieceList.empty,
+        PieceList.empty,
+        this.pawns[Board.whiteIndex],
+        this.knights[Board.whiteIndex],
+        PieceList.empty,
+        this.bishops[Board.whiteIndex],
+        this.rooks[Board.whiteIndex],
+        this.queens[Board.whiteIndex],
+        PieceList.empty,
+        PieceList.empty,
+        this.pawns[Board.blackIndex],
+        this.knights[Board.blackIndex],
+        PieceList.empty,
+        this.bishops[Board.blackIndex],
+        this.rooks[Board.blackIndex],
+        this.queens[Board.blackIndex],
+    ];
+
     constructor () {}
 
+    setSquares(squares: number[]) { this.#squares = squares }
+
+    #getPieceList(pieceType: number, colorIndex: 0 | 1) {
+        return this.#allPieceLists[colorIndex * 8 + pieceType];
+    }
+
     makeMove(move: Move) {
+        appendFileSync("./log", `move ${move.name}\n`);
+
         const enPassantFile     = (this.#currentGameState >> 4) & 0b1111;
         const castlingRights    = (this.#currentGameState >> 0) & 0b1111;
         let   newCastlingRights = castlingRights;
@@ -39,7 +75,7 @@ export class Board {
         this.#currentGameState  = 0;
 
         const colorToMoveIndex  = this.#colorToMove === Piece.White ? Board.whiteIndex : Board.blackIndex;
-        const enemyToMoveIndex  = 1 - colorToMoveIndex;
+        const enemyToMoveIndex  = (1 - colorToMoveIndex) as 0 | 1;
 
         const movedFrom         = move.startSquare ;
         const movedTo           = move.targetSquare;
@@ -57,13 +93,14 @@ export class Board {
         
         if (pieceOnTarget !== Piece.None && !isEnPassant) {
             this.#zobristKey ^= Zobrist.piecesArray[pieceOnTargetType][enemyToMoveIndex][movedTo];
-            // update piece list
+            this.#getPieceList(pieceOnTargetType, enemyToMoveIndex).removePiece(movedTo);
         }
 
         if (pieceOnStartType === Piece.King) {
+            this.kingSquare[colorToMoveIndex] = movedTo;
             newCastlingRights &= this.#colorToMove === Piece.White ? Board.whiteCastleMask : Board.blackCastleMask;
         } else {
-            // update piece lists
+            this.#getPieceList(pieceOnStartType, colorToMoveIndex).movePiece(movedFrom, movedTo);
         }
 
         let pieceEndingOnTargetSquare = pieceOnStart;
@@ -74,28 +111,28 @@ export class Board {
             switch (moveFlag) {
                 case Move.Flag.PromoteToQueen: {
                     promotionType = Piece.Queen;
-                    // update queen piece list
+                    this.queens[colorToMoveIndex].addPiece(movedTo);
                     break;
                 };
                 case Move.Flag.PromoteToRook: {
                     promotionType = Piece.Rook;
-                    // update rook piece list
+                    this.rooks[colorToMoveIndex].addPiece(movedTo);
                     break;
                 };
                 case Move.Flag.PromoteToBishop: {
                     promotionType = Piece.Bishop;
-                    // update bishop piece list
+                    this.bishops[colorToMoveIndex].addPiece(movedTo);
                     break;
                 };
                 case Move.Flag.PromoteToKnight: {
                     promotionType = Piece.Knight;
-                    // update knight piece list
+                    this.knights[colorToMoveIndex].addPiece(movedTo);
                     break;
                 };
             }
 
-            pieceEndingOnTargetSquare = promotionType | this.#colorToMove;
-            // update pawn piece list
+            pieceEndingOnTargetSquare = this.#colorToMove | promotionType;
+            this.pawns[colorToMoveIndex].removePiece(movedTo);
         } else if (isEnPassant) {
             const enPassantPawnSquareIndex = movedTo + (this.#colorToMove === Piece.White ? -8 : 8);
 
@@ -104,7 +141,7 @@ export class Board {
 
             this.#squares[enPassantPawnSquareIndex] = Piece.None;
 
-            // update pawn piece list
+            this.pawns[enemyToMoveIndex].removePiece(enPassantPawnSquareIndex);
 
             this.#zobristKey ^= Zobrist.piecesArray[Piece.Pawn][enemyToMoveIndex][enPassantPawnSquareIndex];
         } else if (moveFlag === Move.Flag.Castling) {
@@ -115,7 +152,7 @@ export class Board {
             this.#squares[castlingRookFrom] = Piece.None;
             this.#squares[castlingRookTo  ] = this.#colorToMove | Piece.Rook;
 
-            // update rook piece list
+            this.rooks[colorToMoveIndex].movePiece(castlingRookFrom, castlingRookTo);
 
             this.#zobristKey ^= Zobrist.piecesArray[Piece.Rook][colorToMoveIndex][castlingRookFrom];
             this.#zobristKey ^= Zobrist.piecesArray[Piece.Rook][colorToMoveIndex][castlingRookTo  ];
@@ -168,7 +205,7 @@ export class Board {
         }
 
         this.#currentGameState |= newCastlingRights;
-        this.#currentGameState |= this.#fiftyMoveCounter << 14;
+        this.#currentGameState |= this.#fiftyMoveCounter << 11;
 
         this.#gameStateHistory.push(this.#currentGameState);
 
@@ -184,16 +221,18 @@ export class Board {
     }
 
     unmakeMove(move: Move) {
+        appendFileSync("./log", `undo ${move.name}\n`);
+
         const unmakingWhiteMove = this.#colorToMove === Piece.Black;
         const colorMovedIndex   = unmakingWhiteMove ? Board.whiteIndex : Board.blackIndex;
-        const enemyMovedIndex   = 1 - colorMovedIndex;
+        const enemyMovedIndex   = (1 - colorMovedIndex) as 0 | 1;
         const enemyColor        = unmakingWhiteMove ? Piece.Black : Piece.White;
 
         this.#colorToMove       = this.#colorToMove === Piece.White ? Piece.Black : Piece.White;
 
         const castlingRights    = this.#currentGameState & 0b1111;
 
-        const capturedPieceType = (this.#currentGameState >> 8) & 0b111111;
+        const capturedPieceType = (this.#currentGameState >> 8) & 0b111;
         const capturedPiece     = capturedPieceType === Piece.None ? Piece.None : enemyColor | capturedPieceType;
 
         const movedFrom         = move.startSquare;
@@ -214,20 +253,39 @@ export class Board {
         // handle en passant captures later
         if (capturedPieceType !== Piece.None && !isEnPassant) {
             this.#zobristKey ^= Zobrist.piecesArray[capturedPieceType][enemyMovedIndex][movedTo];
-            // update pieces list
+            this.#getPieceList(capturedPieceType, enemyMovedIndex).addPiece(movedTo);
         }
 
-        // if (movedPieceType === Piece.King) {
-
-        // } else if (!isPromotion) {
-        //     // update piece lists
-        // }
+        if (movedPieceType === Piece.King) {
+            this.kingSquare[colorMovedIndex] = movedFrom;
+        } else if (!isPromotion) {
+            this.#getPieceList(movedPieceType, colorMovedIndex).movePiece(movedTo, movedFrom);
+        }
 
         this.#squares[movedFrom] = this.#colorToMove | movedPieceType;
         this.#squares[movedTo  ] = capturedPiece;
 
         if (isPromotion) {
-            // update respective piece lists
+            this.pawns[colorMovedIndex].addPiece(movedFrom);
+
+            switch (moveFlag) {
+                case Move.Flag.PromoteToQueen: {
+                    this.queens[colorMovedIndex].removePiece(movedTo);
+                    break;
+                };
+                case Move.Flag.PromoteToRook: {
+                    this.rooks[colorMovedIndex].removePiece(movedTo);
+                    break;
+                };
+                case Move.Flag.PromoteToBishop: {
+                    this.bishops[colorMovedIndex].removePiece(movedTo);
+                    break;
+                };
+                case Move.Flag.PromoteToKnight: {
+                    this.knights[colorMovedIndex].removePiece(movedTo);
+                    break;
+                };
+            }
         } else if (isEnPassant) {
             const enPassantIndex = movedTo + (this.#colorToMove === Piece.White ? -8 : 8);
 
@@ -235,7 +293,7 @@ export class Board {
             this.#squares[movedTo       ] = Piece.None;
             this.#squares[enPassantIndex] = capturedPiece;
 
-            // update pawn piece list
+            this.pawns[enemyMovedIndex].addPiece(enPassantIndex);
 
             this.#zobristKey ^= Zobrist.piecesArray[Piece.Pawn][enemyMovedIndex][enPassantIndex];
         } else if (moveFlag === Move.Flag.Castling) {
@@ -247,7 +305,7 @@ export class Board {
             this.#squares[castlingRookTo  ] = Piece.None;
             this.#squares[castlingRookFrom] = this.#colorToMove | Piece.Rook;
 
-            // update rook piece list
+            this.rooks[colorMovedIndex].movePiece(castlingRookTo, castlingRookFrom);
 
             this.#zobristKey ^= Zobrist.piecesArray[Piece.Rook][colorMovedIndex][castlingRookFrom];
             this.#zobristKey ^= Zobrist.piecesArray[Piece.Rook][colorMovedIndex][castlingRookTo  ];
@@ -257,9 +315,9 @@ export class Board {
 
         this.#currentGameState = this.#gameStateHistory.at(-1)!;
 
-        this.#fiftyMoveCounter = this.#currentGameState >> 14;
+        this.#fiftyMoveCounter = this.#currentGameState >> 11;
 
-        const newEnPassantFile = (this.#currentGameState >> 4) & 0b111;
+        const newEnPassantFile = (this.#currentGameState >> 4) & 0b1111;
 
         // update en passant file
         if (newEnPassantFile !== enPassantFile)  {
@@ -306,6 +364,22 @@ export class Board {
 
     loadPosition(fen: string) {
         const info = FEN.fromFENString(fen);
+
+        for (let squareIndex = 0; squareIndex < 64; squareIndex++) {
+            const piece = info.squares[squareIndex];
+
+            if (piece !== Piece.None) {
+                const pieceType = Piece.getType(piece);
+                const colorIndex = Piece.isColor(piece, Piece.White) ? Board.whiteIndex : Board.blackIndex;
+
+                     if (pieceType === Piece.Queen ) this.queens    [colorIndex].addPiece(squareIndex);
+                else if (pieceType === Piece.Rook  ) this.rooks     [colorIndex].addPiece(squareIndex);
+                else if (pieceType === Piece.Bishop) this.bishops   [colorIndex].addPiece(squareIndex);
+                else if (pieceType === Piece.Knight) this.knights   [colorIndex].addPiece(squareIndex);
+                else if (pieceType === Piece.Pawn  ) this.pawns     [colorIndex].addPiece(squareIndex);
+                else if (pieceType === Piece.King  ) this.kingSquare[colorIndex] = squareIndex;
+            }
+        }
 
         this.#squares = info.squares;
         this.#colorToMove = info.colorToMove;
