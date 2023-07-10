@@ -4,9 +4,42 @@ export class MoveGenerator {
     readonly #board: Board;
     readonly #moves: Move[];
 
+    #whiteToMove = false;
+    // #friendlyColor: number;
+    // #opponentColor
+	// 	int friendlyColour;
+	// 	int opponentColour;
+	// 	int friendlyKingSquare;
+	// 	int friendlyColourIndex;
+	// 	int opponentColourIndex;
+
+	// 	bool inCheck;
+	// 	bool inDoubleCheck;
+	// 	bool pinsExistInPosition;
+	// 	ulong checkRayBitmask;
+	// 	ulong pinRayBitmask;
+	// 	ulong opponentKnightAttacks;
+	// 	ulong opponentAttackMapNoPawns;
+	// 	public ulong opponentAttackMap;
+	// 	public ulong opponentPawnAttackMap;
+	// 	ulong opponentSlidingAttackMap;
+
     constructor(board: Board) {
         this.#board = board;
         this.#moves = [];
+
+			// inCheck = false;
+			// inDoubleCheck = false;
+			// pinsExistInPosition = false;
+			// checkRayBitmask = 0;
+			// pinRayBitmask = 0;
+
+			// isWhiteToMove = board.ColourToMove == Piece.White;
+			// friendlyColour = board.ColourToMove;
+			// opponentColour = board.OpponentColour;
+			// friendlyKingSquare = board.KingSquare[board.ColourToMoveIndex];
+			// friendlyColourIndex = (board.WhiteToMove) ? Board.WhiteIndex : Board.BlackIndex;
+			// opponentColourIndex = 1 - friendlyColourIndex;
     }
 
     generateMoves() {
