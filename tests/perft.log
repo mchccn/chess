@@ -1,0 +1,97 @@
+yarn run v1.22.10
+$ ts-node-esm tests/perft.ts
+✅ TEST PASSED (depth 0) [1 = 1]
+
+✅ TEST PASSED (depth 1) [20 = 20]
+
+✅ TEST PASSED (depth 2) [400 = 400]
+
+✅ TEST PASSED (depth 3) [8902 = 8902]
+
+✅ TEST PASSED (depth 4) [197281 = 197281]
+
+✅ TEST PASSED (depth 0) [1 = 1]
+
+✅ TEST PASSED (depth 1) [48 = 48]
+
+❌ TEST FAILED (depth 2) [2039 ≠ 2043]
+❌ position: r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+❌ expected: 2039
+❌ actual: 2043
+
+❌ TEST FAILED (depth 3) [97862 ≠ 93777]
+❌ position: r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+❌ expected: 97862
+❌ actual: 93777
+
+❌ TEST FAILED (depth 4) [4085603 ≠ 3048545]
+❌ position: r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+❌ expected: 4085603
+❌ actual: 3048545
+
+✅ TEST PASSED (depth 0) [1 = 1]
+
+✅ TEST PASSED (depth 1) [14 = 14]
+
+✅ TEST PASSED (depth 2) [191 = 191]
+
+✅ TEST PASSED (depth 3) [2812 = 2812]
+
+✅ TEST PASSED (depth 4) [43238 = 43238]
+
+✅ TEST PASSED (depth 0) [1 = 1]
+
+✅ TEST PASSED (depth 1) [6 = 6]
+
+✅ TEST PASSED (depth 2) [264 = 264]
+
+✅ TEST PASSED (depth 3) [9467 = 9467]
+
+❌ TEST FAILED (depth 4) [422333 ≠ 371938]
+❌ position: r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1
+❌ expected: 422333
+❌ actual: 371938
+
+✅ TEST PASSED (depth 0) [1 = 1]
+
+✅ TEST PASSED (depth 1) [6 = 6]
+
+✅ TEST PASSED (depth 2) [264 = 264]
+
+✅ TEST PASSED (depth 3) [9467 = 9467]
+
+❌ TEST FAILED (depth 4) [422333 ≠ 418814]
+❌ position: r2q1rk1/pP1p2pp/Q4n2/bbp1p3/Np6/1B3NBn/pPPP1PPP/R3K2R b KQ - 0 1 
+❌ expected: 422333
+❌ actual: 418814
+
+✅ TEST PASSED (depth 0) [1 = 1]
+
+✅ TEST PASSED (depth 1) [44 = 44]
+
+✅ TEST PASSED (depth 2) [1486 = 1486]
+
+❌ TEST FAILED (depth 3) [62379 ≠ 62478]
+❌ position: rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8
+❌ expected: 62379
+❌ actual: 62478
+
+❌ TEST FAILED (depth 4) [2103487 ≠ 2107464]
+❌ position: rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8
+❌ expected: 2103487
+❌ actual: 2107464
+
+✅ TEST PASSED (depth 0) [1 = 1]
+
+✅ TEST PASSED (depth 1) [46 = 46]
+
+✅ TEST PASSED (depth 2) [2079 = 2079]
+
+✅ TEST PASSED (depth 3) [89890 = 89890]
+
+✅ TEST PASSED (depth 4) [3894594 = 3894594]
+
+📋 TEST RESULTS
+✅ 28 tests passed
+❌ 7 tests failed
+Done in 598.12s.

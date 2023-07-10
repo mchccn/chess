@@ -5,7 +5,9 @@
     "main": "dist/index.js",
     "scripts": {
         "sfui": "cd ../stockfish-ui && yarn dev",
-        "logs": "rm logs/*.log"
+        "logs": "rm logs/*.log",
+        "perft": "ts-node-esm tests/perft.ts",
+        "perft:divide": "ts-node-esm tests/perft_divide.ts"
     },
     "keywords": ["chess"],
     "author": "kelsny <cursors.owo.uwu@gmail.com>",

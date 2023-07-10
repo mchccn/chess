@@ -1,5 +1,5 @@
 import { Move } from "../../dist/Move.js";
-import { Board, BoardRepresentation, FEN, MoveGenerator, Piece } from "../../dist/index.js";
+import { Board, BoardRepresentation, MoveGenerator, Piece } from "../../dist/index.js";
 import { iconMap } from "./iconMap.js";
 import { logElement, setup } from "./setup.js";
 import { ws } from "./ws.js";
@@ -10,8 +10,12 @@ setup();
 // sliding pieces move generation test fen "8/8/4Q3/8/3B4/8/2R5/8 w KQkq - 0 1"
 
 // this variable holds the original state of the board
-const startpos = FEN.startingPosition;
+// const startpos = FEN.startingPosition;
 // const startpos = "K7/3N4/4Q3/8/3B4/8/pR2p3/8 w KQkq - 0 1";
+
+// debugging positions
+const startpos = "r3k2r/p1ppqpb1/bn2pnN1/3P4/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1";
+// const startpos = "r3k2r/p1ppqNb1/bn2pnp1/3P4/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1";
 
 // const board = new Board().loadStartingPosition();
 const board = new Board().loadPosition(startpos);

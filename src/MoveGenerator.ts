@@ -85,6 +85,8 @@ export class MoveGenerator {
             if (Piece.isType(piece, Piece.Pawn)) moves.push(...this.#generatePawnMoves(board, startSquare));
         }
 
+        // REMOVE THIS AND IMPLEMENT REAL CHECK CHECKS
+
         if (allowPseudoLegal) return moves;
 
         return moves.filter((move) => {
