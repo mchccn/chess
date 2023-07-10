@@ -130,8 +130,6 @@ export class Board {
             const file = BoardRepresentation.fileIndex(movedFrom) + 1;
 
             this.#currentGameState |= file << 4;
-
-            this.#zobristKey ^= Zobrist.enPassantFile[file];
         }
 
         // moving to/from original rook positions removes castling rights
@@ -155,7 +153,13 @@ export class Board {
         this.#zobristKey ^= Zobrist.piecesArray[pieceOnStartType             ][colorToMoveIndex][movedFrom];
         this.#zobristKey ^= Zobrist.piecesArray[pieceEndingOnTargetSquareType][colorToMoveIndex][movedTo  ];
 
-        if (enPassantFile !== 0) this.#zobristKey ^= Zobrist.enPassantFile[enPassantFile];
+        const newEnPassantFile = (this.#currentGameState >> 4) & 0b1111;
+
+        // update en passant file
+        if (newEnPassantFile !== enPassantFile) {
+            this.#zobristKey ^= Zobrist.enPassantFile[enPassantFile   ];
+            this.#zobristKey ^= Zobrist.enPassantFile[newEnPassantFile];
+        }
 
         // update castling rights
         if (newCastlingRights !== castlingRights) {
@@ -183,7 +187,6 @@ export class Board {
         const unmakingWhiteMove = this.#colorToMove === Piece.Black;
         const colorMovedIndex   = unmakingWhiteMove ? Board.whiteIndex : Board.blackIndex;
         const enemyMovedIndex   = 1 - colorMovedIndex;
-        const friendlyColor     = unmakingWhiteMove ? Piece.White : Piece.Black;
         const enemyColor        = unmakingWhiteMove ? Piece.Black : Piece.White;
 
         this.#colorToMove       = this.#colorToMove === Piece.White ? Piece.Black : Piece.White;
@@ -207,8 +210,6 @@ export class Board {
         this.#zobristKey ^= Zobrist.piecesArray[targetSquareType][colorMovedIndex][movedTo  ];
 
         const enPassantFile = (this.#currentGameState >> 4) & 0b1111;
-
-        if (enPassantFile !== 0) this.#zobristKey ^= Zobrist.enPassantFile[enPassantFile];
 
         // handle en passant captures later
         if (capturedPieceType !== Piece.None && !isEnPassant) {
@@ -260,10 +261,15 @@ export class Board {
 
         const newEnPassantFile = (this.#currentGameState >> 4) & 0b111;
 
-        if (newEnPassantFile !== 0) this.#zobristKey ^= Zobrist.enPassantFile[newEnPassantFile];
+        // update en passant file
+        if (newEnPassantFile !== enPassantFile)  {
+            this.#zobristKey ^= Zobrist.enPassantFile[enPassantFile   ];
+            this.#zobristKey ^= Zobrist.enPassantFile[newEnPassantFile];
+        }
 
         const newCastlingRights = this.#currentGameState & 0b1111;
 
+        // update castling rights
         if (newCastlingRights !== castlingRights) {
             this.#zobristKey ^= Zobrist.castlingRights[castlingRights   ];
             this.#zobristKey ^= Zobrist.castlingRights[newCastlingRights];
