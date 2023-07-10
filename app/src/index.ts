@@ -1,5 +1,5 @@
 import { Move } from "../../dist/Move.js";
-import { Board, BoardRepresentation, MoveGenerator, Piece } from "../../dist/index.js";
+import { Board, BoardRepresentation, FEN, MoveGenerator, Piece } from "../../dist/index.js";
 import { iconMap } from "./iconMap.js";
 import { logElement, setup } from "./setup.js";
 import { ws } from "./ws.js";
@@ -10,11 +10,11 @@ setup();
 // sliding pieces move generation test fen "8/8/4Q3/8/3B4/8/2R5/8 w KQkq - 0 1"
 
 // this variable holds the original state of the board
-// const startpos = FEN.startingPosition;
+const startpos = FEN.startingPosition;
 // const startpos = "K7/3N4/4Q3/8/3B4/8/pR2p3/8 w KQkq - 0 1";
 
 // debugging positions
-const startpos = "r3k2r/p1ppqpb1/bn2pnN1/3P4/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1";
+// const startpos = "r3k2r/p1ppqpb1/bn2pnN1/3P4/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1";
 // const startpos = "r3k2r/p1ppqNb1/bn2pnp1/3P4/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1";
 
 // const board = new Board().loadStartingPosition();
@@ -85,6 +85,7 @@ const state = {
     selected: -1,
     legalMoves: MoveGenerator.generateMoves(board),
     movesMade: [] as Move[],
+    gameOver: false,
 };
 
 function render() {
@@ -136,11 +137,7 @@ function makeMoveOnBoard(move: Move) {
     ws.send(`position fen ${startpos} moves ${state.movesMade.map((move) => move.name).join(" ")}\n`);
 }
 
-boardElement.addEventListener("mousedown", (e) => {});
-
-boardElement.addEventListener("mouseup", (e) => {});
-
-boardElement.addEventListener("click", (e) => {
+boardElement.addEventListener("click", function clickHandler(e) {
     if (!(e.target instanceof HTMLElement)) return;
 
     const cell = e.target.closest<HTMLElement>(".cell");
@@ -193,6 +190,14 @@ boardElement.addEventListener("click", (e) => {
             }
 
             state.legalMoves = MoveGenerator.generateMoves(board);
+
+            if (state.legalMoves.length === 0) {
+                new Audio("assets/sounds/game-end.mp3").play();
+
+                state.gameOver = true;
+
+                boardElement.removeEventListener("click", clickHandler);
+            }
         } else if (board.squares[index] === Piece.None || !Piece.isColor(board.squares[index], board.colorToMove)) {
             // can't select enemy piece or empty cell
             state.selected = -1;
