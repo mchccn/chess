@@ -6,9 +6,9 @@ export class Board {
     static readonly blackIndex               = 1;
 
     static readonly whiteCastleKingsideMask  = 0b1111111111111110;
-	static readonly whiteCastleQueensideMask = 0b1111111111111101;
-	static readonly blackCastleKingsideMask  = 0b1111111111111011;
-	static readonly blackCastleQueensideMask = 0b1111111111110111;
+    static readonly whiteCastleQueensideMask = 0b1111111111111101;
+    static readonly blackCastleKingsideMask  = 0b1111111111111011;
+    static readonly blackCastleQueensideMask = 0b1111111111110111;
 
     static readonly whiteCastleMask          = this.whiteCastleKingsideMask & this.whiteCastleQueensideMask;
     static readonly blackCastleMask          = this.blackCastleKingsideMask & this.blackCastleQueensideMask;
@@ -50,7 +50,7 @@ export class Board {
 
         const moveFlag          = move.moveFlag;
         const isPromotion       = move.isPromotion;
-        const isEnPassant       = move.moveFlag !== Move.Flag.EnPassantCapture;
+        const isEnPassant       = move.moveFlag === Move.Flag.EnPassantCapture;
 
         // update captured piece type
         this.#currentGameState |= pieceOnTargetType << 8;
@@ -60,9 +60,13 @@ export class Board {
             // update piece list
         }
 
-        // update piece lists
+        if (pieceOnStartType === Piece.King) {
+            newCastlingRights &= this.#colorToMove === Piece.White ? Board.whiteCastleMask : Board.blackCastleMask;
+        } else {
+            // update piece lists
+        }
 
-        let pieceEndingOnTargetSquare = pieceOnTarget;
+        let pieceEndingOnTargetSquare = pieceOnStart;
 
         if (isPromotion) {
             let promotionType = 0;
@@ -269,7 +273,7 @@ export class Board {
     }
 
     get squares() {
-        return [...this.#squares];
+        return Object.freeze([...this.#squares]);
     }
 
     get colorToMove() {

@@ -1,6 +1,5 @@
 import { Board, BoardRepresentation, Piece } from "./index.js";
 
-
 export class Move {
     static readonly Flag = {
         None             : 0b0000,
@@ -42,7 +41,10 @@ export class Move {
         if (!this.isPromotion) return Piece.None;
 
         return {
-            
+            [Move.Flag.PromoteToQueen ]: Piece.Queen ,
+            [Move.Flag.PromoteToKnight]: Piece.Knight,
+            [Move.Flag.PromoteToRook  ]: Piece.Rook  ,
+            [Move.Flag.PromoteToBishop]: Piece.Bishop,
         }[this.moveFlag];
     }
 
@@ -75,11 +77,14 @@ export class Move {
 
         const { start, target, promotion } = move.match(this.#moveRegex)!.groups!;
 
-        const startFile  = BoardRepresentation.fileNames.indexOf(start[0]);
-        const startRank  = BoardRepresentation.rankNames.indexOf(start[1]);
+        const startFile   = BoardRepresentation.fileNames.indexOf(start[0]);
+        const startRank   = BoardRepresentation.rankNames.indexOf(start[1]);
 
-        const targetFile = BoardRepresentation.fileNames.indexOf(target[0]);
-        const targetRank = BoardRepresentation.rankNames.indexOf(target[1]);
+        const targetFile  = BoardRepresentation.fileNames.indexOf(target[0]);
+        const targetRank  = BoardRepresentation.rankNames.indexOf(target[1]);
+
+        const startIndex  = BoardRepresentation.indexFromCoord(startFile, startRank);
+        const targetIndex = BoardRepresentation.indexFromCoord(targetFile, targetRank);
 
         let moveFlag = 0;
 
@@ -89,14 +94,26 @@ export class Move {
             if (promotion === "b") moveFlag = Move.Flag.PromoteToBishop;
             if (promotion === "n") moveFlag = Move.Flag.PromoteToKnight;
         } else {
-            // check for castling/en passant/double pawn push using board
+            const movedPiece     = board.squares[startIndex];
+            const movedPieceType = Piece.getType(movedPiece);
+
+            // probably castling if the king moved more than 1 square
+            if (movedPieceType === Piece.King && Math.abs(startFile - targetFile) > 1)
+                moveFlag = Move.Flag.Castling;
+
+            // probably a double pawn push if a pawn moved more than 1 square
+            if (movedPieceType === Piece.Pawn && Math.abs(startRank - targetRank) > 1)
+                moveFlag = Move.Flag.DoublePawnPush;
+
+            const enPassantFile = (board.currentGameState >> 4) & 0b1111;
+            const enPassantRank = board.colorToMove === Piece.White ? 6 : 3;
+            
+            // probably a capture en passant if the pawn moved to the en passant square
+            if (movedPieceType === Piece.Pawn && targetFile === enPassantFile && targetRank === enPassantRank)
+                moveFlag = Move.Flag.EnPassantCapture;
         }
 
-        return new Move(
-            BoardRepresentation.indexFromCoord(startFile, startRank),
-            BoardRepresentation.indexFromCoord(targetFile, targetRank),
-            moveFlag,
-        );
+        return new Move(startIndex, targetIndex, moveFlag);
     }
 
     static equals(a: Move, b: Move) {

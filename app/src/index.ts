@@ -84,7 +84,7 @@ const state = {
 };
 
 function render() {
-    boardElement.innerHTML = "";
+    boardElement.querySelectorAll(".cell").forEach((e) => e.remove());
 
     for (let i = 0; i < 64; i++) {
         const cellElement = document.createElement("div");
@@ -111,7 +111,9 @@ function render() {
             cellElement.classList.add(isLightSquare ? "light-selected" : "dark-selected")
         }
 
-        if (state.legalMoves.some((move) => Move.equals(move, new Move(state.selected, index)))) {
+        if (state.legalMoves.some((move) => (
+            move.startSquare === state.selected && move.targetSquare === index
+        ))) {
             cellElement.classList.add(isLightSquare ? "light-highlighted" : "dark-highlighted");
         }
     }
@@ -143,8 +145,14 @@ boardElement.addEventListener("click", (e) => {
     } else {
         const index = Number(cell.dataset.index);
 
-        const attemptedMove = state.legalMoves.find((move) => Move.equals(move, new Move(state.selected, Number(cell.dataset.index))));
+        const attemptedMove = state.legalMoves.find((move) => (
+            move.startSquare === state.selected && move.targetSquare === index
+        ));
 
+        // if it is a promotion, that means there must be other promotion moves
+        // so we have to add in a UI at some point to allow the user to select
+        // what piece the pawn should be promoted to
+        
         if (attemptedMove) {
             // made a move, deselect cell
             state.selected = -1;
