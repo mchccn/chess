@@ -23,7 +23,7 @@ function perft_divide(board: Board, depth: number, root = true) {
 
     const divide: Record<string, number> = {};
 
-    const moves = MoveGenerator.generateMoves(board);
+    const moves = new MoveGenerator(board).generateMoves();
 
     for (const move of moves) {
         board.makeMove(move);
@@ -49,17 +49,21 @@ function perft_divide(board: Board, depth: number, root = true) {
 
         const chunks: string[] = [];
 
-        stockfish.stdout.on("data", (data) => {
+        stockfish.stdout.on("data", function handler(data) {
             const raw = data.toString();
 
             chunks.push(raw);
 
-            if (raw.includes("Nodes searched: "))
+            if (raw.includes("Nodes searched: ")) {
+                stockfish.off("error", resolve);
+                stockfish.stdout.off("data", handler);
+                
                 resolve(Object.fromEntries(
                     [...chunks.join("\n").matchAll(/^\w+: \d+$/gm)]
                         .map((match) => match[0].split(": "))
                         .map(([key, value]) => [key, Number(value)]),
                 ));
+            }
         });
 
         stockfish.stdin.write(`position fen ${position}\n`);

@@ -105,8 +105,8 @@ export class Move {
             if (movedPieceType === Piece.Pawn && Math.abs(startRank - targetRank) > 1)
                 moveFlag = Move.Flag.DoublePawnPush;
 
-            const enPassantFile = (board.currentGameState >> 4) & 0b1111;
-            const enPassantRank = board.colorToMove === Piece.White ? 6 : 3;
+            const enPassantFile = ((board.currentGameState >> 4) & 0b1111) - 1;
+            const enPassantRank = (board.colorToMove === Piece.White ? 6 : 3) - 1;
             
             // probably a capture en passant if the pawn moved to the en passant square
             if (movedPieceType === Piece.Pawn && targetFile === enPassantFile && targetRank === enPassantRank)

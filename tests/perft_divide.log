@@ -1,4 +1,539 @@
 yarn run v1.22.10
 $ ts-node-esm tests/perft_divide.ts
-perft_divide: depth=4 position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
-expected: moves=48 perft=4085603
+perft_divide: depth=3 position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+expected: moves=48 perft=97862
+actual: moves=48 perft=93557
+for move a1b1: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move a1b1: expected=1969 actual=1971
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/1R2K2R b Kkq - 1 1
+expected: moves=39 perft=1796
+actual: moves=39 perft=1797
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/1R2K2R b Kkq - 1 1
+for move h3g2: expected=44 actual=45
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N2Q2/PPPBBPpP/1R2K2R w Kkq - 0 2
+expected: moves=44 perft=44
+actual: moves=45 perft=45
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N2Q2/PPPBBPpP/1R2K2R w Kkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move a1c1: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move a1c1: expected=1968 actual=1970
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/2R1K2R b Kkq - 1 1
+expected: moves=39 perft=1795
+actual: moves=39 perft=1796
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/2R1K2R b Kkq - 1 1
+for move h3g2: expected=44 actual=45
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N2Q2/PPPBBPpP/2R1K2R w Kkq - 0 2
+expected: moves=44 perft=44
+actual: moves=45 perft=45
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N2Q2/PPPBBPpP/2R1K2R w Kkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move a1d1: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move a1d1: expected=1885 actual=1887
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/3RK2R b Kkq - 1 1
+expected: moves=39 perft=1718
+actual: moves=39 perft=1719
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/3RK2R b Kkq - 1 1
+for move h3g2: expected=42 actual=43
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N2Q2/PPPBBPpP/3RK2R w Kkq - 0 2
+expected: moves=42 perft=42
+actual: moves=43 perft=43
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N2Q2/PPPBBPpP/3RK2R w Kkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move a2a3: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move a2a3: expected=2186 actual=2189
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/P1N2Q1p/1PPBBPPP/R3K2R b KQkq - 0 1
+expected: moves=40 perft=1998
+actual: moves=40 perft=1999
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/P1N2Q1p/1PPBBPPP/R3K2R b KQkq - 0 1
+for move h3g2: expected=48 actual=49
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/P1N2Q2/1PPBBPpP/R3K2R w KQkq - 0 2
+expected: moves=48 perft=48
+actual: moves=49 perft=49
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/P1N2Q2/1PPBBPpP/R3K2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move a2a4: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move a2a4: expected=2149 actual=2152
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/Pp2P3/2N2Q1p/1PPBBPPP/R3K2R b KQkq a3 0 1
+expected: moves=40 perft=1963
+actual: moves=40 perft=1964
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/Pp2P3/2N2Q1p/1PPBBPPP/R3K2R b KQkq a3 0 1
+for move h3g2: expected=47 actual=48
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/Pp2P3/2N2Q2/1PPBBPpP/R3K2R w KQkq - 0 2
+expected: moves=47 perft=47
+actual: moves=48 perft=48
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/Pp2P3/2N2Q2/1PPBBPpP/R3K2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move b2b3: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move b2b3: expected=1964 actual=1967
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/1PN2Q1p/P1PBBPPP/R3K2R b KQkq - 0 1
+expected: moves=38 perft=1787
+actual: moves=38 perft=1788
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/1PN2Q1p/P1PBBPPP/R3K2R b KQkq - 0 1
+for move h3g2: expected=45 actual=46
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/1PN2Q2/P1PBBPpP/R3K2R w KQkq - 0 2
+expected: moves=45 perft=45
+actual: moves=46 perft=46
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/1PN2Q2/P1PBBPpP/R3K2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move c3a4: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move c3a4: expected=2203 actual=2009
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/Np2P3/5Q1p/PPPBBPPP/R3K2R b KQkq - 1 1
+expected: moves=38 perft=2008
+actual: moves=38 perft=2009
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/Np2P3/5Q1p/PPPBBPPP/R3K2R b KQkq - 1 1
+for move h3g2: expected=51 actual=52
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/Np2P3/5Q2/PPPBBPpP/R3K2R w KQkq - 0 2
+expected: moves=51 perft=51
+actual: moves=52 perft=52
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/Np2P3/5Q2/PPPBBPpP/R3K2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move c3b1: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move c3b1: expected=2038 actual=1859
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/5Q1p/PPPBBPPP/RN2K2R b KQkq - 1 1
+expected: moves=38 perft=1858
+actual: moves=38 perft=1859
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/5Q1p/PPPBBPPP/RN2K2R b KQkq - 1 1
+for move h3g2: expected=47 actual=48
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/5Q2/PPPBBPpP/RN2K2R w KQkq - 0 2
+expected: moves=47 perft=47
+actual: moves=48 perft=48
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/5Q2/PPPBBPpP/RN2K2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move c3b5: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move c3b5: expected=2138 actual=2089
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/1N1PN3/1p2P3/5Q1p/PPPBBPPP/R3K2R b KQkq - 1 1
+expected: moves=38 perft=2088
+actual: moves=38 perft=2089
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pnp1/1N1PN3/1p2P3/5Q1p/PPPBBPPP/R3K2R b KQkq - 1 1
+for move h3g2: expected=53 actual=54
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/1N1PN3/1p2P3/5Q2/PPPBBPpP/R3K2R w KQkq - 0 2
+expected: moves=53 perft=53
+actual: moves=54 perft=54
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/1N1PN3/1p2P3/5Q2/PPPBBPpP/R3K2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move c3d1: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move c3d1: expected=2040 actual=1859
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/5Q1p/PPPBBPPP/R2NK2R b KQkq - 1 1
+expected: moves=38 perft=1858
+actual: moves=38 perft=1859
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/5Q1p/PPPBBPPP/R2NK2R b KQkq - 1 1
+for move h3g2: expected=47 actual=48
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/5Q2/PPPBBPpP/R2NK2R w KQkq - 0 2
+expected: moves=47 perft=47
+actual: moves=48 perft=48
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/5Q2/PPPBBPpP/R2NK2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move d2c1: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move d2c1: expected=1963 actual=1965
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N2Q1p/PPP1BPPP/R1B1K2R b KQkq - 1 1
+expected: moves=39 perft=1790
+actual: moves=39 perft=1791
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N2Q1p/PPP1BPPP/R1B1K2R b KQkq - 1 1
+for move h3g2: expected=44 actual=45
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N2Q2/PPP1BPpP/R1B1K2R w KQkq - 0 2
+expected: moves=44 perft=44
+actual: moves=45 perft=45
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N2Q2/PPP1BPpP/R1B1K2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move d2e3: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move d2e3: expected=2136 actual=2139
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N1BQ1p/PPP1BPPP/R3K2R b KQkq - 1 1
+expected: moves=39 perft=1948
+actual: moves=39 perft=1949
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N1BQ1p/PPP1BPPP/R3K2R b KQkq - 1 1
+for move h3g2: expected=48 actual=49
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N1BQ2/PPP1BPpP/R3K2R w KQkq - 0 2
+expected: moves=48 perft=48
+actual: moves=49 perft=49
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N1BQ2/PPP1BPpP/R3K2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move d2f4: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move d2f4: expected=2000 actual=2003
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2PB2/2N2Q1p/PPP1BPPP/R3K2R b KQkq - 1 1
+expected: moves=39 perft=1824
+actual: moves=39 perft=1825
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2PB2/2N2Q1p/PPP1BPPP/R3K2R b KQkq - 1 1
+for move h3g2: expected=45 actual=46
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2PB2/2N2Q2/PPP1BPpP/R3K2R w KQkq - 0 2
+expected: moves=45 perft=45
+actual: moves=46 perft=46
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2PB2/2N2Q2/PPP1BPpP/R3K2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move d2g5: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move d2g5: expected=2134 actual=2137
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PN1B1/1p2P3/2N2Q1p/PPP1BPPP/R3K2R b KQkq - 1 1
+expected: moves=38 perft=1942
+actual: moves=38 perft=1943
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pnp1/3PN1B1/1p2P3/2N2Q1p/PPP1BPPP/R3K2R b KQkq - 1 1
+for move h3g2: expected=49 actual=50
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN1B1/1p2P3/2N2Q2/PPP1BPpP/R3K2R w KQkq - 0 2
+expected: moves=49 perft=49
+actual: moves=50 perft=50
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN1B1/1p2P3/2N2Q2/PPP1BPpP/R3K2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move d2h6: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move d2h6: expected=2019 actual=2022
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnpB/3PN3/1p2P3/2N2Q1p/PPP1BPPP/R3K2R b KQkq - 1 1
+expected: moves=37 perft=1831
+actual: moves=37 perft=1832
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pnpB/3PN3/1p2P3/2N2Q1p/PPP1BPPP/R3K2R b KQkq - 1 1
+for move h3g2: expected=48 actual=49
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pnpB/3PN3/1p2P3/2N2Q2/PPP1BPpP/R3K2R w KQkq - 0 2
+expected: moves=48 perft=48
+actual: moves=49 perft=49
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pnpB/3PN3/1p2P3/2N2Q2/PPP1BPpP/R3K2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move d5d6: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move d5d6: expected=1991 actual=1808
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n1Ppnp1/4N3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1
+expected: moves=37 perft=1807
+actual: moves=37 perft=1808
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n1Ppnp1/4N3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1
+for move h3g2: expected=47 actual=48
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n1Ppnp1/4N3/1p2P3/2N2Q2/PPPBBPpP/R3K2R w KQkq - 0 2
+expected: moves=47 perft=47
+actual: moves=48 perft=48
+compare: depth=1 position=r3k2r/p1ppqpb1/1n1Ppnp1/4N3/1p2P3/2N2Q2/PPPBBPpP/R3K2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move d5e6: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move d5e6: expected=2241 actual=2058
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2Pnp1/4N3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1
+expected: moves=42 perft=2057
+actual: moves=42 perft=2058
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2Pnp1/4N3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1
+for move h3g2: expected=47 actual=48
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2Pnp1/4N3/1p2P3/2N2Q2/PPPBBPpP/R3K2R w KQkq - 0 2
+expected: moves=47 perft=47
+actual: moves=48 perft=48
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2Pnp1/4N3/1p2P3/2N2Q2/PPPBBPpP/R3K2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move e2a6: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move e2a6: expected=1907 actual=1908
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/Bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPB1PPP/R3K2R b KQkq - 1 1
+expected: moves=36 perft=1907
+actual: moves=36 perft=1908
+for move h3g2: with-position=r3k2r/p1ppqpb1/Bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPB1PPP/R3K2R b KQkq - 1 1
+for move h3g2: expected=51 actual=52
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/Bn2pnp1/3PN3/1p2P3/2N2Q2/PPPB1PpP/R3K2R w KQkq - 0 2
+expected: moves=51 perft=51
+actual: moves=52 perft=52
+compare: depth=1 position=r3k2r/p1ppqpb1/Bn2pnp1/3PN3/1p2P3/2N2Q2/PPPB1PpP/R3K2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move e2b5: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move e2b5: expected=2057 actual=2059
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/1B1PN3/1p2P3/2N2Q1p/PPPB1PPP/R3K2R b KQkq - 1 1
+expected: moves=38 perft=2014
+actual: moves=38 perft=2015
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pnp1/1B1PN3/1p2P3/2N2Q1p/PPPB1PPP/R3K2R b KQkq - 1 1
+for move h3g2: expected=51 actual=52
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/1B1PN3/1p2P3/2N2Q2/PPPB1PpP/R3K2R w KQkq - 0 2
+expected: moves=51 perft=51
+actual: moves=52 perft=52
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/1B1PN3/1p2P3/2N2Q2/PPPB1PpP/R3K2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move e2c4: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move e2c4: expected=2082 actual=2084
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1pB1P3/2N2Q1p/PPPB1PPP/R3K2R b KQkq - 1 1
+expected: moves=39 perft=1989
+actual: moves=39 perft=1990
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1pB1P3/2N2Q1p/PPPB1PPP/R3K2R b KQkq - 1 1
+for move h3g2: expected=49 actual=50
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1pB1P3/2N2Q2/PPPB1PpP/R3K2R w KQkq - 0 2
+expected: moves=49 perft=49
+actual: moves=50 perft=50
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1pB1P3/2N2Q2/PPPB1PpP/R3K2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move e2d1: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move e2d1: expected=1733 actual=1642
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N2Q1p/PPPB1PPP/R2BK2R b KQkq - 1 1
+expected: moves=39 perft=1641
+actual: moves=39 perft=1642
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N2Q1p/PPPB1PPP/R2BK2R b KQkq - 1 1
+for move h3g2: expected=40 actual=41
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N2Q2/PPPB1PpP/R2BK2R w KQkq - 0 2
+expected: moves=40 perft=40
+actual: moves=41 perft=41
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N2Q2/PPPB1PpP/R2BK2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move e2d3: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move e2d3: expected=2050 actual=2052
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2NB1Q1p/PPPB1PPP/R3K2R b KQkq - 1 1
+expected: moves=39 perft=1911
+actual: moves=39 perft=1912
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2NB1Q1p/PPPB1PPP/R3K2R b KQkq - 1 1
+for move h3g2: expected=47 actual=48
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2NB1Q2/PPPB1PpP/R3K2R w KQkq - 0 2
+expected: moves=47 perft=47
+actual: moves=48 perft=48
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2NB1Q2/PPPB1PpP/R3K2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move e2f1: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move e2f1: expected=2060 actual=1875
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N2Q1p/PPPB1PPP/R3KB1R b KQkq - 1 1
+expected: moves=39 perft=1875
+actual: moves=39 perft=1875
+for move e5c4: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move e5c4: expected=1880 actual=1796
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3P4/1pN1P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 1 1
+expected: moves=40 perft=1795
+actual: moves=40 perft=1796
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pnp1/3P4/1pN1P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 1 1
+for move h3g2: expected=43 actual=44
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3P4/1pN1P3/2N2Q2/PPPBBPpP/R3K2R w KQkq - 0 2
+expected: moves=43 perft=43
+actual: moves=44 perft=44
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3P4/1pN1P3/2N2Q2/PPPBBPpP/R3K2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move e5c6: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move e5c6: expected=2027 actual=1890
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1nN1pnp1/3P4/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 1 1
+expected: moves=37 perft=1839
+actual: moves=38 perft=1890
+compare: depth=2 position=r3k2r/p1ppqpb1/1nN1pnp1/3P4/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 1 1
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e8c8
+missed moves: -
+for move e5d3: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move e5d3: expected=1803 actual=1680
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3P4/1p2P3/2NN1Q1p/PPPBBPPP/R3K2R b KQkq - 1 1
+expected: moves=40 perft=1679
+actual: moves=40 perft=1680
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pnp1/3P4/1p2P3/2NN1Q1p/PPPBBPPP/R3K2R b KQkq - 1 1
+for move h3g2: expected=40 actual=41
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3P4/1p2P3/2NN1Q2/PPPBBPpP/R3K2R w KQkq - 0 2
+expected: moves=40 perft=40
+actual: moves=41 perft=41
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3P4/1p2P3/2NN1Q2/PPPBBPpP/R3K2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move e5d7: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move e5d7: expected=2124 actual=1993
+perft_divide: depth=2 position=r3k2r/p1pNqpb1/1n2pnp1/3P4/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1
+expected: moves=41 perft=1944
+actual: moves=42 perft=1993
+compare: depth=2 position=r3k2r/p1pNqpb1/1n2pnp1/3P4/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e8g8
+missed moves: -
+for move e5f7: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move e5f7: expected=2080 actual=1949
+perft_divide: depth=2 position=r3k2r/p1ppqNb1/1n2pnp1/3P4/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1
+expected: moves=40 perft=1900
+actual: moves=41 perft=1949
+compare: depth=2 position=r3k2r/p1ppqNb1/1n2pnp1/3P4/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e8c8
+missed moves: -
+for move e5g4: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move e5g4: expected=1878 actual=1719
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3P4/1p2P1N1/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 1 1
+expected: moves=40 perft=1718
+actual: moves=40 perft=1719
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pnp1/3P4/1p2P1N1/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 1 1
+for move h3g2: expected=42 actual=43
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3P4/1p2P1N1/2N2Q2/PPPBBPpP/R3K2R w KQkq - 0 2
+expected: moves=42 perft=42
+actual: moves=43 perft=43
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3P4/1p2P1N1/2N2Q2/PPPBBPpP/R3K2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move e5g6: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move e5g6: expected=1997 actual=1866
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnN1/3P4/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1
+expected: moves=38 perft=1817
+actual: moves=39 perft=1866
+compare: depth=2 position=r3k2r/p1ppqpb1/1n2pnN1/3P4/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e8g8
+missed moves: -
+for move f3d3: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move f3d3: expected=2005 actual=1870
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2NQ3p/PPPBBPPP/R3K2R b KQkq - 1 1
+expected: moves=39 perft=1869
+actual: moves=39 perft=1870
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2NQ3p/PPPBBPPP/R3K2R b KQkq - 1 1
+for move h3g2: expected=45 actual=46
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2NQ4/PPPBBPpP/R3K2R w KQkq - 0 2
+expected: moves=45 perft=45
+actual: moves=46 perft=46
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2NQ4/PPPBBPpP/R3K2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move f3e3: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move f3e3: expected=2174 actual=1986
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N1Q2p/PPPBBPPP/R3K2R b KQkq - 1 1
+expected: moves=39 perft=1985
+actual: moves=39 perft=1986
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N1Q2p/PPPBBPPP/R3K2R b KQkq - 1 1
+for move h3g2: expected=48 actual=49
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N1Q3/PPPBBPpP/R3K2R w KQkq - 0 2
+expected: moves=48 perft=48
+actual: moves=49 perft=49
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N1Q3/PPPBBPpP/R3K2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move f3f4: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move f3f4: expected=2132 actual=1949
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2PQ2/2N4p/PPPBBPPP/R3K2R b KQkq - 1 1
+expected: moves=39 perft=1948
+actual: moves=39 perft=1949
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2PQ2/2N4p/PPPBBPPP/R3K2R b KQkq - 1 1
+for move h3g2: expected=47 actual=48
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2PQ2/2N5/PPPBBPpP/R3K2R w KQkq - 0 2
+expected: moves=47 perft=47
+actual: moves=48 perft=48
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2PQ2/2N5/PPPBBPpP/R3K2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move f3f5: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move f3f5: expected=2396 actual=2197
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PNQ2/1p2P3/2N4p/PPPBBPPP/R3K2R b KQkq - 1 1
+expected: moves=41 perft=2196
+actual: moves=41 perft=2197
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pnp1/3PNQ2/1p2P3/2N4p/PPPBBPPP/R3K2R b KQkq - 1 1
+for move h3g2: expected=51 actual=52
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PNQ2/1p2P3/2N5/PPPBBPpP/R3K2R w KQkq - 0 2
+expected: moves=51 perft=51
+actual: moves=52 perft=52
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PNQ2/1p2P3/2N5/PPPBBPpP/R3K2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move f3f6: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move f3f6: expected=2111 actual=1908
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pQp1/3PN3/1p2P3/2N4p/PPPBBPPP/R3K2R b KQkq - 0 1
+expected: moves=35 perft=1907
+actual: moves=35 perft=1908
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pQp1/3PN3/1p2P3/2N4p/PPPBBPPP/R3K2R b KQkq - 0 1
+for move h3g2: expected=52 actual=53
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pQp1/3PN3/1p2P3/2N5/PPPBBPpP/R3K2R w KQkq - 0 2
+expected: moves=52 perft=52
+actual: moves=53 perft=53
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pQp1/3PN3/1p2P3/2N5/PPPBBPpP/R3K2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move f3g3: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move f3g3: expected=2214 actual=2023
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N3Qp/PPPBBPPP/R3K2R b KQkq - 1 1
+expected: moves=39 perft=2022
+actual: moves=39 perft=2023
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N3Qp/PPPBBPPP/R3K2R b KQkq - 1 1
+for move h3g2: expected=52 actual=53
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N3Q1/PPPBBPpP/R3K2R w KQkq - 0 2
+expected: moves=52 perft=52
+actual: moves=53 perft=53
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N3Q1/PPPBBPpP/R3K2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move f3g4: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move f3g4: expected=2169 actual=1979
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P1Q1/2N4p/PPPBBPPP/R3K2R b KQkq - 1 1
+expected: moves=39 perft=1978
+actual: moves=39 perft=1979
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P1Q1/2N4p/PPPBBPPP/R3K2R b KQkq - 1 1
+for move h3g2: expected=50 actual=51
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P1Q1/2N5/PPPBBPpP/R3K2R w KQkq - 0 2
+expected: moves=50 perft=50
+actual: moves=51 perft=51
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P1Q1/2N5/PPPBBPpP/R3K2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move f3h3: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move f3h3: expected=2360 actual=2152
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N4Q/PPPBBPPP/R3K2R b KQkq - 0 1
+expected: moves=39 perft=2152
+actual: moves=39 perft=2152
+for move f3h5: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move f3h5: expected=2267 actual=2066
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PN2Q/1p2P3/2N4p/PPPBBPPP/R3K2R b KQkq - 1 1
+expected: moves=39 perft=2065
+actual: moves=39 perft=2066
+for move h3g2: with-position=r3k2r/p1ppqpb1/1n2pnp1/3PN2Q/1p2P3/2N4p/PPPBBPPP/R3K2R b KQkq - 1 1
+for move h3g2: expected=51 actual=52
+perft_divide: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN2Q/1p2P3/2N5/PPPBBPpP/R3K2R w KQkq - 0 2
+expected: moves=51 perft=51
+actual: moves=52 perft=52
+compare: depth=1 position=r3k2r/p1ppqpb1/1n2pnp1/3PN2Q/1p2P3/2N5/PPPBBPpP/R3K2R w KQkq - 0 2
+compare: extraneous-moves=1 missed-moves=0
+extraneous moves: e1g1
+missed moves: -
+for move g2g3: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move g2g3: expected=1882 actual=1714
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N2QPp/PPPBBP1P/R3K2R b KQkq - 0 1
+expected: moves=38 perft=1714
+actual: moves=38 perft=1714
+for move g2g4: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move g2g4: expected=1843 actual=1679
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P1P1/2N2Q1p/PPPBBP1P/R3K2R b KQkq g3 0 1
+expected: moves=38 perft=1679
+actual: moves=38 perft=1679
+for move g2h3: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move g2h3: expected=1970 actual=1798
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N2Q1P/PPPBBP1P/R3K2R b KQkq - 0 1
+expected: moves=39 perft=1798
+actual: moves=39 perft=1798
+for move h1f1: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move h1f1: expected=1929 actual=1930
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3KR2 b Qkq - 1 1
+expected: moves=39 perft=1758
+actual: moves=39 perft=1758
+for move h1g1: with-position=r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1
+for move h1g1: expected=2013 actual=2014
+perft_divide: depth=2 position=r3k2r/p1ppqpb1/1n2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K1R1 b Qkq - 1 1
+expected: moves=39 perft=1836
+actual: moves=39 perft=1836
+Done in 29.23s.

@@ -15,7 +15,7 @@ function perft(board: Board, depth: number) {
 
     let nodes = 0;
 
-    const moves = MoveGenerator.generateMoves(board);
+    const moves = new MoveGenerator(board).generateMoves();
 
     for (const move of moves) {
         board.makeMove(move);

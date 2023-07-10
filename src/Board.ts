@@ -1,7 +1,4 @@
-import { appendFileSync, createWriteStream } from "fs";
 import { BoardRepresentation, FEN, Move, Piece, PieceList, Zobrist } from "./index.js";
-
-const DEBUG_WRITE_STREAM = createWriteStream("./log");
 
 export class Board {
     static readonly whiteIndex               = 0;
@@ -31,12 +28,14 @@ export class Board {
 
     #zobristKey = 0n;
 
-    readonly kingSquare: [number, number] = [-1, -1];
-    readonly pawns: [PieceList, PieceList] = [new PieceList(), new PieceList()];
-    readonly knights: [PieceList, PieceList] = [new PieceList(), new PieceList()];
-    readonly bishops: [PieceList, PieceList] = [new PieceList(), new PieceList()];
-    readonly rooks: [PieceList, PieceList] = [new PieceList(), new PieceList()];
-    readonly queens: [PieceList, PieceList] = [new PieceList(), new PieceList()];
+    #repetitionHistory: bigint[] = [];
+
+    readonly kingSquare: [number, number]       = [-1, -1];
+    readonly pawns     : [PieceList, PieceList] = [new PieceList(), new PieceList()];
+    readonly knights   : [PieceList, PieceList] = [new PieceList(), new PieceList()];
+    readonly bishops   : [PieceList, PieceList] = [new PieceList(), new PieceList()];
+    readonly rooks     : [PieceList, PieceList] = [new PieceList(), new PieceList()];
+    readonly queens    : [PieceList, PieceList] = [new PieceList(), new PieceList()];
 
     #allPieceLists: PieceList[] = [
         PieceList.empty,
@@ -59,14 +58,15 @@ export class Board {
 
     constructor () {}
 
-    setSquares(squares: number[]) { this.#squares = squares }
-
     #getPieceList(pieceType: number, colorIndex: 0 | 1) {
         return this.#allPieceLists[colorIndex * 8 + pieceType];
     }
 
     makeMove(move: Move) {
-        appendFileSync("./log", `move ${move.name}\n`);
+        // DEBUG
+        // const fen = FEN.toFENString(this);
+
+        // appendFileSync("./log", `move ${move.name}\n`);
 
         const enPassantFile     = (this.#currentGameState >> 4) & 0b1111;
         const castlingRights    = (this.#currentGameState >> 0) & 0b1111;
@@ -216,12 +216,23 @@ export class Board {
         this.#fiftyMoveCounter++;
         
         // reset fifty move counter if a pawn was moved or if a capture was made
-        if (pieceOnStartType === Piece.Pawn || pieceOnTargetType !== Piece.None || isEnPassant)
+        if (pieceOnStartType === Piece.Pawn || pieceOnTargetType !== Piece.None || isEnPassant) {
+            this.#repetitionHistory.length = 0;
             this.#fiftyMoveCounter = 0;
+        } else {
+            this.#repetitionHistory.push(this.#zobristKey);
+        }
+
+        // if (this.#squares.includes(Piece.White) || this.#squares.includes(Piece.Black)) {
+        //     throw new Error(`board includes typeless pieces (making move ${move.name} #${move.bits}) (fen ${fen})`);
+        // }
     }
 
     unmakeMove(move: Move) {
-        appendFileSync("./log", `undo ${move.name}\n`);
+        // DEBUG
+        // const fen = FEN.toFENString(this);
+
+        // appendFileSync("./log", `undo ${move.name}\n`);
 
         const unmakingWhiteMove = this.#colorToMove === Piece.Black;
         const colorMovedIndex   = unmakingWhiteMove ? Board.whiteIndex : Board.blackIndex;
@@ -334,6 +345,12 @@ export class Board {
         }
 
         this.#plyCount--;
+
+        this.#repetitionHistory.pop();
+
+        // if (this.#squares.includes(Piece.White) || this.#squares.includes(Piece.Black)) {
+        //     throw new Error(`board includes typeless pieces (unmaking move ${move.name} #${move.bits}) (fen ${fen}) (state ${this.#currentGameState})`);
+        // }
     }
 
     get squares() {
@@ -365,6 +382,10 @@ export class Board {
     loadPosition(fen: string) {
         const info = FEN.fromFENString(fen);
 
+        if (info.squares.includes(Piece.White) || info.squares.includes(Piece.Black)) {
+            throw new Error(`BAD OUTPUT BY FEN PARSER (FEN ${fen}): [${info.squares.join(", ")}]`);
+        }
+
         for (let squareIndex = 0; squareIndex < 64; squareIndex++) {
             const piece = info.squares[squareIndex];
 
@@ -395,6 +416,7 @@ export class Board {
         this.#currentGameState = initialGameState;
 
         this.#zobristKey = Zobrist.calculateZobristKey(this);
+        this.#repetitionHistory = [];
 
         return this;
     }

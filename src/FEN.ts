@@ -37,6 +37,9 @@ export class FEN {
                 const pieceColor = char.toUpperCase() === char ? Piece.White : Piece.Black; 
                 const pieceType = this.#symbolToType[char.toLowerCase()];
 
+                // !
+                if (!pieceType) throw new Error(`NO PIECE TYPE FOUND (FEN ${fen})`);
+
                 const rank = 7 - (cell >> 3);
                 const file = cell & 0b111;
 
