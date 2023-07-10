@@ -69,7 +69,7 @@ export class MoveGenerator {
         ];
     });
 
-    static generateMoves(board: Board) {
+    static generateMoves(board: Board, allowPseudoLegal = false): Move[] {
         const moves: Move[] = [];
 
         for (let startSquare = 0; startSquare < 64; startSquare++) {
@@ -85,7 +85,19 @@ export class MoveGenerator {
             if (Piece.isType(piece, Piece.Pawn)) moves.push(...this.#generatePawnMoves(board, startSquare));
         }
 
-        return moves;
+        if (allowPseudoLegal) return moves;
+
+        return moves.filter((move) => {
+            board.makeMove(move);
+
+            const legal = this.generateMoves(board, true).every((move) => board.squares[move.targetSquare] !== ((board.colorToMove === Piece.White ? Piece.Black : Piece.White) | Piece.King));
+
+            board.unmakeMove(move);
+
+            return legal;
+        });
+
+        // return moves;
     }
 
     static #generateSlidingMoves(board: Board, startSquare: number, piece: number) {

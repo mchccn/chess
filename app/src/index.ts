@@ -132,6 +132,10 @@ function makeMoveOnBoard(move: Move) {
     ws.send(`position ${startpos} moves ${state.movesMade.map((move) => move.name).join(" ")}\n`);
 }
 
+boardElement.addEventListener("mousedown", (e) => {});
+
+boardElement.addEventListener("mouseup", (e) => {});
+
 boardElement.addEventListener("click", (e) => {
     if (!(e.target instanceof HTMLElement)) return;
 
@@ -148,27 +152,41 @@ boardElement.addEventListener("click", (e) => {
         const attemptedMove = state.legalMoves.find((move) => (
             move.startSquare === state.selected && move.targetSquare === index
         ));
-
-        // if it is a promotion, that means there must be other promotion moves
-        // so we have to add in a UI at some point to allow the user to select
-        // what piece the pawn should be promoted to
         
         if (attemptedMove) {
             // made a move, deselect cell
             state.selected = -1;
 
-            if (attemptedMove.moveFlag === Move.Flag.Castling) {
-                new Audio("assets/sounds/castle.mp3").play();
-            } else if (attemptedMove.isPromotion) {
-                new Audio("assets/sounds/move-promote.mp3").play();
-            } else if (attemptedMove.moveFlag === Move.Flag.EnPassantCapture || (board.squares[attemptedMove.targetSquare] !== Piece.None && !Piece.isColor(board.squares[attemptedMove.targetSquare], board.colorToMove))) {
-                new Audio("assets/sounds/capture.mp3").play();
-            } else {
-                new Audio("assets/sounds/move-self.mp3").play();
-            }
+            if (attemptedMove.isPromotion) {
+                // replace with ui and await user input later
+                const promotionInput = prompt("promotion (q/n/b/r):")?.[0]?.toLowerCase() ?? "q";
+                
+                const promotionFlag = "qnbr".includes(promotionInput) ? {
+                    q: Move.Flag.PromoteToQueen,
+                    n: Move.Flag.PromoteToKnight,
+                    b: Move.Flag.PromoteToBishop,
+                    r: Move.Flag.PromoteToRook,
+                }[promotionInput] : Move.Flag.PromoteToQueen;
 
-            // move on board
-            makeMoveOnBoard(attemptedMove);
+                makeMoveOnBoard(new Move(
+                    attemptedMove.startSquare,
+                    attemptedMove.targetSquare,
+                    promotionFlag,
+                ));
+                
+                new Audio("assets/sounds/move-promote.mp3").play();
+            } else {
+                if (attemptedMove.moveFlag === Move.Flag.Castling) {
+                    new Audio("assets/sounds/castle.mp3").play();
+                } else if (attemptedMove.moveFlag === Move.Flag.EnPassantCapture || (board.squares[attemptedMove.targetSquare] !== Piece.None && !Piece.isColor(board.squares[attemptedMove.targetSquare], board.colorToMove))) {
+                    new Audio("assets/sounds/capture.mp3").play();
+                } else {
+                    new Audio("assets/sounds/move-self.mp3").play();
+                }
+                
+                // move on board
+                makeMoveOnBoard(attemptedMove);
+            }
 
             state.legalMoves = MoveGenerator.generateMoves(board);
         } else if (board.squares[index] === Piece.None || !Piece.isColor(board.squares[index], board.colorToMove)) {
