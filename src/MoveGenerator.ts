@@ -96,7 +96,9 @@ export class MoveGenerator {
 
         if (this.#inCheck && isPinned) return;
 
-        let i: number, n: number, dirOffset: number, targetSquare: number, pieceOnTarget: number, isCapture: boolean, preventsCheck: boolean;
+        let i: number, dirOffset   : number,
+            n: number, targetSquare: number, pieceOnTarget: number, isCapture: boolean, preventsCheck: boolean;
+
         for (i = startIndex; i < endIndex; i++) {
             dirOffset = MoveData.directionOffsets[i];
 
@@ -125,8 +127,8 @@ export class MoveGenerator {
     }
 
     #generateKnightMoves() {
-        let i: number, startSquare: number, offset: number, knightOffsets: number[],
-            j: number, targetSquare: number, pieceOnTarget: number, isCapture: boolean;
+        let i: number, startSquare : number, offset       : number, knightOffsets: number[],
+            j: number, targetSquare: number, pieceOnTarget: number, isCapture    : boolean ;
 
         const knights = this.#board.knights[this.#friendlyColorIndex].squares;
 
@@ -156,7 +158,10 @@ export class MoveGenerator {
 
     #generateKingMoves() {
         let i: number, offset: number, targetSquare: number, pieceOnTarget: number, isCapture: boolean,
-            hasKingsideCastleRight: boolean, hasQueensideCastleRight: boolean, kingsideSquare: number, queensideSquare: number;
+            hasKingsideCastleRight : boolean,
+            hasQueensideCastleRight: boolean,
+            kingsideSquare         : number,
+            queensideSquare        : number;
 
         const offsets = MoveData.kingOffsetsForSquare[this.#friendlyKingSquare];
 
@@ -208,9 +213,11 @@ export class MoveGenerator {
     }
 
     #generatePawnMoves() {
-        let i: number, startSquare: number, rank: number, isAboutToPromote: boolean,
-            oneSquareForward: number, twoSquareForward: number, dir: number,
-            pawnCaptureDir: number, targetSquare: number, targetPiece: number, capturedPawnSquare: number;
+        let i: number, startSquare: number, targetSquare: number,
+            oneSquareForward: number, dir : number,
+            twoSquareForward: number, rank: number,
+            pawnCaptureDir  : number, isAboutToPromote  : boolean,
+            targetPiece     : number, capturedPawnSquare: number;
 
         const whiteToMove         = this.#board.colorToMove === Piece.White;
         const colorToMoveIndex    = whiteToMove ? Board.whiteIndex : Board.blackIndex;
@@ -376,8 +383,9 @@ export class MoveGenerator {
             this.#board.queens[this.#opponentColorIndex].count !== 0 ||
             this.#board.bishops[this.#opponentColorIndex].count !== 0 ? 8 : 4;
 
-        let dir: number, isDiagonal: boolean, n: number, offset: number, friendlyPieceInRay: boolean, rayMask: bigint,
-            i: number, squareIndex: number, piece: number, pieceType: number,
+        let dir: number, offset: number, friendlyPieceInRay: boolean,
+            i: number, squareIndex: number , piece  : number, pieceType: number,
+            n: number, isDiagonal : boolean, rayMask: bigint,
             startSquare: number,
             pawnAttacks: bigint;
 
