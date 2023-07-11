@@ -325,7 +325,7 @@ export class MoveGenerator {
         this.#board.squares_mut[startSquare            ] = Piece.None;
         this.#board.squares_mut[enPassantCapturedSquare] = Piece.None;
 
-        const inCheckAfterCapture = this.#squareAttackedAfterEnPassant(enPassantCapturedSquare, startSquare);
+        const inCheckAfterCapture = this.#squareAttackedAfterEnPassant(enPassantCapturedSquare);
 
         this.#board.squares_mut[targetSquare           ] = Piece.None;
         this.#board.squares_mut[startSquare            ] = this.#friendlyColor | Piece.Pawn;
@@ -334,7 +334,7 @@ export class MoveGenerator {
         return inCheckAfterCapture;
     }
 
-    #squareAttackedAfterEnPassant(enPassantCapturedSquare: number, startSquare: number) {
+    #squareAttackedAfterEnPassant(enPassantCapturedSquare: number) {
         if (Bitboard.containsSquare(this.#opponentAttackMapNoPawns, this.#friendlyKingSquare))
             return true; // don't need to check if we're already in check
 
