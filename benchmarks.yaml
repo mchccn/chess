@@ -15,4 +15,11 @@ perft:
     nps:
       lower: 509000
       upper: 589000
+  - tag: v3-move-generation-piece-list-optimization
+    hash: ae8a3d521beec1b7022cee617fae028d99edbe6c
+    depth: 5
+    node: 496370814
+    time: 973648304816
+    nps:
+      lower: 
 # - tag: ...
