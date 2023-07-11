@@ -29,6 +29,12 @@ export class MoveGenerator {
     #opponentPawnAttackMap = 0n;
     #opponentSlidingAttackMap = 0n;
 
+    get inCheck() { return this.#inCheck; }
+
+    get checkRayBitmask() { return this.#checkRayBitmask; }
+    get pinRayBitmask() { return this.#pinRayBitmask; }
+    get opponentAttackMap() { return this.#opponentAttackMap; }
+
     #options: MoveGeneratorOptions = {};
 
     constructor(board: Board) {
@@ -376,7 +382,9 @@ export class MoveGenerator {
 
                         this.#inCheck = true;
                     }
-                } else break // enemy piece cannot move in this direction
+                }
+                
+                break; // enemy piece cannot move in this direction anymore
             }
 
             if (this.#inDoubleCheck) break; // stop searching if there is a double check (only king can move)

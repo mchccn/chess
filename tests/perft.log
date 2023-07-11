@@ -4,21 +4,25 @@ $ ts-node-esm tests/perft.ts
 
 ✅ TEST PASSED (depth 1) [20 = 20] {2ms}
 
-✅ TEST PASSED (depth 2) [400 = 400] {3ms}
+✅ TEST PASSED (depth 2) [400 = 400] {4ms}
 
-✅ TEST PASSED (depth 3) [8902 = 8902] {407ms}
+✅ TEST PASSED (depth 3) [8902 = 8902] {57ms}
 
-✅ TEST PASSED (depth 4) [197281 = 197281] {1125ms}
+✅ TEST PASSED (depth 4) [197281 = 197281] {519ms}
+
+✅ TEST PASSED (depth 5) [4865609 = 4865609] {10991ms}
 
 ✅ TEST PASSED (depth 0) [1 = 1] {0ms}
 
 ✅ TEST PASSED (depth 1) [48 = 48] {0ms}
 
-✅ TEST PASSED (depth 2) [2039 = 2039] {15ms}
+✅ TEST PASSED (depth 2) [2039 = 2039] {12ms}
 
-✅ TEST PASSED (depth 3) [97862 = 97862] {743ms}
+✅ TEST PASSED (depth 3) [97862 = 97862] {166ms}
 
-✅ TEST PASSED (depth 4) [4085603 = 4085603] {12202ms}
+✅ TEST PASSED (depth 4) [4085603 = 4085603] {8212ms}
+
+✅ TEST PASSED (depth 5) [193690690 = 193690690] {446394ms}
 
 ✅ TEST PASSED (depth 0) [1 = 1] {0ms}
 
@@ -26,25 +30,23 @@ $ ts-node-esm tests/perft.ts
 
 ✅ TEST PASSED (depth 2) [191 = 191] {0ms}
 
-✅ TEST PASSED (depth 3) [2812 = 2812] {6ms}
+✅ TEST PASSED (depth 3) [2812 = 2812] {8ms}
 
-✅ TEST PASSED (depth 4) [43238 = 43238] {118ms}
+✅ TEST PASSED (depth 4) [43238 = 43238] {143ms}
+
+✅ TEST PASSED (depth 5) [674624 = 674624] {2149ms}
 
 ✅ TEST PASSED (depth 0) [1 = 1] {0ms}
 
 ✅ TEST PASSED (depth 1) [6 = 6] {0ms}
 
-✅ TEST PASSED (depth 2) [264 = 264] {1ms}
+✅ TEST PASSED (depth 2) [264 = 264] {2ms}
 
-❌ TEST FAILED (depth 3) [9467 ≠ 9463] {25ms}
-❌ position: r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1
-❌ expected: 9467
-❌ actual: 9463
+✅ TEST PASSED (depth 3) [9467 = 9467] {25ms}
 
-❌ TEST FAILED (depth 4) [422333 ≠ 422149] {1901ms}
-❌ position: r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1
-❌ expected: 422333
-❌ actual: 422149
+✅ TEST PASSED (depth 4) [422333 = 422333] {1224ms}
+
+✅ TEST PASSED (depth 5) [15833292 = 15833292] {48483ms}
 
 ✅ TEST PASSED (depth 0) [1 = 1] {0ms}
 
@@ -52,28 +54,23 @@ $ ts-node-esm tests/perft.ts
 
 ✅ TEST PASSED (depth 2) [264 = 264] {0ms}
 
-❌ TEST FAILED (depth 3) [9467 ≠ 9463] {78ms}
-❌ position: r2q1rk1/pP1p2pp/Q4n2/bbp1p3/Np6/1B3NBn/pPPP1PPP/R3K2R b KQ - 0 1 
-❌ expected: 9467
-❌ actual: 9463
+✅ TEST PASSED (depth 3) [9467 = 9467] {22ms}
 
-❌ TEST FAILED (depth 4) [422333 ≠ 422149] {1210ms}
-❌ position: r2q1rk1/pP1p2pp/Q4n2/bbp1p3/Np6/1B3NBn/pPPP1PPP/R3K2R b KQ - 0 1 
-❌ expected: 422333
-❌ actual: 422149
+✅ TEST PASSED (depth 4) [422333 = 422333] {1004ms}
+
+✅ TEST PASSED (depth 5) [15833292 = 15833292] {47837ms}
 
 ✅ TEST PASSED (depth 0) [1 = 1] {0ms}
 
 ✅ TEST PASSED (depth 1) [44 = 44] {0ms}
 
-✅ TEST PASSED (depth 2) [1486 = 1486] {2ms}
+✅ TEST PASSED (depth 2) [1486 = 1486] {4ms}
 
-✅ TEST PASSED (depth 3) [62379 = 62379] {186ms}
+✅ TEST PASSED (depth 3) [62379 = 62379] {150ms}
 
-❌ TEST FAILED (depth 4) [2103487 ≠ 2103441] {10084ms}
-❌ position: rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8
-❌ expected: 2103487
-❌ actual: 2103441
+✅ TEST PASSED (depth 4) [2103487 = 2103487] {5794ms}
+
+✅ TEST PASSED (depth 5) [89941194 = 89941194] {247234ms}
 
 ✅ TEST PASSED (depth 0) [1 = 1] {0ms}
 
@@ -81,11 +78,13 @@ $ ts-node-esm tests/perft.ts
 
 ✅ TEST PASSED (depth 2) [2079 = 2079] {5ms}
 
-✅ TEST PASSED (depth 3) [89890 = 89890] {250ms}
+✅ TEST PASSED (depth 3) [89890 = 89890] {220ms}
 
-✅ TEST PASSED (depth 4) [3894594 = 3894594] {15213ms}
+✅ TEST PASSED (depth 4) [3894594 = 3894594] {11102ms}
+
+✅ TEST PASSED (depth 5) [164075551 = 164075551] {476368ms}
 
 📋 TEST RESULTS
-✅ 30 tests passed
-❌ 5 tests failed
-Done in 48.97s.
+✅ 42 tests passed
+❌ 0 tests failed
+Done in 1311.34s.

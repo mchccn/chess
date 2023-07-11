@@ -8,7 +8,7 @@ setup();
 
 // this variable holds the original state of the board
 // const startpos = FEN.startingPosition;
-const startpos = "K7/3N4/4Q3/8/3B4/8/pR2p3/7k w KQkq - 0 1";
+// const startpos = "K7/3N4/4Q3/8/3B4/8/pR2p3/7k w KQkq - 0 1";
 
 // debugging positions
 // const startpos = "r3k2r/p1ppqpb1/bn2pnN1/3P4/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1";
@@ -17,6 +17,7 @@ const startpos = "K7/3N4/4Q3/8/3B4/8/pR2p3/7k w KQkq - 0 1";
 // const startpos = "r3k2r/p1ppqp2/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPP1BPPP/R3K2R b KQkq - 0 2";
 // const startpos = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1";
 // const startpos = "r3k2r/p1ppqp2/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPP1BPPP/R3K2R b KQkq - 0 2";
+const startpos = "r3k2r/Pppp1ppp/1b3nbN/nPq5/B1P1P3/5N2/Pp1P2PP/R2Q1RK1 w kq - 0 2";
 // const startpos = "8/8/8/pP7/8/8/8/8 w - a6 0 1";
 
 // const board = new Board().loadStartingPosition();
@@ -113,7 +114,7 @@ function render() {
 
         cellElement.append(imgElement);
         boardElement.append(cellElement);
-
+        
         if (index === state.selected) {
             cellElement.classList.add(isLightSquare ? "light-selected" : "dark-selected")
         }
@@ -189,6 +190,8 @@ boardElement.addEventListener("click", function clickHandler(e) {
             // made a move, deselect cell
             state.selected = -1;
 
+            let 
+            audio: HTMLAudioElement;
             if (attemptedMove.isPromotion) {
                 // replace with ui and await user input later
                 const promotionInput = prompt("promotion (q/n/b/r):")?.[0]?.toLowerCase() ?? "q";
@@ -206,27 +209,34 @@ boardElement.addEventListener("click", function clickHandler(e) {
                     promotionFlag,
                 ));
                 
-                new Audio("assets/sounds/move-promote.mp3").play();
+                audio = new Audio("assets/sounds/move-promote.mp3");
             } else {
                 if (attemptedMove.moveFlag === Move.Flag.Castling) {
-                    new Audio("assets/sounds/castle.mp3").play();
+                    audio = new Audio("assets/sounds/castle.mp3");
                 } else if (attemptedMove.moveFlag === Move.Flag.EnPassantCapture || (board.squares[attemptedMove.targetSquare] !== Piece.None && !Piece.isColor(board.squares[attemptedMove.targetSquare], board.colorToMove))) {
-                    new Audio("assets/sounds/capture.mp3").play();
+                    audio = new Audio("assets/sounds/capture.mp3");
                 } else {
-                    new Audio("assets/sounds/move-self.mp3").play();
+                    audio = new Audio("assets/sounds/move-self.mp3");
                 }
                 
                 // move on board
                 makeMoveOnBoard(attemptedMove);
+
+                const mg = new MoveGenerator(board);
+                mg.generateMoves();
+
+                if (mg.inCheck) audio = new Audio("assets/sounds/move-check.mp3");
             }
 
             if (state.legalMoves.length === 0) {
-                new Audio("assets/sounds/game-end.mp3").play();
+                audio = new Audio("assets/sounds/game-end.mp3");
 
                 state.gameOver = true;
 
                 boardElement.removeEventListener("click", clickHandler);
             }
+
+            audio.play();
         } else if (board.squares[index] === Piece.None || !Piece.isColor(board.squares[index], board.colorToMove)) {
             // can't select enemy piece or empty cell
             state.selected = -1;

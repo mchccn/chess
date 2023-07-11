@@ -63,11 +63,6 @@ export class Board {
     }
 
     makeMove(move: Move) {
-        // DEBUG
-        // const fen = FEN.toFENString(this);
-
-        // appendFileSync("./log", `move ${move.name}\n`);
-
         const oldEnPassantFile   = (this.#currentGameState >> 4) & 0b1111;
         const oldCastlingRights  = (this.#currentGameState >> 0) & 0b1111;
         let   newCastlingRights  = oldCastlingRights;
@@ -222,18 +217,9 @@ export class Board {
         } else {
             this.#repetitionHistory.push(this.#zobristKey);
         }
-
-        // if (this.#squares.includes(Piece.White) || this.#squares.includes(Piece.Black)) {
-        //     throw new Error(`board includes typeless pieces (making move ${move.name} #${move.bits}) (fen ${fen})`);
-        // }
     }
 
     unmakeMove(move: Move) {
-        // DEBUG
-        // const fen = FEN.toFENString(this);
-
-        // appendFileSync("./log", `undo ${move.name}\n`);
-
         const unmakingWhiteMove  = this.#colorToMove === Piece.Black;
         const friendlyColorIndex = unmakingWhiteMove ? Board.whiteIndex : Board.blackIndex;
         const opponentColorIndex = (1 - friendlyColorIndex) as 0 | 1;
@@ -347,10 +333,6 @@ export class Board {
         this.#plyCount--;
 
         this.#repetitionHistory.pop();
-
-        // if (this.#squares.includes(Piece.White) || this.#squares.includes(Piece.Black)) {
-        //     throw new Error(`board includes typeless pieces (unmaking move ${move.name} #${move.bits}) (fen ${fen}) (state ${this.#currentGameState})`);
-        // }
     }
 
     get squares() {
