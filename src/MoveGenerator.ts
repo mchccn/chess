@@ -126,7 +126,7 @@ export class MoveGenerator {
 
     #generateKnightMoves() {
         let i: number, startSquare: number, offset: number, knightOffsets: number[],
-            targetSquare: number, pieceOnTarget: number, isCapture: boolean;
+            j: number, targetSquare: number, pieceOnTarget: number, isCapture: boolean;
 
         const knights = this.#board.knights[this.#friendlyColorIndex].squares;
 
@@ -137,7 +137,9 @@ export class MoveGenerator {
             
             knightOffsets = MoveData.knightOffsetsForSquare[startSquare];
 
-            for (offset = 0; offset < knightOffsets.length; offset++) {
+            for (j = 0; j < knightOffsets.length; j++) {
+                offset        = knightOffsets[j];
+
                 targetSquare  = startSquare + offset;
                 pieceOnTarget = this.#board.squares[targetSquare];
 
