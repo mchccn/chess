@@ -1,0 +1,10 @@
+perft:
+  - tag: v1-move-generation
+    hash: 4ed666f1b7084811186026281dba5a2e99390072
+    depth: 5
+    nodes: 496370814
+    time: 862643002158
+    nps: 
+      lower: 496000
+      upper: 575000
+# - tag: ...
