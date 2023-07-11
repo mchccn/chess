@@ -4,6 +4,7 @@
         "module": "esnext",
         "outDir": "dist",
         "declaration": true,
+        "removeComments": true,
         "moduleResolution": "node",
         "resolveJsonModule": true,
         "esModuleInterop": true,
