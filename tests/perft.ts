@@ -30,15 +30,20 @@ function perft(board: Board, depth: number) {
 
 let failed = 0;
 let passed = 0;
+let time   = 0n;
+let total  = 0n;
 
 Object.entries(tests).forEach(([fen, nodes]) => {
     const board = new Board().loadPosition(fen);
 
-    for (let depth = 0; depth < nodes.length; depth++) {
+    for (let depth = 0; depth < Math.min(nodes.length, Number(process.argv[2]) || Infinity); depth++) {
         const expected = nodes[depth];
         const then     = process.hrtime.bigint();
         const actual   = perft(board, depth);
         const now      = process.hrtime.bigint();
+
+        time  += now - then;
+        total += BigInt(actual);
 
         if (expected !== actual) {
             console.log(`❌ TEST FAILED (depth ${depth}) [${expected} ≠ ${actual}] {${(now - then) / 1_000_000n}ms}`);
@@ -60,3 +65,5 @@ Object.entries(tests).forEach(([fen, nodes]) => {
 console.log(`📋 TEST RESULTS`);
 console.log(`✅ ${passed} test${passed === 1 ? "" : "s"} passed`);
 console.log(`❌ ${failed} test${failed === 1 ? "" : "s"} failed`);
+console.log(`ℹ️ ${total} nodes found in ${time}ns (~${Number(total / (time / 1_000_000n)) * 1000} nps)`);
+console.log(`ℹ️ run perft_bench for more accurate speeds`);
