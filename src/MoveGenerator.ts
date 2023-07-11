@@ -79,16 +79,25 @@ export class MoveGenerator {
         let i: number;
 
         const rooks = this.#board.rooks[this.#friendlyColorIndex].squares;
-        for (i = 0; i < rooks.length; i++)
+        for (i = 0; i < rooks.length; i++) {
+            if (rooks[i] > 63) break;
+            
             this.#generateSlidingPieceMoves(rooks[i], 0, 4);
+        }
 
         const bishops = this.#board.bishops[this.#friendlyColorIndex].squares;
-        for (i = 0; i < bishops.length; i++)
+        for (i = 0; i < bishops.length; i++) {
+            if (bishops[i] > 63) break;
+            
             this.#generateSlidingPieceMoves(bishops[i], 4, 8);
+        }
 
         const queens = this.#board.queens[this.#friendlyColorIndex].squares;
-        for (i = 0; i < queens.length; i++)
+        for (i = 0; i < queens.length; i++) {
+            if (queens[i] > 63) break;
+            
             this.#generateSlidingPieceMoves(queens[i], 0, 8);
+        }
     }
 
     #generateSlidingPieceMoves(startSquare: number, startIndex: number, endIndex: number) {
@@ -134,6 +143,8 @@ export class MoveGenerator {
 
         for (i = 0; i < knights.length; i++) {
             startSquare = knights[i];
+
+            if (startSquare > 63) break;
 
             if (this.#isPinned(startSquare)) continue;
             
@@ -233,6 +244,8 @@ export class MoveGenerator {
 
         for (i = 0; i < pawns.length; i++) {
             startSquare      = pawns[i];
+
+            if (startSquare > 63) break;
 
             rank             = BoardRepresentation.rankIndex(startSquare);
             isAboutToPromote = rank === rankBeforePromotion;
@@ -445,6 +458,8 @@ export class MoveGenerator {
         for (i = 0; i < knights.length; i++) {
             startSquare = knights[i];
 
+            if (startSquare > 63) break;
+
             this.#opponentKnightAttacks |= MoveData.knightAttackBitboards[startSquare];
 
             if (!isKnightCheck && Bitboard.containsSquare(this.#opponentKnightAttacks, this.#friendlyKingSquare)) {
@@ -466,6 +481,8 @@ export class MoveGenerator {
 
         for (i = 0; i < pawns.length; i++) {
             startSquare = pawns[i];
+
+            if (startSquare > 63) break;
 
             pawnAttacks = MoveData.pawnAttackBitboards[startSquare][this.#opponentColorIndex];
 
@@ -494,16 +511,25 @@ export class MoveGenerator {
         this.#opponentSlidingAttackMap = 0n;
 
         const rooks = this.#board.rooks[this.#opponentColorIndex].squares;
-        for (i = 0; i < rooks.length; i++)
+        for (i = 0; i < rooks.length; i++) {
+            if (rooks[i] > 63) break;
+            
             this.#computeSlidingAttack(rooks[i], 0, 4);
+        }
 
         const bishops = this.#board.bishops[this.#opponentColorIndex].squares;
-        for (i = 0; i < bishops.length; i++)
+        for (i = 0; i < bishops.length; i++) {
+            if (bishops[i] > 63) break;
+            
             this.#computeSlidingAttack(bishops[i], 4, 8);
+        }
 
         const queens = this.#board.queens[this.#opponentColorIndex].squares;
-        for (i = 0; i < queens.length; i++)
+        for (i = 0; i < queens.length; i++) {
+            if (queens[i] > 63) break;
+            
             this.#computeSlidingAttack(queens[i], 0, 8);
+        }
     }
 
     #computeSlidingAttack(startSquare: number, startDirIndex: number, endDirIndex: number) {

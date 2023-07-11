@@ -17,7 +17,8 @@ setup();
 // const startpos = "r3k2r/p1ppqp2/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPP1BPPP/R3K2R b KQkq - 0 2";
 // const startpos = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1";
 // const startpos = "r3k2r/p1ppqp2/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPP1BPPP/R3K2R b KQkq - 0 2";
-const startpos = "r3k2r/Pppp1ppp/1b3nbN/nPq5/B1P1P3/5N2/Pp1P2PP/R2Q1RK1 w kq - 0 2";
+// const startpos = "r3k2r/Pppp1ppp/1b3nbN/nPq5/B1P1P3/5N2/Pp1P2PP/R2Q1RK1 w kq - 0 2";
+const startpos = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 // const startpos = "8/8/8/pP7/8/8/8/8 w - a6 0 1";
 
 // const board = new Board().loadStartingPosition();
@@ -115,6 +116,10 @@ function render() {
         cellElement.append(imgElement);
         boardElement.append(cellElement);
         
+        if (board.knights[0].squares.includes(index)) {
+            cellElement.classList.add("debug-1")
+        }
+
         if (index === state.selected) {
             cellElement.classList.add(isLightSquare ? "light-selected" : "dark-selected")
         }

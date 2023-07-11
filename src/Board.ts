@@ -31,11 +31,11 @@ export class Board {
     #repetitionHistory: bigint[] = [];
 
     readonly kingSquare: [number, number]       = [-1, -1];
-    readonly pawns     : [PieceList, PieceList] = [new PieceList(), new PieceList()];
-    readonly knights   : [PieceList, PieceList] = [new PieceList(), new PieceList()];
-    readonly bishops   : [PieceList, PieceList] = [new PieceList(), new PieceList()];
-    readonly rooks     : [PieceList, PieceList] = [new PieceList(), new PieceList()];
-    readonly queens    : [PieceList, PieceList] = [new PieceList(), new PieceList()];
+    readonly pawns     : [PieceList, PieceList] = [new PieceList( 8), new PieceList( 8)];
+    readonly queens    : [PieceList, PieceList] = [new PieceList( 9), new PieceList( 9)];
+    readonly knights   : [PieceList, PieceList] = [new PieceList(10), new PieceList(10)];
+    readonly bishops   : [PieceList, PieceList] = [new PieceList(10), new PieceList(10)];
+    readonly rooks     : [PieceList, PieceList] = [new PieceList(10), new PieceList(10)];
 
     #allPieceLists: PieceList[] = [
         PieceList.empty,
