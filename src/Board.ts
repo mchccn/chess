@@ -373,7 +373,8 @@ export class Board {
             throw new Error(`BAD OUTPUT BY FEN PARSER (FEN ${fen}): [${info.squares.join(", ")}]`);
         }
 
-        for (let squareIndex = 0; squareIndex < 64; squareIndex++) {
+        let squareIndex: number;
+        for (squareIndex = 0; squareIndex < 64; squareIndex++) {
             const piece = info.squares[squareIndex];
 
             if (piece !== Piece.None) {

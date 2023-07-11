@@ -7,4 +7,12 @@ perft:
     nps: 
       lower: 496000
       upper: 575000
+  - tag: v2-move-generation-loop-var-optimization
+    hash: 22206e6437c401c1be73a68702e99509c4ca8daa
+    depth: 5
+    nodes: 496370814
+    time: 964413840246
+    nps:
+      lower: 509000
+      upper: 600000
 # - tag: ...

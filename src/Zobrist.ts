@@ -13,27 +13,31 @@ export class Zobrist {
     static readonly sideToMove: bigint = this.#randomU64();
 
     static {
-        for (let pieceIndex = 0; pieceIndex < 8; pieceIndex++) {
+        let i: number, squareIndex: number;
+
+        for (i = 0; i < 8; i++) {
             this.piecesArray.push([[], []]);
 
-            for (let squareIndex = 0; squareIndex < 64; squareIndex++) {
-                this.piecesArray[pieceIndex][Board.whiteIndex][squareIndex] = this.#randomU64();
-                this.piecesArray[pieceIndex][Board.blackIndex][squareIndex] = this.#randomU64();
+            for (squareIndex = 0; squareIndex < 64; squareIndex++) {
+                this.piecesArray[i][Board.whiteIndex][squareIndex] = this.#randomU64();
+                this.piecesArray[i][Board.blackIndex][squareIndex] = this.#randomU64();
             }
         }
 
-        for (let i = 0; i < 16; i++) this.castlingRights.push(this.#randomU64());
+        for (i = 0; i < 16; i++) this.castlingRights.push(this.#randomU64());
 
-        for (let i = 0; i < 9; i++) this.enPassantFile.push(this.#randomU64());
+        for (i = 0; i < 9; i++) this.enPassantFile.push(this.#randomU64());
     }
 
     static calculateZobristKey(board: Board) {
         let zobristKey = 0n;
 
-        for (let squareIndex = 0; squareIndex < 64; squareIndex++) {
+        let squareIndex: number, pieceType: number, pieceColor: number;
+
+        for (squareIndex = 0; squareIndex < 64; squareIndex++) {
             if (board.squares[squareIndex] !== Piece.None) {
-                const pieceType  = Piece.getType (board.squares[squareIndex]);
-                const pieceColor = Piece.getColor(board.squares[squareIndex]);
+                pieceType  = Piece.getType (board.squares[squareIndex]);
+                pieceColor = Piece.getColor(board.squares[squareIndex]);
 
                 zobristKey ^= this.piecesArray[pieceType][pieceColor === Piece.White ? Board.whiteIndex : Board.blackIndex][squareIndex];
             }
@@ -51,11 +55,13 @@ export class Zobrist {
     }
 
     static #randomU64() {
+        let i: number;
+
         // in-browser implementation
         if (typeof window !== "undefined") {
             const array = new Uint8Array(8);
 
-            for (let i = 0; i < 8; i++) array[i] = Math.floor(Math.random() * 256);
+            for (i = 0; i < 8; i++) array[i] = Math.floor(Math.random() * 256);
 
             return new DataView(array.buffer).getBigUint64(0);
         }
@@ -63,7 +69,7 @@ export class Zobrist {
         // nodejs implementation
         const array = [];
 
-        for (let i = 0; i < 8; i++) array.push(Math.floor(Math.random() * 256))
+        for (i = 0; i < 8; i++) array.push(Math.floor(Math.random() * 256))
 
         return Buffer.from(array).readBigUInt64BE();
     }

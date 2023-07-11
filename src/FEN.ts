@@ -26,7 +26,8 @@ export class FEN {
 
         const squares = new Array<number>(64).fill(0);
 
-        for (let i = 0, cell = 0; i < positions.length; i++) {
+        let i: number, cell: number;
+        for (i = 0, cell = 0; i < positions.length; i++) {
             const char = positions[i];
 
             if (char === "/") continue;
@@ -75,19 +76,20 @@ export class FEN {
     static toFENString(board: Board): string {
         let fen = "";
 
-        for (let rank = 7; rank >= 0; rank--) {
-            for (let file = 0; file < 8; file++) {
-                const cell = board.squares[rank * 8 + file];
+        let rank: number, file: number, cell: number, j: number, type: number, casing: keyof string;
+        for (rank = 7; rank >= 0; rank--) {
+            for (file = 0; file < 8; file++) {
+                cell = board.squares[rank * 8 + file];
 
-                const j = file;
+                j = file;
 
                 while (!board.squares[rank * 8 + file] && file < 8) file++;
 
                 if (file !== j) {
                     fen += file-- - j;
                 } else {
-                    const type = Piece.getType(cell);
-                    const casing = Piece.getColor(cell) === Piece.White ? "toUpperCase" : "toLowerCase";
+                    type = Piece.getType(cell);
+                    casing = Piece.getColor(cell) === Piece.White ? "toUpperCase" : "toLowerCase";
 
                     fen += this.#typeToSymbol[type][casing]();
                 }

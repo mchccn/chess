@@ -1,7 +1,5 @@
 import { Bitboard, Board, BoardRepresentation, Move, MoveData, Piece } from "./index.js";
 
-const drop: (ident: any) => asserts ident is never = (ident: any) => void ident;
-
 export type MoveGeneratorOptions = { excludeQuietMoves?: boolean };
 
 export class MoveGenerator {
@@ -53,12 +51,11 @@ export class MoveGenerator {
     }
 
     generateMoves(options: MoveGeneratorOptions = {}) {
+        // DO NOT USE options; USE this.#options
         this.#options = {
             excludeQuietMoves: false,
             ...options
         };
-
-        drop(options);
 
         this.#moves.length = 0;
 
@@ -79,14 +76,19 @@ export class MoveGenerator {
     }
 
     #generateSlidingMoves() {
-        for (const rookSquare of this.#board.rooks[this.#friendlyColorIndex].squares)
-            this.#generateSlidingPieceMoves(rookSquare, 0, 4);
+        let i: number;
 
-        for (const bishopSquare of this.#board.bishops[this.#friendlyColorIndex].squares)
-            this.#generateSlidingPieceMoves(bishopSquare, 4, 8);
+        const rooks = this.#board.rooks[this.#friendlyColorIndex].squares;
+        for (i = 0; i < rooks.length; i++)
+            this.#generateSlidingPieceMoves(rooks[i], 0, 4);
 
-        for (const queenSquare of this.#board.queens[this.#friendlyColorIndex].squares)
-            this.#generateSlidingPieceMoves(queenSquare, 0, 8);
+        const bishops = this.#board.bishops[this.#friendlyColorIndex].squares;
+        for (i = 0; i < bishops.length; i++)
+            this.#generateSlidingPieceMoves(bishops[i], 4, 8);
+
+        const queens = this.#board.queens[this.#friendlyColorIndex].squares;
+        for (i = 0; i < queens.length; i++)
+            this.#generateSlidingPieceMoves(queens[i], 0, 8);
     }
 
     #generateSlidingPieceMoves(startSquare: number, startIndex: number, endIndex: number) {
@@ -94,20 +96,23 @@ export class MoveGenerator {
 
         if (this.#inCheck && isPinned) return;
 
-        for (let i = startIndex; i < endIndex; i++) {
-            const dirOffset = MoveData.directionOffsets[i];
+        let i: number, dirOffset   : number,
+            n: number, targetSquare: number, pieceOnTarget: number, isCapture: boolean, preventsCheck: boolean;
+
+        for (i = startIndex; i < endIndex; i++) {
+            dirOffset = MoveData.directionOffsets[i];
 
             if (isPinned && !this.#isAlongRay(dirOffset, this.#friendlyKingSquare, startSquare)) continue;
 
-            for (let n = 0; n < MoveData.squaresToEdge[startSquare][i]; n++) {
-                const targetSquare = startSquare + dirOffset * (n + 1);
-                const pieceOnTarget = this.#board.squares[targetSquare];
+            for (n = 0; n < MoveData.squaresToEdge[startSquare][i]; n++) {
+                targetSquare  = startSquare + dirOffset * (n + 1);
+                pieceOnTarget = this.#board.squares[targetSquare];
 
                 // blocked by friendly piece
                 if (Piece.isColor(pieceOnTarget, this.#board.colorToMove)) break;
 
-                const isCapture     = pieceOnTarget !== Piece.None;
-                const preventsCheck = this.#inCheckRay(targetSquare);
+                isCapture     = pieceOnTarget !== Piece.None;
+                preventsCheck = this.#inCheckRay(targetSquare);
                 
                 if (!this.#inCheck || preventsCheck) {
                     if (!this.#options.excludeQuietMoves || isCapture) {
@@ -122,14 +127,25 @@ export class MoveGenerator {
     }
 
     #generateKnightMoves() {
-        for (const startSquare of this.#board.knights[this.#friendlyColorIndex].squares) {
+        let i: number, startSquare : number, offset       : number, knightOffsets: number[],
+            j: number, targetSquare: number, pieceOnTarget: number, isCapture    : boolean ;
+
+        const knights = this.#board.knights[this.#friendlyColorIndex].squares;
+
+        for (i = 0; i < knights.length; i++) {
+            startSquare = knights[i];
+
             if (this.#isPinned(startSquare)) continue;
             
-            for (const offset of MoveData.knightOffsetsForSquare[startSquare]) {
-                const targetSquare = startSquare + offset;
-                const pieceOnTarget = this.#board.squares[targetSquare];
+            knightOffsets = MoveData.knightOffsetsForSquare[startSquare];
 
-                const isCapture = Piece.isColor(pieceOnTarget, this.#opponentColor);
+            for (j = 0; j < knightOffsets.length; j++) {
+                offset        = knightOffsets[j];
+
+                targetSquare  = startSquare + offset;
+                pieceOnTarget = this.#board.squares[targetSquare];
+
+                isCapture     = Piece.isColor(pieceOnTarget, this.#opponentColor);
 
                 if (!this.#options.excludeQuietMoves || isCapture) {
                     if (Piece.isColor(pieceOnTarget, this.#friendlyColor) || (this.#inCheck && !this.#inCheckRay(targetSquare))) continue;
@@ -141,14 +157,24 @@ export class MoveGenerator {
     }
 
     #generateKingMoves() {
-        for (const offset of MoveData.kingOffsetsForSquare[this.#friendlyKingSquare]) {
-            const targetSquare = this.#friendlyKingSquare + offset;
-            const pieceOnTarget = this.#board.squares[targetSquare];
+        let i: number, offset: number, targetSquare: number, pieceOnTarget: number, isCapture: boolean,
+            hasKingsideCastleRight : boolean,
+            hasQueensideCastleRight: boolean,
+            kingsideSquare         : number,
+            queensideSquare        : number;
+
+        const offsets = MoveData.kingOffsetsForSquare[this.#friendlyKingSquare];
+
+        for (i = 0; i < offsets.length; i++) {
+            offset = offsets[i];
+
+            targetSquare = this.#friendlyKingSquare + offset;
+            pieceOnTarget = this.#board.squares[targetSquare];
 
             // can't move here if it's a friendly piece
             if (pieceOnTarget !== Piece.None && Piece.isColor(pieceOnTarget, this.#friendlyColor)) continue;
 
-            const isCapture = Piece.isColor(pieceOnTarget, this.#opponentColor);
+            isCapture = Piece.isColor(pieceOnTarget, this.#opponentColor);
 
             // can't move into check ray unless it is a capture
             if (!isCapture && (this.#options.excludeQuietMoves || this.#inCheckRay(targetSquare))) continue;
@@ -158,12 +184,12 @@ export class MoveGenerator {
 
                 // check castling
                 if (!this.#inCheck && !isCapture) {
-                    const hasKingsideCastleRight  = (this.#board.currentGameState & (this.#whiteToMove ? 0b0001 : 0b0100)) !== 0;
-                    const hasQueensideCastleRight = (this.#board.currentGameState & (this.#whiteToMove ? 0b0010 : 0b1000)) !== 0;
+                    hasKingsideCastleRight  = (this.#board.currentGameState & (this.#whiteToMove ? 0b0001 : 0b0100)) !== 0;
+                    hasQueensideCastleRight = (this.#board.currentGameState & (this.#whiteToMove ? 0b0010 : 0b1000)) !== 0;
 
                     // kingside
                     if ((targetSquare === BoardRepresentation.f1 || targetSquare === BoardRepresentation.f8) && hasKingsideCastleRight) {
-                        const kingsideSquare = targetSquare + 1;
+                        kingsideSquare = targetSquare + 1;
 
                         if (this.#board.squares[kingsideSquare] === Piece.None && !this.#squareIsAttacked(kingsideSquare)) {
                             this.#moves.push(new Move(this.#friendlyKingSquare, kingsideSquare, Move.Flag.Castling));
@@ -172,7 +198,7 @@ export class MoveGenerator {
 
                     // queenside
                     if ((targetSquare === BoardRepresentation.d1 || targetSquare === BoardRepresentation.d8) && hasQueensideCastleRight) {
-                        const queensideSquare = targetSquare - 1;
+                        queensideSquare = targetSquare - 1;
 
                         if (this.#board.squares[queensideSquare] === Piece.None &&
                             this.#board.squares[queensideSquare - 1] === Piece.None &&
@@ -187,6 +213,12 @@ export class MoveGenerator {
     }
 
     #generatePawnMoves() {
+        let i: number, startSquare: number, targetSquare: number,
+            oneSquareForward: number, dir : number,
+            twoSquareForward: number, rank: number,
+            pawnCaptureDir  : number, isAboutToPromote  : boolean,
+            targetPiece     : number, capturedPawnSquare: number;
+
         const whiteToMove         = this.#board.colorToMove === Piece.White;
         const colorToMoveIndex    = whiteToMove ? Board.whiteIndex : Board.blackIndex;
 
@@ -197,12 +229,16 @@ export class MoveGenerator {
         const enPassantFile       = ((this.#board.currentGameState >> 4) & 0b1111) - 1;
         const enPassantSquare     = enPassantFile === -1 ? -1 : (8 * (whiteToMove ? 5 : 2)) + enPassantFile;
 
-        for (const startSquare of this.#board.pawns[this.#friendlyColorIndex].squares) {
-            const rank                = BoardRepresentation.rankIndex(startSquare);
-            const isAboutToPromote    = rank === rankBeforePromotion;
+        const pawns               = this.#board.pawns[this.#friendlyColorIndex].squares;
+
+        for (i = 0; i < pawns.length; i++) {
+            startSquare      = pawns[i];
+
+            rank             = BoardRepresentation.rankIndex(startSquare);
+            isAboutToPromote = rank === rankBeforePromotion;
 
             if (!this.#options.excludeQuietMoves) {
-                const oneSquareForward = startSquare + pawnOffset;
+                oneSquareForward = startSquare + pawnOffset;
 
                 if (this.#board.squares[oneSquareForward] === Piece.None) {
                     if (!this.#isPinned(startSquare) || this.#isAlongRay(pawnOffset, startSquare, this.#friendlyKingSquare)) {
@@ -216,7 +252,7 @@ export class MoveGenerator {
 
                         // double pawn push if it hasn't been moved
                         if (rank === startRank) {
-                            const twoSquareForward = oneSquareForward + pawnOffset;
+                            twoSquareForward = oneSquareForward + pawnOffset;
 
                             if (this.#board.squares[twoSquareForward] === Piece.None) {
                                 if (!this.#inCheck || this.#inCheckRay(twoSquareForward)) {
@@ -228,11 +264,11 @@ export class MoveGenerator {
                 }
             }
 
-            for (let dir = 0; dir < 2; dir++) {
+            for (dir = 0; dir < 2; dir++) {
                 if (MoveData.squaresToEdge[startSquare][MoveData.pawnAttackDirections[colorToMoveIndex][dir]] > 0) {
-                    const pawnCaptureDir = MoveData.directionOffsets[MoveData.pawnAttackDirections[colorToMoveIndex][dir]];
-                    const targetSquare   = startSquare + pawnCaptureDir;
-                    const targetPiece    = this.#board.squares[targetSquare];
+                    pawnCaptureDir = MoveData.directionOffsets[MoveData.pawnAttackDirections[colorToMoveIndex][dir]];
+                    targetSquare   = startSquare + pawnCaptureDir;
+                    targetPiece    = this.#board.squares[targetSquare];
 
                     if (this.#isPinned(startSquare) && !this.#isAlongRay(pawnCaptureDir, this.#friendlyKingSquare, startSquare))
                         continue;    
@@ -248,7 +284,7 @@ export class MoveGenerator {
                     }
 
                     if (targetSquare === enPassantSquare) {
-                        const capturedPawnSquare = targetSquare + (whiteToMove ? -8 : 8);
+                        capturedPawnSquare = targetSquare + (whiteToMove ? -8 : 8);
 
                         if (!this.#inCheckAfterEnPassant(startSquare, targetSquare, capturedPawnSquare)) {
                             this.#moves.push(new Move(startSquare, targetSquare, Move.Flag.EnPassantCapture));
@@ -302,12 +338,16 @@ export class MoveGenerator {
         if (Bitboard.containsSquare(this.#opponentAttackMapNoPawns, this.#friendlyKingSquare))
             return true; // don't need to check if we're already in check
 
+        let n: number, squareIndex: number, piece: number, i: number;
+
         const dirIndex = enPassantCapturedSquare < this.#friendlyKingSquare ? 2 : 3;
 
-        for (let n = 0; n < MoveData.squaresToEdge[this.#friendlyKingSquare][dirIndex]; n++) {
-            const squareIndex = this.#friendlyKingSquare + MoveData.directionOffsets[dirIndex] * (n + 1);
+        const squaresToEdge = MoveData.squaresToEdge[this.#friendlyKingSquare][dirIndex];
 
-            const piece = this.#board.squares[squareIndex];
+        for (n = 0; n < squaresToEdge; n++) {
+            squareIndex = this.#friendlyKingSquare + MoveData.directionOffsets[dirIndex] * (n + 1);
+
+            piece = this.#board.squares[squareIndex];
 
             if (piece === Piece.None) continue;
 
@@ -318,9 +358,9 @@ export class MoveGenerator {
         }
 
         // pawn attack map unavailable since it has been captured
-        for (let i = 0; i < 2; i++) {
+        for (i = 0; i < 2; i++) {
             if (MoveData.squaresToEdge[this.#friendlyKingSquare][MoveData.pawnAttackDirections[this.#friendlyColorIndex][i]] > 0) {
-                const piece = this.#board.squares[this.#friendlyKingSquare + MoveData.directionOffsets[MoveData.pawnAttackDirections[this.#friendlyColorIndex][i]]];
+                piece = this.#board.squares[this.#friendlyKingSquare + MoveData.directionOffsets[MoveData.pawnAttackDirections[this.#friendlyColorIndex][i]]];
 
                 // is attacked by enemy pawn
                 if (piece === (this.#opponentColor | Piece.Pawn)) return true;
@@ -343,21 +383,27 @@ export class MoveGenerator {
             this.#board.queens[this.#opponentColorIndex].count !== 0 ||
             this.#board.bishops[this.#opponentColorIndex].count !== 0 ? 8 : 4;
 
-        for (let dir = startDirIndex; dir < endDirIndex; dir++) {
-            const isDiagonal = dir >= 4;
+        let dir: number, offset: number, friendlyPieceInRay: boolean,
+            i: number, squareIndex: number , piece  : number, pieceType: number,
+            n: number, isDiagonal : boolean, rayMask: bigint,
+            startSquare: number,
+            pawnAttacks: bigint;
 
-            const n      = MoveData.squaresToEdge[this.#friendlyKingSquare][dir];
-            const offset = MoveData.directionOffsets[dir];
+        for (dir = startDirIndex; dir < endDirIndex; dir++) {
+            isDiagonal         = dir >= 4;
+
+            n                  = MoveData.squaresToEdge[this.#friendlyKingSquare][dir];
+            offset             = MoveData.directionOffsets[dir];
             
-            let friendlyPieceInRay = false;
-            let rayMask            = 0n;
+            friendlyPieceInRay = false;
+            rayMask            = 0n;
 
-            for (let i = 0; i < n; i++) {
-                const squareIndex = this.#friendlyKingSquare + offset * (i + 1);
+            for (i = 0; i < n; i++) {
+                squareIndex = this.#friendlyKingSquare + offset * (i + 1);
                 
                 rayMask |= 1n << BigInt(squareIndex);
 
-                const piece = this.#board.squares[squareIndex];
+                piece = this.#board.squares[squareIndex];
 
                 if (piece === Piece.None) continue;
 
@@ -368,7 +414,7 @@ export class MoveGenerator {
                     continue;
                 }
 
-                const pieceType = Piece.getType(piece);
+                pieceType = Piece.getType(piece);
 
                 if ((isDiagonal && Piece.isBishopOrQueen(pieceType)) || (!isDiagonal && Piece.isRookOrQueen(pieceType))) {
                     if (friendlyPieceInRay) {
@@ -394,7 +440,11 @@ export class MoveGenerator {
 
         let isKnightCheck = false;
 
-        for (const startSquare of this.#board.knights[this.#opponentColorIndex].squares) {
+        const knights = this.#board.knights[this.#opponentColorIndex].squares;
+
+        for (i = 0; i < knights.length; i++) {
+            startSquare = knights[i];
+
             this.#opponentKnightAttacks |= MoveData.knightAttackBitboards[startSquare];
 
             if (!isKnightCheck && Bitboard.containsSquare(this.#opponentKnightAttacks, this.#friendlyKingSquare)) {
@@ -412,8 +462,12 @@ export class MoveGenerator {
 
         let isPawnCheck = false;
 
-        for (const startSquare of this.#board.pawns[this.#opponentColorIndex].squares) {
-            const pawnAttacks = MoveData.pawnAttackBitboards[startSquare][this.#opponentColorIndex];
+        const pawns = this.#board.pawns[this.#opponentColorIndex].squares;
+
+        for (i = 0; i < pawns.length; i++) {
+            startSquare = pawns[i];
+
+            pawnAttacks = MoveData.pawnAttackBitboards[startSquare][this.#opponentColorIndex];
 
             this.#opponentPawnAttackMap |= pawnAttacks;
 
@@ -435,25 +489,32 @@ export class MoveGenerator {
     }
 
     #computeSlidingAttackMap() {
+        let i: number;
+
         this.#opponentSlidingAttackMap = 0n;
 
-        for (const rookSquare of this.#board.rooks[this.#opponentColorIndex].squares)
-            this.#computeSlidingAttack(rookSquare, 0, 4);
+        const rooks = this.#board.rooks[this.#opponentColorIndex].squares;
+        for (i = 0; i < rooks.length; i++)
+            this.#computeSlidingAttack(rooks[i], 0, 4);
 
-        for (const bishopSquare of this.#board.bishops[this.#opponentColorIndex].squares)
-            this.#computeSlidingAttack(bishopSquare, 4, 8);
+        const bishops = this.#board.bishops[this.#opponentColorIndex].squares;
+        for (i = 0; i < bishops.length; i++)
+            this.#computeSlidingAttack(bishops[i], 4, 8);
 
-        for (const queenSquare of this.#board.queens[this.#opponentColorIndex].squares)
-            this.#computeSlidingAttack(queenSquare, 0, 8);
+        const queens = this.#board.queens[this.#opponentColorIndex].squares;
+        for (i = 0; i < queens.length; i++)
+            this.#computeSlidingAttack(queens[i], 0, 8);
     }
 
     #computeSlidingAttack(startSquare: number, startDirIndex: number, endDirIndex: number) {
-        for (let dir = startDirIndex; dir < endDirIndex; dir++) {
-            const offset = MoveData.directionOffsets[dir];
+        let dir: number, offset: number, n: number, targetSquare: number, targetSquarePiece: number;
 
-            for (let n = 0; n < MoveData.squaresToEdge[startSquare][dir]; n++) {
-                const targetSquare = startSquare + offset * (n + 1);
-                const targetSquarePiece = this.#board.squares[targetSquare];
+        for (dir = startDirIndex; dir < endDirIndex; dir++) {
+            offset = MoveData.directionOffsets[dir];
+
+            for (n = 0; n < MoveData.squaresToEdge[startSquare][dir]; n++) {
+                targetSquare      = startSquare + offset * (n + 1);
+                targetSquarePiece = this.#board.squares[targetSquare];
 
                 this.#opponentSlidingAttackMap |= 1n << BigInt(targetSquare);
 
