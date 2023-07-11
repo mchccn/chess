@@ -21,5 +21,6 @@ perft:
     node: 496370814
     time: 973648304816
     nps:
-      lower: 
+      lower: 541000
+      upper: 596000
 # - tag: ...
