@@ -14,5 +14,5 @@ perft:
     time: 964413840246
     nps:
       lower: 509000
-      upper: 600000
+      upper: 589000
 # - tag: ...
