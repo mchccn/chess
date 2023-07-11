@@ -2,6 +2,7 @@ import { spawn } from "child_process";
 import { readFileSync } from "fs";
 import path from "path";
 import url from "url";
+import { isDeepStrictEqual } from "util";
 import { Board, FEN, Move, MoveGenerator } from "../src/index.js";
 
 const __filename = url.fileURLToPath(import.meta.url);
@@ -87,6 +88,12 @@ function perft_divide(board: Board, depth: number, root = true) {
     const extraneousMoves = ourMoves.filter((move) => !stockfishMoves.includes(move));
     const missedMoves = stockfishMoves.filter((move) => !ourMoves.includes(move));
 
+    if (isDeepStrictEqual(ourDivide, stockfishDivide)) {
+        console.log(`perft_divide: no problems reported`);
+
+        return process.exit(0);
+    }
+
     if (extraneousMoves.length || missedMoves.length) {
         console.log(`compare: depth=${depth} position=${position}`);
         console.log(`compare: extraneous-moves=${extraneousMoves.length} missed-moves=${missedMoves.length}`);
@@ -111,6 +118,6 @@ function perft_divide(board: Board, depth: number, root = true) {
         }
     }
 
-    // kill stockfish to exit process
-    if (depth === ogdepth) stockfish.kill();
+    // exit when done
+    if (depth === ogdepth) process.exit(0);
 })(position, ogdepth);

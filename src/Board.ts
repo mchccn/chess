@@ -357,6 +357,11 @@ export class Board {
         return Object.freeze([...this.#squares]);
     }
 
+    /** mutable version of Board#squares (warning: mutates internal representation) */
+    get squares_mut() {
+        return this.#squares;
+    }
+
     get colorToMove() {
         return this.#colorToMove;
     }

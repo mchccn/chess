@@ -8,7 +8,7 @@ setup();
 
 // this variable holds the original state of the board
 // const startpos = FEN.startingPosition;
-// const startpos = "K7/3N4/4Q3/8/3B4/8/pR2p3/8 w KQkq - 0 1";
+const startpos = "K7/3N4/4Q3/8/3B4/8/pR2p3/7k w KQkq - 0 1";
 
 // debugging positions
 // const startpos = "r3k2r/p1ppqpb1/bn2pnN1/3P4/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1";
@@ -16,7 +16,7 @@ setup();
 // const startpos = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1";
 // const startpos = "r3k2r/p1ppqp2/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPP1BPPP/R3K2R b KQkq - 0 2";
 // const startpos = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1";
-const startpos = "r3k2r/p1ppqp2/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPP1BPPP/R3K2R b KQkq - 0 2";
+// const startpos = "r3k2r/p1ppqp2/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPP1BPPP/R3K2R b KQkq - 0 2";
 // const startpos = "8/8/8/pP7/8/8/8/8 w - a6 0 1";
 
 // const board = new Board().loadStartingPosition();
