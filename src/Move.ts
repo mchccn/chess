@@ -37,15 +37,19 @@ export class Move {
         return (this.#bits >> 12 & 0b0100) === 0b0100;
     }
 
-    get promotionPieceType() {
-        if (!this.isPromotion) return Piece.None;
+    static #promotionLookup = [
+        Piece.None,
+        Piece.None,
+        Piece.None,
+        Piece.None,
+        Piece.Queen,
+        Piece.Knight,
+        Piece.Rook,
+        Piece.Bishop,
+    ];
 
-        return {
-            [Move.Flag.PromoteToQueen ]: Piece.Queen ,
-            [Move.Flag.PromoteToKnight]: Piece.Knight,
-            [Move.Flag.PromoteToRook  ]: Piece.Rook  ,
-            [Move.Flag.PromoteToBishop]: Piece.Bishop,
-        }[this.moveFlag];
+    get promotionPieceType() {
+        return Move.#promotionLookup[this.moveFlag];
     }
 
     get bits() {
