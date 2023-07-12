@@ -87,7 +87,7 @@ export class Magics {
         const bestMagicsSoFar = new Array<bigint>(64).fill(-1n);
 
         while (bestMagicsSoFar.some((x) => x < 0)) {
-            for (let squareIndex = 0; squareIndex < 63; squareIndex++) {
+            for (let squareIndex = 0; squareIndex < 64; squareIndex++) {
                 if (bestMagicsSoFar[squareIndex] > 0) continue;
 
                 const candidate = Bitboard.randomU64() & Bitboard.randomU64() & Bitboard.randomU64();
@@ -108,7 +108,7 @@ export class Magics {
         const bestMagicsSoFar = new Array<bigint>(64).fill(-1n);
 
         while (bestMagicsSoFar.some((x) => x < 0)) {
-            for (let squareIndex = 0; squareIndex < 63; squareIndex++) {
+            for (let squareIndex = 0; squareIndex < 64; squareIndex++) {
                 if (bestMagicsSoFar[squareIndex] > 0) continue;
 
                 const candidate = Bitboard.randomU64() & Bitboard.randomU64() & Bitboard.randomU64();
