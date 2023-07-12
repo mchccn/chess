@@ -5,7 +5,7 @@ import { ws } from "./ws.js";
 
 setup();
 
-const startpos = "rnbqkbnr/ppppppp1/7p/8/5P2/8/PPPPP1PP/RNBQKBNR w KQkq - 0 2";
+const startpos = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 const board = new Board({ disableTakingTurns: true }).loadPosition(startpos);
 
