@@ -1,6 +1,6 @@
 import { Bitboard, Board, BoardRepresentation, Move, MoveData, Piece } from "./index.js";
 
-export type MoveGeneratorOptions = { excludeQuietMoves?: boolean };
+export type MoveGeneratorOptions = { excludeQuietMoves: boolean };
 
 export class MoveGenerator {
     readonly #board: Board;
@@ -33,7 +33,11 @@ export class MoveGenerator {
     get pinRayBitmask() { return this.#pinRayBitmask; }
     get opponentAttackMap() { return this.#opponentAttackMap; }
 
-    #options: MoveGeneratorOptions = {};
+    static get #defaultOptions() {
+        return { excludeQuietMoves: false };
+    }
+
+    #options: MoveGeneratorOptions = MoveGenerator.#defaultOptions;
 
     constructor(board: Board) {
         this.#board = board;
@@ -50,10 +54,10 @@ export class MoveGenerator {
         this.#friendlyKingSquare = board.kingSquare[this.#friendlyColorIndex];
     }
 
-    generateMoves(options: MoveGeneratorOptions = {}) {
+    generateMoves(options: Partial<MoveGeneratorOptions> = {}) {
         // do not use `options`, use `this.#options`
         this.#options = {
-            excludeQuietMoves: false,
+            ...MoveGenerator.#defaultOptions,
             ...options
         };
 
@@ -64,7 +68,7 @@ export class MoveGenerator {
         this.#generateKingMoves();
 
         // only need king moves if in double check
-        if (this.#inDoubleCheck) return Object.freeze([...this.#moves]);
+        if (this.#inDoubleCheck) return this.#moves;
 
         this.#generateSlidingMoves();
 
@@ -72,7 +76,7 @@ export class MoveGenerator {
 
         this.#generatePawnMoves();
 
-        return Object.freeze([...this.#moves]);
+        return this.#moves;
     }
 
     #generateSlidingMoves() {
@@ -94,7 +98,7 @@ export class MoveGenerator {
         for (let i = startIndex; i < endIndex; i++) {
             const dirOffset = MoveData.directionOffsets[i];
 
-            if (isPinned && !this.#isAlongRay(dirOffset, this.#friendlyKingSquare, startSquare)) continue;
+            if (this.#friendlyKingSquare !== -1 && isPinned && !this.#isAlongRay(dirOffset, this.#friendlyKingSquare, startSquare)) continue;
 
             for (let n = 0; n < MoveData.squaresToEdge[startSquare][i]; n++) {
                 const targetSquare = startSquare + dirOffset * (n + 1);
@@ -138,6 +142,8 @@ export class MoveGenerator {
     }
 
     #generateKingMoves() {
+        if (this.#friendlyKingSquare === -1) return;
+
         for (const offset of MoveData.kingOffsetsForSquare[this.#friendlyKingSquare]) {
             const targetSquare = this.#friendlyKingSquare + offset;
             const pieceOnTarget = this.#board.squares[targetSquare];
@@ -202,7 +208,7 @@ export class MoveGenerator {
                 const oneSquareForward = startSquare + pawnOffset;
 
                 if (this.#board.squares[oneSquareForward] === Piece.None) {
-                    if (!this.#isPinned(startSquare) || this.#isAlongRay(pawnOffset, startSquare, this.#friendlyKingSquare)) {
+                    if (!this.#isPinned(startSquare) || (this.#friendlyKingSquare !== -1 && this.#isAlongRay(pawnOffset, startSquare, this.#friendlyKingSquare))) {
                         if (!this.#inCheck || this.#inCheckRay(oneSquareForward)) {
                             if (isAboutToPromote) {
                                 this.#generatePromotionMoves(startSquare, oneSquareForward);
@@ -231,7 +237,7 @@ export class MoveGenerator {
                     const targetSquare   = startSquare + pawnCaptureDir;
                     const targetPiece    = this.#board.squares[targetSquare];
 
-                    if (this.#isPinned(startSquare) && !this.#isAlongRay(pawnCaptureDir, this.#friendlyKingSquare, startSquare))
+                    if (this.#friendlyKingSquare !== -1 && this.#isPinned(startSquare) && !this.#isAlongRay(pawnCaptureDir, this.#friendlyKingSquare, startSquare))
                         continue;    
 
                     if (targetPiece && !Piece.isColor(targetPiece, this.#board.colorToMove)) {
@@ -264,29 +270,39 @@ export class MoveGenerator {
     }
 
     #isAlongRay(rayDir: number, startSquare: number, targetSquare: number) {
+        if (this.#friendlyKingSquare === -1) return false;
+        
         const moveDir = MoveData.directionLookup[targetSquare - startSquare + 63];
 
         return rayDir === moveDir || -rayDir === moveDir;
     }
 
     #isPinned(square: number) {
+        if (this.#friendlyKingSquare === -1) return false;
+
         return this.#pinsExistInPosition && Bitboard.containsSquare(this.#pinRayBitmask, square);
     }
 
     #inCheckRay(square: number) {
+        if (this.#friendlyKingSquare === -1) return false;
+
         return this.#inCheck && Bitboard.containsSquare(this.#checkRayBitmask, square);
     }
 
     #squareIsAttacked(square: number) {
+        if (this.#friendlyKingSquare === -1) return false;
+
         return Bitboard.containsSquare(this.#opponentAttackMap, square);
     }
 
     #inCheckAfterEnPassant(startSquare: number, targetSquare: number, enPassantCapturedSquare: number) {
+        if (this.#friendlyKingSquare === -1) return false;
+
         this.#board.squares[targetSquare           ] = this.#board.squares[startSquare];
         this.#board.squares[startSquare            ] = Piece.None;
         this.#board.squares[enPassantCapturedSquare] = Piece.None;
 
-        const inCheckAfterCapture = this.#squareAttackedAfterEnPassant(enPassantCapturedSquare, startSquare);
+        const inCheckAfterCapture = this.#squareAttackedAfterEnPassant(enPassantCapturedSquare);
 
         this.#board.squares[targetSquare           ] = Piece.None;
         this.#board.squares[startSquare            ] = this.#friendlyColor | Piece.Pawn;
@@ -295,7 +311,7 @@ export class MoveGenerator {
         return inCheckAfterCapture;
     }
 
-    #squareAttackedAfterEnPassant(enPassantCapturedSquare: number, startSquare: number) {
+    #squareAttackedAfterEnPassant(enPassantCapturedSquare: number) {
         if (Bitboard.containsSquare(this.#opponentAttackMapNoPawns, this.#friendlyKingSquare))
             return true; // don't need to check if we're already in check
 
@@ -328,6 +344,8 @@ export class MoveGenerator {
     }
 
     #computeAttacks() {
+        if (this.#friendlyKingSquare === -1) return;
+
         this.#computeSlidingAttackMap();
 
         // if there are enemy queens or rooks left, it should start at 0 (otherwise 4)
@@ -427,7 +445,11 @@ export class MoveGenerator {
 
         const enemyKingSquare = this.#board.kingSquare[this.#opponentColorIndex];
 
-        this.#opponentAttackMapNoPawns = this.#opponentSlidingAttackMap | this.#opponentKnightAttacks | MoveData.kingAttackBitboards[enemyKingSquare];
+        this.#opponentAttackMapNoPawns = 
+            this.#opponentSlidingAttackMap |
+            this.#opponentKnightAttacks    |
+            (enemyKingSquare === -1 ? 0n : MoveData.kingAttackBitboards[enemyKingSquare]);
+
         this.#opponentAttackMap = this.#opponentAttackMapNoPawns | this.#opponentPawnAttackMap;
     }
 

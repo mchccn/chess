@@ -21,6 +21,7 @@ html {
     --board-light-selected: #f6b150;
     --board-dark-selected: #ea7527;
     --board-debug-1: #3471f5;
+    --board-debug-2: #982cf0;
 }
 
 body {
@@ -71,6 +72,10 @@ body {
 
 .dark-highlighted {
     background-color: var(--board-dark-highlighted);
+}
+
+.debug-2 {
+    background-color: var(--board-debug-2);
 }
 
 .light-selected {

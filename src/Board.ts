@@ -1,5 +1,7 @@
 import { BoardRepresentation, FEN, GameState, Move, MoveGenerator, Piece, PieceList, Zobrist } from "./index.js";
 
+export type BoardOptions = { disableTakingTurns: boolean };
+
 export class Board {
     static readonly whiteIndex               = 0;
     static readonly blackIndex               = 1;
@@ -56,7 +58,18 @@ export class Board {
         this.queens[Board.blackIndex],
     ];
 
-    constructor () {}
+    static get #defaultOptions() {
+        return { disableTakingTurns: false };
+    }
+
+    #options: BoardOptions = Board.#defaultOptions;
+
+    constructor(options: Partial<BoardOptions> = {}) {
+        this.#options = {
+            ...Board.#defaultOptions,
+            ...options
+        };
+    }
 
     #getPieceList(pieceType: number, colorIndex: 0 | 1) {
         return this.#allPieceLists[colorIndex * 8 + pieceType];
@@ -181,7 +194,6 @@ export class Board {
 
         const pieceEndingOnTargetSquareType = Piece.getType(pieceEndingOnTargetSquare);
 
-        this.#zobristKey ^= Zobrist.sideToMove;
         this.#zobristKey ^= Zobrist.piecesArray[pieceOnStartType             ][friendlyColorIndex][movedFrom];
         this.#zobristKey ^= Zobrist.piecesArray[pieceEndingOnTargetSquareType][friendlyColorIndex][movedTo  ];
 
@@ -205,7 +217,11 @@ export class Board {
         this.#gameStateHistory.push(this.#currentGameState);
 
         // switch turns
-        this.#colorToMove = this.#colorToMove === Piece.White ? Piece.Black : Piece.White;
+        if (!this.#options.disableTakingTurns) {
+            this.#colorToMove = this.#colorToMove === Piece.White ? Piece.Black : Piece.White;
+
+            this.#zobristKey ^= Zobrist.sideToMove;
+        }
 
         this.#plyCount++;
         this.#fiftyMoveCounter++;
@@ -225,8 +241,6 @@ export class Board {
         const opponentColorIndex = (1 - friendlyColorIndex) as 0 | 1;
         const enemyColor         = unmakingWhiteMove ? Piece.Black : Piece.White;
 
-        this.#colorToMove        = this.#colorToMove === Piece.White ? Piece.Black : Piece.White;
-
         const oldCastlingRights  = this.#currentGameState & 0b1111;
 
         const capturedPieceType  = (this.#currentGameState >> 8) & 0b111;
@@ -241,7 +255,12 @@ export class Board {
         const targetSquareType   = Piece.getType(this.#squares[movedTo]);
         const movedPieceType     = isPromotion ? Piece.Pawn : targetSquareType;
 
-        this.#zobristKey ^= Zobrist.sideToMove;
+        if (!this.#options.disableTakingTurns) {
+            this.#colorToMove = this.#colorToMove === Piece.White ? Piece.Black : Piece.White;
+
+            this.#zobristKey ^= Zobrist.sideToMove;
+        }
+
         this.#zobristKey ^= Zobrist.piecesArray[movedPieceType  ][friendlyColorIndex][movedFrom];
         this.#zobristKey ^= Zobrist.piecesArray[targetSquareType][friendlyColorIndex][movedTo  ];
 
