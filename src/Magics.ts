@@ -158,6 +158,10 @@ export class Magics {
         this.#initialized = true;
     }
 
+    static getQueenMoves(square: number, blockers: bigint) {
+        return this.getRookMoves(square, blockers) | this.getBishopMoves(square, blockers);
+    }
+
     static getRookMoves(square: number, blockers: bigint) {
         if (!this.#initialized) throw new Error("magics data hasn't been initialized yet");
 
