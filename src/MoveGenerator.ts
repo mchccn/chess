@@ -1,7 +1,5 @@
 import { Bitboard, Board, BoardRepresentation, Move, MoveData, Piece } from "./index.js";
 
-const drop: (ident: any) => asserts ident is never = (ident: any) => void ident;
-
 export type MoveGeneratorOptions = { excludeQuietMoves?: boolean };
 
 export class MoveGenerator {
@@ -53,12 +51,11 @@ export class MoveGenerator {
     }
 
     generateMoves(options: MoveGeneratorOptions = {}) {
+        // do not use `options`, use `this.#options`
         this.#options = {
             excludeQuietMoves: false,
             ...options
         };
-
-        drop(options);
 
         this.#moves.length = 0;
 
@@ -285,15 +282,15 @@ export class MoveGenerator {
     }
 
     #inCheckAfterEnPassant(startSquare: number, targetSquare: number, enPassantCapturedSquare: number) {
-        this.#board.squares_mut[targetSquare           ] = this.#board.squares[startSquare];
-        this.#board.squares_mut[startSquare            ] = Piece.None;
-        this.#board.squares_mut[enPassantCapturedSquare] = Piece.None;
+        this.#board.squares[targetSquare           ] = this.#board.squares[startSquare];
+        this.#board.squares[startSquare            ] = Piece.None;
+        this.#board.squares[enPassantCapturedSquare] = Piece.None;
 
         const inCheckAfterCapture = this.#squareAttackedAfterEnPassant(enPassantCapturedSquare, startSquare);
 
-        this.#board.squares_mut[targetSquare           ] = Piece.None;
-        this.#board.squares_mut[startSquare            ] = this.#friendlyColor | Piece.Pawn;
-        this.#board.squares_mut[enPassantCapturedSquare] = this.#opponentColor | Piece.Pawn;
+        this.#board.squares[targetSquare           ] = Piece.None;
+        this.#board.squares[startSquare            ] = this.#friendlyColor | Piece.Pawn;
+        this.#board.squares[enPassantCapturedSquare] = this.#opponentColor | Piece.Pawn;
 
         return inCheckAfterCapture;
     }

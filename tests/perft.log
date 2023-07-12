@@ -2,27 +2,27 @@ yarn run v1.22.10
 $ ts-node-esm tests/perft.ts
 ✅ TEST PASSED (depth 0) [1 = 1] {0ms}
 
-✅ TEST PASSED (depth 1) [20 = 20] {2ms}
+✅ TEST PASSED (depth 1) [20 = 20] {4ms}
 
 ✅ TEST PASSED (depth 2) [400 = 400] {3ms}
 
-✅ TEST PASSED (depth 3) [8902 = 8902] {39ms}
+✅ TEST PASSED (depth 3) [8902 = 8902] {47ms}
 
-✅ TEST PASSED (depth 4) [197281 = 197281] {464ms}
+✅ TEST PASSED (depth 4) [197281 = 197281] {361ms}
 
-✅ TEST PASSED (depth 5) [4865609 = 4865609] {13535ms}
+✅ TEST PASSED (depth 5) [4865609 = 4865609] {6730ms}
 
 ✅ TEST PASSED (depth 0) [1 = 1] {0ms}
 
 ✅ TEST PASSED (depth 1) [48 = 48] {0ms}
 
-✅ TEST PASSED (depth 2) [2039 = 2039] {7ms}
+✅ TEST PASSED (depth 2) [2039 = 2039] {6ms}
 
-✅ TEST PASSED (depth 3) [97862 = 97862] {163ms}
+✅ TEST PASSED (depth 3) [97862 = 97862] {274ms}
 
-✅ TEST PASSED (depth 4) [4085603 = 4085603] {8197ms}
+✅ TEST PASSED (depth 4) [4085603 = 4085603] {5742ms}
 
-✅ TEST PASSED (depth 5) [193690690 = 193690690] {333360ms}
+✅ TEST PASSED (depth 5) [193690690 = 193690690] {191710ms}
 
 ✅ TEST PASSED (depth 0) [1 = 1] {0ms}
 
@@ -30,23 +30,11 @@ $ ts-node-esm tests/perft.ts
 
 ✅ TEST PASSED (depth 2) [191 = 191] {0ms}
 
-✅ TEST PASSED (depth 3) [2812 = 2812] {5ms}
+✅ TEST PASSED (depth 3) [2812 = 2812] {2ms}
 
-✅ TEST PASSED (depth 4) [43238 = 43238] {82ms}
+✅ TEST PASSED (depth 4) [43238 = 43238] {39ms}
 
-✅ TEST PASSED (depth 5) [674624 = 674624] {1239ms}
-
-✅ TEST PASSED (depth 0) [1 = 1] {0ms}
-
-✅ TEST PASSED (depth 1) [6 = 6] {0ms}
-
-✅ TEST PASSED (depth 2) [264 = 264] {0ms}
-
-✅ TEST PASSED (depth 3) [9467 = 9467] {16ms}
-
-✅ TEST PASSED (depth 4) [422333 = 422333] {711ms}
-
-✅ TEST PASSED (depth 5) [15833292 = 15833292] {30149ms}
+✅ TEST PASSED (depth 5) [674624 = 674624] {607ms}
 
 ✅ TEST PASSED (depth 0) [1 = 1] {0ms}
 
@@ -54,39 +42,50 @@ $ ts-node-esm tests/perft.ts
 
 ✅ TEST PASSED (depth 2) [264 = 264] {0ms}
 
-✅ TEST PASSED (depth 3) [9467 = 9467] {17ms}
+✅ TEST PASSED (depth 3) [9467 = 9467] {8ms}
 
-✅ TEST PASSED (depth 4) [422333 = 422333] {785ms}
+✅ TEST PASSED (depth 4) [422333 = 422333] {378ms}
 
-✅ TEST PASSED (depth 5) [15833292 = 15833292] {32915ms}
+✅ TEST PASSED (depth 5) [15833292 = 15833292] {15666ms}
+
+✅ TEST PASSED (depth 0) [1 = 1] {0ms}
+
+✅ TEST PASSED (depth 1) [6 = 6] {0ms}
+
+✅ TEST PASSED (depth 2) [264 = 264] {0ms}
+
+✅ TEST PASSED (depth 3) [9467 = 9467] {8ms}
+
+✅ TEST PASSED (depth 4) [422333 = 422333] {405ms}
+
+✅ TEST PASSED (depth 5) [15833292 = 15833292] {15933ms}
 
 ✅ TEST PASSED (depth 0) [1 = 1] {0ms}
 
 ✅ TEST PASSED (depth 1) [44 = 44] {0ms}
 
-✅ TEST PASSED (depth 2) [1486 = 1486] {2ms}
+✅ TEST PASSED (depth 2) [1486 = 1486] {1ms}
 
-✅ TEST PASSED (depth 3) [62379 = 62379] {99ms}
+✅ TEST PASSED (depth 3) [62379 = 62379] {49ms}
 
-✅ TEST PASSED (depth 4) [2103487 = 2103487] {4876ms}
+✅ TEST PASSED (depth 4) [2103487 = 2103487] {2080ms}
 
-✅ TEST PASSED (depth 5) [89941194 = 89941194] {146162ms}
+✅ TEST PASSED (depth 5) [89941194 = 89941194] {91182ms}
 
 ✅ TEST PASSED (depth 0) [1 = 1] {0ms}
 
 ✅ TEST PASSED (depth 1) [46 = 46] {0ms}
 
-✅ TEST PASSED (depth 2) [2079 = 2079] {3ms}
+✅ TEST PASSED (depth 2) [2079 = 2079] {1ms}
 
-✅ TEST PASSED (depth 3) [89890 = 89890] {154ms}
+✅ TEST PASSED (depth 3) [89890 = 89890] {79ms}
 
-✅ TEST PASSED (depth 4) [3894594 = 3894594] {6654ms}
+✅ TEST PASSED (depth 4) [3894594 = 3894594] {3367ms}
 
-✅ TEST PASSED (depth 5) [164075551 = 164075551] {282989ms}
+✅ TEST PASSED (depth 5) [164075551 = 164075551] {164406ms}
 
 📋 TEST RESULTS
 ✅ 42 tests passed
 ❌ 0 tests failed
-ℹ️ 496370814 nodes found in 862643002158ns (~575000 nps)
-ℹ️ run perft_bench for more accurate speeds
-Done in 864.63s.
+ℹ️ 496370814 nodes found in 499100816118ns (~994000 nps)
+Done in 502.48s.

@@ -1,4 +1,4 @@
-import { BoardRepresentation, FEN, Move, Piece, PieceList, Zobrist } from "./index.js";
+import { BoardRepresentation, FEN, GameState, Move, MoveGenerator, Piece, PieceList, Zobrist } from "./index.js";
 
 export class Board {
     static readonly whiteIndex               = 0;
@@ -32,10 +32,10 @@ export class Board {
 
     readonly kingSquare: [number, number]       = [-1, -1];
     readonly pawns     : [PieceList, PieceList] = [new PieceList(), new PieceList()];
+    readonly queens    : [PieceList, PieceList] = [new PieceList(), new PieceList()];
     readonly knights   : [PieceList, PieceList] = [new PieceList(), new PieceList()];
     readonly bishops   : [PieceList, PieceList] = [new PieceList(), new PieceList()];
     readonly rooks     : [PieceList, PieceList] = [new PieceList(), new PieceList()];
-    readonly queens    : [PieceList, PieceList] = [new PieceList(), new PieceList()];
 
     #allPieceLists: PieceList[] = [
         PieceList.empty,
@@ -335,12 +335,39 @@ export class Board {
         this.#repetitionHistory.pop();
     }
 
-    get squares() {
-        return Object.freeze([...this.#squares]);
+    gameState() {
+        const moveGenerator = new MoveGenerator(this);
+        const moves         = moveGenerator.generateMoves();
+
+        if (moves.length === 0) {
+            if (moveGenerator.inCheck) {
+                return this.#colorToMove === Piece.White ? GameState.BlackCheckmatedWhite : GameState.WhiteCheckmatedBlack;
+            }
+
+            return GameState.Stalemate;
+        }
+
+        if (this.#fiftyMoveCounter >= 100) return GameState.FiftyMoveRule;
+
+        const repeats = this.#repetitionHistory.filter((x) => x === this.#zobristKey).length;
+
+        if (repeats >= 3) return GameState.Repetition;
+
+        const pawnCount   = this.pawns  [0].count + this.pawns  [1].count;
+        const rookCount   = this.rooks  [0].count + this.rooks  [1].count;
+        const queenCount  = this.queens [0].count + this.queens [1].count;
+        const knightCount = this.knights[0].count + this.knights[1].count;
+        const bishopCount = this.bishops[0].count + this.bishops[1].count;
+
+        if (pawnCount + rookCount + queenCount === 0) {
+            if (knightCount === 1 || bishopCount === 1) return GameState.InsufficientMaterial;
+        }
+
+        return GameState.Playing;
     }
 
-    /** mutable version of Board#squares (warning: mutates internal representation) */
-    get squares_mut() {
+    /** warning: do not mutate */
+    get squares() {
         return this.#squares;
     }
 
@@ -369,10 +396,6 @@ export class Board {
     loadPosition(fen: string) {
         const info = FEN.fromFENString(fen);
 
-        if (info.squares.includes(Piece.White) || info.squares.includes(Piece.Black)) {
-            throw new Error(`BAD OUTPUT BY FEN PARSER (FEN ${fen}): [${info.squares.join(", ")}]`);
-        }
-
         for (let squareIndex = 0; squareIndex < 64; squareIndex++) {
             const piece = info.squares[squareIndex];
 
@@ -399,7 +422,7 @@ export class Board {
         const enPassantState = info.enPassantFile << 4;
         const initialGameState = whiteCastlingRights | blackCastlingRights | enPassantState;
 
-        this.#gameStateHistory.push(initialGameState);
+        this.#gameStateHistory = [initialGameState];
         this.#currentGameState = initialGameState;
 
         this.#zobristKey = Zobrist.calculateZobristKey(this);

@@ -12,14 +12,16 @@ export class FEN {
         q: Piece.Queen,
     };
 
-    static readonly #typeToSymbol: Record<number, string> = {
-        [Piece.King  ]: "k",
-        [Piece.Pawn  ]: "p",
-        [Piece.Knight]: "n",
-        [Piece.Bishop]: "b",
-        [Piece.Rook  ]: "r",
-        [Piece.Queen ]: "q",
-    };
+    static readonly #typeToSymbol = [
+        "?",
+        "k", // Piece.King = 1
+        "p", // Piece.Pawn = 2
+        "n", // Piece.Knight = 3
+        "?",
+        "b", // Piece.Bishop = 5
+        "r", // Piece.Rook = 6
+        "q", // Piece.Queen = 7
+    ];
 
     static fromFENString(fen: string): FENInfo {
         const [positions, sideToMove, castlingRights, enPassantTarget, halfmoveClock, fullmoveNumber] = fen.split(" ");

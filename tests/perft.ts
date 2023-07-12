@@ -66,4 +66,3 @@ console.log(`📋 TEST RESULTS`);
 console.log(`✅ ${passed} test${passed === 1 ? "" : "s"} passed`);
 console.log(`❌ ${failed} test${failed === 1 ? "" : "s"} failed`);
 console.log(`ℹ️ ${total} nodes found in ${time}ns (~${Number(total / (time / 1_000_000n)) * 1000} nps)`);
-console.log(`ℹ️ run perft_bench for more accurate speeds`);

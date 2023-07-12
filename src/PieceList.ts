@@ -16,13 +16,10 @@ export class PieceList {
 
         this.#squares[index] = targetSquare;
     }
-
-    clear() {
-        this.#squares.length = 0;
-    }
-
+    
+    /** warning: do not mutate */
     get squares() {
-        return Object.freeze([...this.#squares]);
+        return this.#squares;
     }
 
     get count() {

@@ -2,5 +2,5 @@ yarn run v1.22.10
 $ ts-node-esm tests/perft_bench.ts
 working...
 📋 TEST RESULTS
-ℹ️ 28769300 nodes found in 57917772318ns (~496000 nps)
-Done in 60.13s.
+ℹ️ 2876930 nodes found in 3669644616ns (~784000 nps)
+Done in 6.17s.
