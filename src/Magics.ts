@@ -1,6 +1,7 @@
 import { Bitboard, BoardRepresentation, MoveData } from "./index.js";
 
-
+// this engine does not use magics because computing the piece bitboards needed slows it down severely
+// however, it still includes the code needed to compute and use magics
 
 export class Magics {
     // queen not needed since you can just AND the rook and bishop masks
@@ -80,6 +81,48 @@ export class Magics {
                 this.bishopBlockerBitboards[squareIndex][index] = this.#computeBlockerBitboard(index, bishopBitboard);
             }
         }
+    }
+
+    static computeRookMagics() {
+        const bestMagicsSoFar = new Array<bigint>(64).fill(-1n);
+
+        while (bestMagicsSoFar.some((x) => x < 0)) {
+            for (let squareIndex = 0; squareIndex < 63; squareIndex++) {
+                if (bestMagicsSoFar[squareIndex] > 0) continue;
+
+                const candidate = Bitboard.randomU64() & Bitboard.randomU64() & Bitboard.randomU64();
+
+                const blockers = this.rookBlockerBitboards[squareIndex];
+
+                const set = new Set(blockers.map((blocker) => Bitboard.overflowMultU64(blocker, candidate) >> this.rookShifts[squareIndex]));
+
+                if (set.size === this.rookBlockerBitboards[squareIndex].length)
+                    bestMagicsSoFar[squareIndex] = candidate; 
+            }
+        }
+
+        return bestMagicsSoFar;
+    }
+
+    static computeBishopMagics() {
+        const bestMagicsSoFar = new Array<bigint>(64).fill(-1n);
+
+        while (bestMagicsSoFar.some((x) => x < 0)) {
+            for (let squareIndex = 0; squareIndex < 63; squareIndex++) {
+                if (bestMagicsSoFar[squareIndex] > 0) continue;
+
+                const candidate = Bitboard.randomU64() & Bitboard.randomU64() & Bitboard.randomU64();
+
+                const blockers = this.bishopBlockerBitboards[squareIndex];
+
+                const set = new Set(blockers.map((blocker) => Bitboard.overflowMultU64(blocker, candidate) >> this.bishopShifts[squareIndex]));
+
+                if (set.size === this.bishopBlockerBitboards[squareIndex].length)
+                    bestMagicsSoFar[squareIndex] = candidate; 
+            }
+        }
+
+        return bestMagicsSoFar;
     }
 
     static #computeBlockerBitboard(index: number, bitboard: bigint) {
