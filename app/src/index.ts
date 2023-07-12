@@ -1,27 +1,12 @@
-import { Bitboard, Board, BoardRepresentation, Magics, Move, MoveGenerator, Piece } from "../../dist/index.js";
+import { Board, BoardRepresentation, Move, MoveGenerator, Piece } from "../../dist/index.js";
 import { iconMap } from "./iconMap.js";
 import { logElement, setup } from "./setup.js";
 import { ws } from "./ws.js";
 
 setup();
 
-// this variable holds the original state of the board
-// const startpos = FEN.startingPosition;
-// const startpos = "K7/3N4/4Q3/8/3B4/8/pR2p3/7k w KQkq - 0 1";
+const startpos = "rnbqkbnr/ppppppp1/7p/8/5P2/8/PPPPP1PP/RNBQKBNR w KQkq - 0 2";
 
-// debugging positions
-// const startpos = "r3k2r/p1ppqpb1/bn2pnN1/3P4/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1";
-// const startpos = "r3k2r/p1ppqNb1/bn2pnp1/3P4/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1";
-// const startpos = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1";
-// const startpos = "r3k2r/p1ppqp2/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPP1BPPP/R3K2R b KQkq - 0 2";
-// const startpos = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1";
-// const startpos = "r3k2r/p1ppqp2/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPP1BPPP/R3K2R b KQkq - 0 2";
-// const startpos = "r3k2r/Pppp1ppp/1b3nbN/nPq5/B1P1P3/5N2/Pp1P2PP/R2Q1RK1 w kq - 0 2";
-// const startpos = "8/8/8/pP7/8/8/8/8 w - a6 0 1";
-// const startpos = "8/8/8/8/8/8/8/7B w - - 0 1";
-const startpos = "8/8/8/8/8/8/8/R7 w - - 0 1";
-
-// const board = new Board().loadStartingPosition();
 const board = new Board({ disableTakingTurns: true }).loadPosition(startpos);
 
 const WS_SEND = ws.send.bind(ws);
@@ -116,10 +101,6 @@ function render() {
         cellElement.append(imgElement);
         boardElement.append(cellElement);
 
-        if (Bitboard.containsSquare(Magics.rookAttackBitboards[board.rooks[0].squares[0]], index)) {
-            cellElement.classList.add("debug-2")
-        }
-        
         if (index === state.selected) {
             cellElement.classList.add(isLightSquare ? "light-selected" : "dark-selected")
         }
