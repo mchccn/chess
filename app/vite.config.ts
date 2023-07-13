@@ -4,5 +4,6 @@ import { defineConfig } from "vite";
 export default defineConfig({
     plugins: [react()],
     base: "/chess",
-    build: { outDir: "../docs", },
+    build: { outDir: "../docs" },
+    server: { fs: { strict: false } },
 });
