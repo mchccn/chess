@@ -3,6 +3,23 @@ export class Bitboard {
         return ((bitboard >> BigInt(square)) & 1n) !== 0n;
     }
 
+    static reverse(bitboard: bigint) {
+        bitboard = (bitboard & 0b0000000000000000000000000000000011111111111111111111111111111111n) << 32n
+                 | (bitboard & 0b1111111111111111111111111111111100000000000000000000000000000000n) >> 32n;
+        bitboard = (bitboard & 0b0000000000000000111111111111111100000000000000001111111111111111n) << 16n
+                 | (bitboard & 0b1111111111111111000000000000000011111111111111110000000000000000n) >> 16n;
+        bitboard = (bitboard & 0b0000000011111111000000001111111100000000111111110000000011111111n) <<  8n
+                 | (bitboard & 0b1111111100000000111111110000000011111111000000001111111100000000n) >>  8n;
+        bitboard = (bitboard & 0b0000111100001111000011110000111100001111000011110000111100001111n) <<  4n
+                 | (bitboard & 0b1111000011110000111100001111000011110000111100001111000011110000n) >>  4n;
+        bitboard = (bitboard & 0b0011001100110011001100110011001100110011001100110011001100110011n) <<  2n
+                 | (bitboard & 0b1100110011001100110011001100110011001100110011001100110011001100n) >>  2n;
+        bitboard = (bitboard & 0b0101010101010101010101010101010101010101010101010101010101010101n) <<  1n
+                 | (bitboard & 0b1010101010101010101010101010101010101010101010101010101010101010n) >>  1n;
+
+        return bitboard;
+    }
+
     static readonly #bitScanMagic = 0x07edd5e59a4e28c2n;
 
     // table[(x & -x) * magic >> 58]
@@ -21,9 +38,9 @@ export class Bitboard {
     static readonly #u64 = new BigUint64Array(1);
 
     static popLSB(bitboard: bigint) {
-        this.#u64[0] = bitboard;
-        this.#u64[0] &= -bitboard;
-        this.#u64[0] *= this.#bitScanMagic;
+        this.#u64[0]   = bitboard;
+        this.#u64[0]  &= -bitboard;
+        this.#u64[0]  *= this.#bitScanMagic;
         this.#u64[0] >>= 58n;
 
         return [
@@ -33,7 +50,7 @@ export class Bitboard {
     }
 
     static overflowMultU64(a: bigint, b: bigint) {
-        this.#u64[0] = a;
+        this.#u64[0]  = a;
         this.#u64[0] *= b;
 
         return this.#u64[0];

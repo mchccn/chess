@@ -130,7 +130,18 @@ export class Magics {
 
                 let rookMoves = 0n;
 
-                //
+                for (let i = 0; i < 4; i++) {
+                    const dirOffset = MoveData.directionOffsets[i];
+
+                    for (let n = 0; n < MoveData.squaresToEdge[squareIndex][i]; n++) {
+                        const targetSquare = squareIndex + dirOffset * (n + 1);
+                        const pieceOnTarget = Bitboard.containsSquare(rookBlockers, targetSquare);
+
+                        rookMoves |= 1n << BigInt(targetSquare);
+
+                        if (pieceOnTarget) break;
+                    }
+                }
 
                 const key = Bitboard.overflowMultU64(rookBlockers, this.rookMagics[squareIndex]) >> this.rookShifts[squareIndex];
 
@@ -147,7 +158,18 @@ export class Magics {
 
                 let bishopMoves = 0n;
 
-                //
+                for (let i = 4; i < 8; i++) {
+                    const dirOffset = MoveData.directionOffsets[i];
+
+                    for (let n = 0; n < MoveData.squaresToEdge[squareIndex][i]; n++) {
+                        const targetSquare = squareIndex + dirOffset * (n + 1);
+                        const pieceOnTarget = Bitboard.containsSquare(bishopBlockers, targetSquare);
+
+                        bishopMoves |= 1n << BigInt(targetSquare);
+
+                        if (pieceOnTarget) break;
+                    }
+                }
 
                 const key = Bitboard.overflowMultU64(bishopBlockers, this.bishopMagics[squareIndex]) >> this.bishopShifts[squareIndex];
 
@@ -165,6 +187,10 @@ export class Magics {
     static getRookMoves(square: number, blockers: bigint) {
         if (!this.#initialized) throw new Error("magics data hasn't been initialized yet");
 
+        // blockers were generated in reverse... oops
+        // if this line is removed, the magics must be re-generated
+        blockers = Bitboard.reverse(blockers);
+
         blockers &= this.rookAttackBitboards[square];
 
         const index = Bitboard.overflowMultU64(blockers, this.rookMagics[square]) >> this.rookShifts[square];
@@ -174,6 +200,10 @@ export class Magics {
 
     static getBishopMoves(square: number, blockers: bigint) {
         if (!this.#initialized) throw new Error("magics data hasn't been initialized yet");
+
+        // blockers were generated in reverse... oops
+        // if this line is removed, the magics must be re-generated
+        blockers = Bitboard.reverse(blockers);
 
         blockers &= this.bishopAttackBitboards[square];
 

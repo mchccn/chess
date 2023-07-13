@@ -7,7 +7,7 @@ setup();
 
 const startpos = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
-const board = new Board({ disableTakingTurns: true }).loadPosition(startpos);
+const board = new Board().loadPosition(startpos);
 
 const WS_SEND = ws.send.bind(ws);
 
@@ -129,31 +129,6 @@ function makeMoveOnBoard(move: Move) {
     
     state.legalMoves = new MoveGenerator(board).generateMoves();
 }
-
-function unmakeMoveOnBoard() {
-    if (state.gameOver) return;
-    
-    if (state.movesMade.length) {
-        // unmake move
-        board.unmakeMove(state.movesMade.pop()!);
-
-        // send to server
-        ws.send(`position fen ${startpos} moves ${state.movesMade.map((move) => move.name).join(" ")}\n`);
-        
-        state.legalMoves = new MoveGenerator(board).generateMoves();
-    }
-}
-
-//@ts-ignore
-globalThis.board = board;
-
-document.addEventListener("keypress", (e) => {
-    if (e.code === "KeyZ") {
-        unmakeMoveOnBoard();
-
-        render();
-    }
-});
 
 boardElement.addEventListener("click", function clickHandler(e) {
     if (!(e.target instanceof HTMLElement)) return;
