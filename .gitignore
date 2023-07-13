@@ -4,7 +4,7 @@ node_modules/
 
 dist/
 
-*.js
+!app/dist
 
 !webpack.config.js
 
