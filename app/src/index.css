@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fira+Mono&family=Poppins&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Fira+Mono&family=Poppins&display=swap");
 
 *,
 *::before,
@@ -22,6 +22,8 @@ html {
     --board-dark-selected: #ea7527;
     --board-debug-1: #3471f5;
     --board-debug-2: #982cf0;
+    --board-debug-3: #e95aeb;
+    --board-debug-4: #59ea61;
 }
 
 body {
@@ -33,125 +35,60 @@ body {
     font-family: "Poppins", sans-serif;
 }
 
-.light {
-    background-color: var(--board-light);
+
+.fade-out-appear,
+.fade-out-enter {
+    opacity: 0;
+    transform: translateX(-1rem);
 }
 
-.dark {
-    background-color: var(--board-dark);
+.fade-out-appear-active,
+.fade-out-enter.fade-out-enter-active {
+    opacity: 1;
+    transform: translateX(0);
+    transition-property: opacity, transform;
+    transition-duration: 300ms;
+    transition-timing-function: ease-in-out;
 }
 
-.debug-1 {
-    background-color: var(--board-debug-1);
+.fade-out-exit {
+    opacity: 1;
+    transform: translateX(0);
 }
 
-.light-highlighted {
-    background-color: var(--board-light-highlighted);
+.fade-out-exit.fade-out-exit-active {
+    opacity: 0;
+    transform: translateX(-1rem);
+    transition-property: opacity, transform;
+    transition-duration: 300ms;
+    transition-timing-function: ease-in-out;
 }
 
-.dark-highlighted {
-    background-color: var(--board-dark-highlighted);
+.fade-out-other-side.fade-out-appear,
+.fade-out-other-side.fade-out-enter {
+    opacity: 0;
+    transform: translateX(1rem);
 }
 
-.debug-2 {
-    background-color: var(--board-debug-2);
+.fade-out-other-side.fade-out-appear-active,
+.fade-out-other-side.fade-out-enter.fade-out-enter-active {
+    opacity: 1;
+    transform: translateX(0);
+    transition-property: opacity, transform;
+    transition-duration: 300ms;
+    transition-timing-function: ease-in-out;
 }
 
-.light-selected {
-    background-color: var(--board-light-selected);
+.fade-out-other-side.fade-out-exit {
+    opacity: 1;
+    transform: translateX(0);
 }
 
-.dark-selected {
-    background-color: var(--board-dark-selected);
+.fade-out-other-side.fade-out-exit.fade-out-exit-active {
+    opacity: 0;
+    transform: translateX(1rem);
+    transition-property: opacity, transform;
+    transition-duration: 300ms;
+    transition-timing-function: ease-in-out;
 }
 
-.board {
-    position: relative;
-
-    width: 512px;
-    height: 512px;
-
-    display: grid;
-
-    grid-template-columns: repeat(8, 1fr);
-    grid-template-rows: repeat(8, 1fr);
-}
-
-.files {
-    position: absolute;
-    
-    bottom: 0;
-
-    width: 100%;
-    height: 12.5%;
-    
-    display: flex;
-}
-
-.files > div {
-    width: 12.5%;
-
-    display: grid;
-
-    place-items: end;
-
-    padding: 2px 4px;
-
-    font-size: 12px;
-
-    user-select: none;
-}
-
-.files > div:nth-child(even) {
-    color: var(--board-dark);
-}
-
-.files > div:nth-child(odd) {
-    color: var(--board-light);
-}
-
-.ranks {
-    position: absolute;
-
-    left: 0;
-
-    width: 12.5%;
-    height: 100%;
-
-    display: flex;
-    flex-direction: column-reverse;
-}
-
-.ranks > div {
-    height: 12.5%;
-
-    display: grid;
-
-    padding: 2px 4px;
-
-    font-size: 12px;
-
-    user-select: none;
-}
-
-.ranks > div:nth-child(even) {
-    color: var(--board-dark);
-}
-
-.ranks > div:nth-child(odd) {
-    color: var(--board-light);
-}
-
-.cell {
-    display: grid;
-    place-items: center;
-}
-
-.cell-img {
-    width: 64px;
-    height: 64px;
-
-    user-select: none;
-
-    z-index: 10;
-}

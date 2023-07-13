@@ -2,7 +2,7 @@ export class PieceList {
     readonly #squares: number[] = [];
 
     addPiece(square: number) {
-        this.#squares.push(square);
+        if (!this.#squares.includes(square)) this.#squares.push(square);
     }
 
     removePiece(square: number) {

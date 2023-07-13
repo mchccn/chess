@@ -32,12 +32,12 @@ export class Board {
 
     #repetitionHistory: bigint[] = [];
 
-    readonly kingSquare: [number, number]       = [-1, -1];
-    readonly pawns     : [PieceList, PieceList] = [new PieceList(), new PieceList()];
-    readonly queens    : [PieceList, PieceList] = [new PieceList(), new PieceList()];
-    readonly knights   : [PieceList, PieceList] = [new PieceList(), new PieceList()];
-    readonly bishops   : [PieceList, PieceList] = [new PieceList(), new PieceList()];
-    readonly rooks     : [PieceList, PieceList] = [new PieceList(), new PieceList()];
+    kingSquare: [number, number]       = [-1, -1];
+    pawns     : [PieceList, PieceList] = [new PieceList(), new PieceList()];
+    queens    : [PieceList, PieceList] = [new PieceList(), new PieceList()];
+    knights   : [PieceList, PieceList] = [new PieceList(), new PieceList()];
+    bishops   : [PieceList, PieceList] = [new PieceList(), new PieceList()];
+    rooks     : [PieceList, PieceList] = [new PieceList(), new PieceList()];
 
     #allPieceLists: PieceList[] = [
         PieceList.empty,
@@ -416,6 +416,31 @@ export class Board {
 
     loadPosition(fen: string) {
         const info = FEN.fromFENString(fen);
+
+        this.pawns   = [new PieceList(), new PieceList()];
+        this.queens  = [new PieceList(), new PieceList()];
+        this.knights = [new PieceList(), new PieceList()];
+        this.bishops = [new PieceList(), new PieceList()];
+        this.rooks   = [new PieceList(), new PieceList()];
+
+        this.#allPieceLists = [
+            PieceList.empty,
+            PieceList.empty,
+            this.pawns[Board.whiteIndex],
+            this.knights[Board.whiteIndex],
+            PieceList.empty,
+            this.bishops[Board.whiteIndex],
+            this.rooks[Board.whiteIndex],
+            this.queens[Board.whiteIndex],
+            PieceList.empty,
+            PieceList.empty,
+            this.pawns[Board.blackIndex],
+            this.knights[Board.blackIndex],
+            PieceList.empty,
+            this.bishops[Board.blackIndex],
+            this.rooks[Board.blackIndex],
+            this.queens[Board.blackIndex],
+        ];
 
         for (let squareIndex = 0; squareIndex < 64; squareIndex++) {
             const piece = info.squares[squareIndex];

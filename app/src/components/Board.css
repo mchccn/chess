@@ -1,0 +1,122 @@
+.light {
+    background-color: var(--board-light);
+}
+
+.light-text {
+    color: var(--board-light);
+}
+
+.dark {
+    background-color: var(--board-dark);
+}
+
+.dark-text {
+    color: var(--board-dark);
+}
+
+.debug-1 {
+    background-color: var(--board-debug-1);
+}
+
+.light-highlighted {
+    background-color: var(--board-light-highlighted);
+}
+
+.dark-highlighted {
+    background-color: var(--board-dark-highlighted);
+}
+
+.debug-2 {
+    background-color: var(--board-debug-2);
+}
+
+.light-selected {
+    background-color: var(--board-light-selected);
+}
+
+.dark-selected {
+    background-color: var(--board-dark-selected);
+}
+
+.debug-3 {
+    background-color: var(--board-debug-3);
+}
+
+.debug-4 {
+    background-color: var(--board-debug-4);
+}
+
+.board {
+    position: relative;
+
+    width: 512px;
+    height: 512px;
+
+    display: grid;
+
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+}
+
+.files {
+    position: absolute;
+    
+    bottom: 0;
+
+    width: 100%;
+    height: 12.5%;
+    
+    display: flex;
+}
+
+.files > div {
+    width: 12.5%;
+
+    display: grid;
+
+    place-items: end;
+
+    padding: 2px 4px;
+
+    font-size: 12px;
+
+    user-select: none;
+}
+
+.ranks {
+    position: absolute;
+
+    left: 0;
+
+    width: 12.5%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.ranks > div {
+    height: 12.5%;
+
+    display: grid;
+
+    padding: 2px 4px;
+
+    font-size: 12px;
+
+    user-select: none;
+}
+
+.cell {
+    display: grid;
+    place-items: center;
+}
+
+.cell-img {
+    width: 64px;
+    height: 64px;
+
+    user-select: none;
+
+    z-index: 10;
+}

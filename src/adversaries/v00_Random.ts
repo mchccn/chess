@@ -6,6 +6,8 @@ export class v00_Random extends Adversary {
     bestMove(board: Board): Move {
         const moves = new MoveGenerator(board).generateMoves();
 
-        return moves[Math.floor(Math.random() * moves.length)] ?? Move.invalidMove;
+        const move = moves[Math.floor(Math.random() * moves.length)] ?? Move.invalidMove;
+
+        return move;
     }
 }

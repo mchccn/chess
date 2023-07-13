@@ -4,6 +4,8 @@ export class Bitboard {
     }
 
     static reverse(bitboard: bigint) {
+        // this is 2x faster than using strings
+
         bitboard = (bitboard & 0b0000000000000000000000000000000011111111111111111111111111111111n) << 32n
                  | (bitboard & 0b1111111111111111111111111111111100000000000000000000000000000000n) >> 32n;
         bitboard = (bitboard & 0b0000000000000000111111111111111100000000000000001111111111111111n) << 16n

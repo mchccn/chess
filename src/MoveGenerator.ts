@@ -3,8 +3,8 @@ import { Bitboard, Board, BoardRepresentation, Move, MoveData, Piece } from "./i
 export type MoveGeneratorOptions = { excludeQuietMoves: boolean };
 
 export class MoveGenerator {
-    readonly #board: Board;
-    readonly #moves: Move[];
+    #board: Board;
+    #moves: Move[];
 
     #whiteToMove: boolean;
     #friendlyColor: number;
@@ -61,7 +61,7 @@ export class MoveGenerator {
             ...options
         };
 
-        this.#moves.length = 0;
+        this.#moves = [];
 
         this.#computeAttacks();
 

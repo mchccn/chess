@@ -1,0 +1,42 @@
+.main-menu {
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.5rem;
+
+    text-align: center;
+}
+
+.main-menu h1 {
+    display: flex;
+    align-items: center;
+}
+
+.main-menu h2 {
+    font-size: 1rem;
+
+    color: #999999;
+}
+
+.main-menu h3 {
+    color: #444444;
+}
+
+.main-menu p,
+.main-menu .not-black {
+    color: #999999;
+}
+
+a.src-link {
+    color: #999999;
+}
+
+a.src-link:hover {
+    text-decoration: underline;
+}
+
+a {
+    color: #222222;
+
+    text-decoration: none;
+}
