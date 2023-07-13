@@ -1,117 +1,9 @@
-import { Board, BoardRepresentation, Move, MoveGenerator, Piece } from "../../dist/index.js";
-import { iconMap } from "./iconMap.js";
-import { logElement, setup } from "./setup.js";
-import { ws } from "./ws.js";
+import { GameState, Move, MoveGenerator, Piece } from "../../dist/index.js";
+import { boardElement, render } from "./render.js";
+import { setup } from "./setup.js";
+import { state } from "./state.js";
 
 setup();
-
-const startpos = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-
-const board = new Board().loadPosition(startpos);
-
-const WS_SEND = ws.send.bind(ws);
-
-ws.send = function (data: any) {
-    logElement.append("> " + data);
-
-    return WS_SEND(data);
-};
-
-ws.addEventListener("open", () => {
-    ws.send("uci\n");
-});
-
-// implement UCI
-ws.addEventListener("message", ({ data: message }) => {
-    const { data } = message as { data: number[] };
-
-    const string = typeof message === "string" ? message : Buffer.from(data).toString("utf8");
-
-    logElement.append("< " + string);
-
-    const [command, ...args] = string.trimEnd().split(" ");
-
-    switch (command) {
-        case "uciok": {
-            ws.send("isready\n");
-            break;
-        };
-        case "readyok": {
-            ws.send("ucinewgame\n");
-            ws.send(`position fen ${startpos}\n`);
-            break;
-        };
-        case "id": {
-            return;
-        };
-        case "bestmove": {
-            const [lan] = args; // we don't care about ponders
-
-            const move = Move.parseMove(lan, board);
-
-            return makeMoveOnBoard(move);
-        };
-        case "info": {
-            // nothing to do here (yet)
-            return;
-        };
-        case "option": {
-            // display ui with option handlers later
-            return;
-        };
-
-        // custom commands that aren't part of UCI (mainly for debugging)
-
-        // ignore unknown command
-        default:
-            return;
-    }
-});
-
-const boardElement = document.querySelector<HTMLElement>(".board")!;
-
-const state = {
-    selected: -1,
-    legalMoves: new MoveGenerator(board).generateMoves(),
-    movesMade: [] as Move[],
-    gameOver: false,
-};
-
-function render() {
-    boardElement.querySelectorAll(".cell").forEach((e) => e.remove());
-
-    for (let i = 0; i < 64; i++) {
-        const cellElement = document.createElement("div");
-        cellElement.classList.add("cell");
-        
-        const imgElement = document.createElement("img");
-        imgElement.classList.add("cell-img");
-        imgElement.draggable = false;
-
-        const file = i & 0b111;
-        const rank = 7 - (i >> 3);
-        const index = rank * 8 + file;
-
-        const isLightSquare = BoardRepresentation.isLightSquare(file, rank);
-
-        cellElement.dataset.index = index.toString();
-        cellElement.classList.add(isLightSquare ? "light" : "dark");
-        imgElement.src = "assets/pieces/" + iconMap[board.squares[index]];
-
-        cellElement.append(imgElement);
-        boardElement.append(cellElement);
-
-        if (index === state.selected) {
-            cellElement.classList.add(isLightSquare ? "light-selected" : "dark-selected")
-        }
-
-        if (state.legalMoves.some((move) => (
-            move.startSquare === state.selected && move.targetSquare === index
-        ))) {
-            cellElement.classList.add(isLightSquare ? "light-highlighted" : "dark-highlighted");
-        }
-    }
-}
 
 render();
 
@@ -119,15 +11,12 @@ function makeMoveOnBoard(move: Move) {
     if (state.gameOver) return;
     
     // move on board
-    board.makeMove(move);
+    state.board.makeMove(move);
 
     // update state
     state.movesMade.push(move);
 
-    // send to server
-    ws.send(`position fen ${startpos} moves ${state.movesMade.map((move) => move.name).join(" ")}\n`);
-    
-    state.legalMoves = new MoveGenerator(board).generateMoves();
+    state.legalMoves = new MoveGenerator(state.board).generateMoves();
 }
 
 boardElement.addEventListener("click", function clickHandler(e) {
@@ -151,8 +40,8 @@ boardElement.addEventListener("click", function clickHandler(e) {
             // made a move, deselect cell
             state.selected = -1;
 
-            let 
-            audio: HTMLAudioElement;
+            let audio: HTMLAudioElement;
+            
             if (attemptedMove.isPromotion) {
                 // replace with ui and await user input later
                 const promotionInput = prompt("promotion (q/n/b/r):")?.[0]?.toLowerCase() ?? "q";
@@ -174,7 +63,7 @@ boardElement.addEventListener("click", function clickHandler(e) {
             } else {
                 if (attemptedMove.moveFlag === Move.Flag.Castling) {
                     audio = new Audio("assets/sounds/castle.mp3");
-                } else if (attemptedMove.moveFlag === Move.Flag.EnPassantCapture || (board.squares[attemptedMove.targetSquare] !== Piece.None && !Piece.isColor(board.squares[attemptedMove.targetSquare], board.colorToMove))) {
+                } else if (attemptedMove.moveFlag === Move.Flag.EnPassantCapture || (state.board.squares[attemptedMove.targetSquare] !== Piece.None && !Piece.isColor(state.board.squares[attemptedMove.targetSquare], state.board.colorToMove))) {
                     audio = new Audio("assets/sounds/capture.mp3");
                 } else {
                     audio = new Audio("assets/sounds/move-self.mp3");
@@ -183,13 +72,15 @@ boardElement.addEventListener("click", function clickHandler(e) {
                 // move on board
                 makeMoveOnBoard(attemptedMove);
 
-                const mg = new MoveGenerator(board);
+                const mg = new MoveGenerator(state.board);
                 mg.generateMoves();
 
                 if (mg.inCheck) audio = new Audio("assets/sounds/move-check.mp3");
             }
 
-            if (state.legalMoves.length === 0) {
+            const gameState = state.board.gameState();
+
+            if (gameState !== GameState.Playing) {
                 audio = new Audio("assets/sounds/game-end.mp3");
 
                 state.gameOver = true;
@@ -198,7 +89,7 @@ boardElement.addEventListener("click", function clickHandler(e) {
             }
 
             audio.play();
-        } else if (board.squares[index] === Piece.None || !Piece.isColor(board.squares[index], board.colorToMove)) {
+        } else if (state.board.squares[index] === Piece.None || !Piece.isColor(state.board.squares[index], state.board.colorToMove)) {
             // can't select enemy piece or empty cell
             state.selected = -1;
         } else {

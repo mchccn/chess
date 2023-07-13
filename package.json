@@ -4,8 +4,6 @@
     "description": "chess",
     "main": "dist/index.js",
     "scripts": {
-        "sfui": "cd ../stockfish-ui && yarn dev",
-        "logs": "rm logs/*.log",
         "test:parse_move": "ts-node-esm tests/parse_move.ts",
         "perft": "ts-node-esm tests/perft.ts",
         "perft:divide": "ts-node-esm tests/perft_divide.ts",
