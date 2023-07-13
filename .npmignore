@@ -1,5 +1,3 @@
-server/
-
 app/
 
 src/
@@ -7,5 +5,3 @@ src/
 wiki.xml
 
 rules.pdf
-
-benchmarks.log
