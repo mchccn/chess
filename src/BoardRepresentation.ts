@@ -32,7 +32,11 @@ export class BoardRepresentation {
         return rank * 8 + file;
     }
 
-    static isLightSquare(file: number, rank: number) {
+    static isLightSquare(index: number): boolean;
+    static isLightSquare(file: number, rank: number): boolean;
+    static isLightSquare(file: number, rank?: number) {
+        if (typeof rank === "undefined") [file, rank] = [this.fileIndex(file), this.rankIndex(file)];
+
         return (file + rank) % 2 !== 0;
     }
 

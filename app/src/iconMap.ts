@@ -1,6 +1,6 @@
 import { Piece } from "../../dist/index.js";
 
-export const iconMap = {
+const IconMap = {
     [Piece.None                ]: "none.svg"        ,
     [Piece.White | Piece.King  ]: "white_king.svg"  ,
     [Piece.White | Piece.Pawn  ]: "white_pawn.svg"  ,
@@ -15,3 +15,5 @@ export const iconMap = {
     [Piece.Black | Piece.Rook  ]: "black_rook.svg"  ,
     [Piece.Black | Piece.Queen ]: "black_queen.svg" ,
 };
+
+export default IconMap;

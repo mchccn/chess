@@ -33,27 +33,6 @@ body {
     font-family: "Poppins", sans-serif;
 }
 
-.log {
-    font-family: "Fira Mono", monospace;
-
-    white-space: pre;
-
-    background: rgba(255, 255, 255, 0.75);
-
-    position: fixed;
-    
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-
-    z-index: 100;
-
-    display: none;
-
-    padding: 8px;
-}
-
 .light {
     background-color: var(--board-light);
 }
@@ -85,7 +64,6 @@ body {
 .dark-selected {
     background-color: var(--board-dark-selected);
 }
-
 
 .board {
     position: relative;

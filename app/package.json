@@ -1,22 +1,22 @@
 {
-  "name": "app",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "dev": "webpack -w"
-  },
-  "keywords": [],
-  "author": "kelly <cursors.owo.uwu@gmail.com>",
-  "license": "MIT",
-  "devDependencies": {
-    "@types/ws": "^8.5.5",
-    "ts-loader": "^9.4.4",
-    "typescript": "^5.1.6",
-    "webpack": "^5.88.1",
-    "webpack-cli": "^5.1.4"
-  },
-  "dependencies": {
-    "ws": "^8.13.0"
-  }
+    "name": "app",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+    },
+    "devDependencies": {
+        "@types/react": "^18.2.14",
+        "@types/react-dom": "^18.2.6",
+        "@vitejs/plugin-react": "^4.0.1",
+        "typescript": "^5.0.2",
+        "vite": "^4.4.0"
+    }
 }
