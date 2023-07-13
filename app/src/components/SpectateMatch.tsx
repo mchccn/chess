@@ -90,7 +90,7 @@ export default function SpectateMatch(props: SpectateMatchProps) {
                 : playMove(playerTwo.current!.bestMove(board));
 
             setSelected((s) => s - 1);
-        }, 100);
+        }, 10);
 
         return () => clearTimeout(timeout);
     });
@@ -100,6 +100,26 @@ export default function SpectateMatch(props: SpectateMatchProps) {
     return (
         <BoardWrapper
             transitioningElementRef={props.transitioningElementRef}
+            left={
+                <>
+                    <p>{board.plyCount} ply</p>
+                    <p>
+                        {(board.currentGameState & 0b0001 ? "K" : "") +
+                            (board.currentGameState & 0b0010 ? "Q" : "") +
+                            (board.currentGameState & 0b0100 ? "k" : "") +
+                            (board.currentGameState & 0b1000 ? "q" : "") ||
+                            "no"}{" "}
+                        castling rights
+                    </p>
+                    <p>
+                        {board.colorToMove === Piece.White ? "white" : "black"}{" "}
+                        to move
+                    </p>
+                </>
+            }
+            right={`${
+                GameState.isDraw(board.gameState()) ? "draw by " : ""
+            }${GameState.getName(board.gameState())}`}
             boardProps={{
                 playingAs: Piece.White,
                 legalMoves: [],

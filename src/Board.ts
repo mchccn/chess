@@ -368,10 +368,6 @@ export class Board {
 
         if (this.#fiftyMoveCounter >= 100) return GameState.FiftyMoveRule;
 
-        const repeats = this.#repetitionHistory.filter((x) => x === this.#zobristKey).length;
-
-        if (repeats >= 3) return GameState.ThreeFoldRepetition;
-
         const pawnCount   = this.pawns  [0].count + this.pawns  [1].count;
         const rookCount   = this.rooks  [0].count + this.rooks  [1].count;
         const queenCount  = this.queens [0].count + this.queens [1].count;
@@ -383,6 +379,10 @@ export class Board {
 
             if (knightCount + bishopCount === 0) return GameState.InsufficientMaterial;
         }
+
+        const repeats = this.#repetitionHistory.filter((x) => x === this.#zobristKey).length;
+
+        if (repeats >= 3) return GameState.ThreeFoldRepetition;
 
         return GameState.Playing;
     }

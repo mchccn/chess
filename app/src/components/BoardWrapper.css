@@ -1,0 +1,20 @@
+.board-wrapper {
+    display: flex;
+
+    flex-direction: row;
+
+    gap: 2rem;
+}
+
+.board-wrapper .left,
+.board-wrapper .right {
+    width: 256px;
+
+    background-color: #fafafa;
+
+    box-shadow: inset 0px 0px 20px 0px #e0e0e0;
+
+    padding: 0.5rem 1rem;
+
+    font-size: 0.8rem;
+}
