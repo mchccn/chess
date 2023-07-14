@@ -11,8 +11,10 @@
     "dependencies": {
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
+        "react-markdown": "^8.0.7",
         "react-router-dom": "^6.14.1",
-        "react-transition-group": "^4.4.5"
+        "react-transition-group": "^4.4.5",
+        "remark-gfm": "^3.0.1"
     },
     "devDependencies": {
         "@types/react": "^18.2.14",

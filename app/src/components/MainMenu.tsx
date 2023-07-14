@@ -10,9 +10,10 @@ export default function MainMenu({ transitioningElementRef }: MainMenuProps) {
     return (
         <div className="main-menu" ref={transitioningElementRef}>
             <h1>
-                <img width={45} height={45} src="favicon.svg" /> @kelsny/chess
+                <img src="favicon.svg" /> @kelsny/chess
             </h1>
             <h2>TypeScript chess engine</h2>
+            <p>read the <Link to="docs">documentation</Link></p>
             <h3>test it out below</h3>
             <p>
                 play as{" "}

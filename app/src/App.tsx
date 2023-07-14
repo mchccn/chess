@@ -2,6 +2,7 @@ import { MutableRefObject, useContext, useRef } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { BoardContext } from "./BoardContext";
+import Documentation from "./components/Documentation";
 import MainMenu from "./components/MainMenu";
 import SpectateMatch from "./components/SpectateMatch";
 import VsAdversary from "./components/VsAdversary";
@@ -31,6 +32,16 @@ function App() {
                         path="/"
                         element={
                             <MainMenu
+                                transitioningElementRef={
+                                    transitioningElementRef
+                                }
+                            />
+                        }
+                    />
+                    <Route
+                        path="/docs"
+                        element={
+                            <Documentation
                                 transitioningElementRef={
                                     transitioningElementRef
                                 }

@@ -1,4 +1,4 @@
-import { v00_Random } from "../../dist/adversaries/v00_Random";
+import { v00_Random } from "../../src/adversaries/v00_Random";
 
 const AdversariesMap = { v00_Random };
 

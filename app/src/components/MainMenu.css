@@ -10,12 +10,19 @@
 .main-menu h1 {
     display: flex;
     align-items: center;
+
+    font-size: 2.25rem;
+}
+
+.main-menu h1 img {
+    width: 3.25rem;
+    height: 3.25rem;
 }
 
 .main-menu h2 {
-    font-size: 1rem;
+    font-size: 1.25rem;
 
-    color: #999999;
+    color: #777777;
 }
 
 .main-menu h3 {
@@ -24,11 +31,11 @@
 
 .main-menu p,
 .main-menu .not-black {
-    color: #999999;
+    color: #888888;
 }
 
 a.src-link {
-    color: #999999;
+    color: #888888;
 }
 
 a.src-link:hover {
