@@ -1,5 +1,5 @@
 import { writeFileSync } from "fs";
-import { Adversary, Board, GameState, Piece } from "../dist/index.js";
+import { Adversary, Board, GameState, Piece } from "../src/index.js";
 
 const engineNamePlayingAsWhite = process.argv[2];
 const engineNamePlayingAsBlack = process.argv[3];
