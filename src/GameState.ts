@@ -8,7 +8,7 @@ export class GameState {
     static readonly Stalemate            = 0b10000;
     static readonly ThreeFoldRepetition  = 0b10100;
     static readonly FiftyMoveRule        = 0b11000;
-    static readonly InsufficientMaterial = 0b10100;
+    static readonly InsufficientMaterial = 0b11100;
 
     static isWinLose(state: number) {
         return ((state >> 1) & 1) !== 0;
