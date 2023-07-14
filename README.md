@@ -2,8 +2,6 @@
 
 chess
 
-todo: convert everything to use bigints and use (magic) bitboards
- 
 ### resources used
 
 - https://www.chessprogramming.org
@@ -29,3 +27,13 @@ todo: convert everything to use bigints and use (magic) bitboards
 - https://joeyrobert.org/2016/01/06/optimizing-move-generation/
 
 - https://chess.stackexchange.com/questions/29407/chess-engine-faster-move-generation
+
+- https://en.wikipedia.org/wiki/Portable_Game_Notation
+
+- https://www.chess.com/terms/chess-pgn
+
+- https://www.chess.com/terms/fen-chess
+
+- https://github.com/lichess-org/lila
+
+- https://en.wikipedia.org/wiki/Algebraic_notation_(chess)
