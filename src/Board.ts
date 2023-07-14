@@ -71,7 +71,7 @@ export class Board {
         };
     }
 
-    #getPieceList(pieceType: number, colorIndex: 0 | 1) {
+    getPieceList(pieceType: number, colorIndex: 0 | 1) {
         return this.#allPieceLists[colorIndex * 8 + pieceType];
     }
 
@@ -101,14 +101,14 @@ export class Board {
         
         if (pieceOnTarget !== Piece.None && !isEnPassant) {
             this.#zobristKey ^= Zobrist.piecesArray[pieceOnTargetType][opponentColorIndex][movedTo];
-            this.#getPieceList(pieceOnTargetType, opponentColorIndex).removePiece(movedTo);
+            this.getPieceList(pieceOnTargetType, opponentColorIndex).removePiece(movedTo);
         }
 
         if (pieceOnStartType === Piece.King) {
             this.kingSquare[friendlyColorIndex] = movedTo;
             newCastlingRights &= this.#colorToMove === Piece.White ? Board.whiteCastleMask : Board.blackCastleMask;
         } else {
-            this.#getPieceList(pieceOnStartType, friendlyColorIndex).movePiece(movedFrom, movedTo);
+            this.getPieceList(pieceOnStartType, friendlyColorIndex).movePiece(movedFrom, movedTo);
         }
 
         let pieceEndingOnTargetSquare = pieceOnStart;
@@ -269,13 +269,13 @@ export class Board {
         // handle en passant captures later
         if (capturedPieceType !== Piece.None && !isEnPassant) {
             this.#zobristKey ^= Zobrist.piecesArray[capturedPieceType][opponentColorIndex][movedTo];
-            this.#getPieceList(capturedPieceType, opponentColorIndex).addPiece(movedTo);
+            this.getPieceList(capturedPieceType, opponentColorIndex).addPiece(movedTo);
         }
 
         if (movedPieceType === Piece.King) {
             this.kingSquare[friendlyColorIndex] = movedFrom;
         } else if (!isPromotion) {
-            this.#getPieceList(movedPieceType, friendlyColorIndex).movePiece(movedTo, movedFrom);
+            this.getPieceList(movedPieceType, friendlyColorIndex).movePiece(movedTo, movedFrom);
         }
 
         this.#squares[movedFrom] = this.#colorToMove | movedPieceType;
@@ -406,6 +406,10 @@ export class Board {
 
     get currentGameState() {
         return this.#currentGameState;
+    }
+
+    get zobristKey() {
+        return this.#zobristKey;
     }
 
     loadStartingPosition() {

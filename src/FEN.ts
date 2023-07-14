@@ -3,7 +3,7 @@ import { Board, BoardRepresentation, Piece } from "./index.js";
 export class FEN {
     static readonly startingPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
-    static readonly #symbolToType: Record<string, number> = {
+    static readonly symbolToType: Record<string, number> = {
         k: Piece.King,
         p: Piece.Pawn,
         n: Piece.Knight,
@@ -12,7 +12,7 @@ export class FEN {
         q: Piece.Queen,
     };
 
-    static readonly #typeToSymbol = [
+    static readonly typeToSymbol = [
         "?",
         "k", // Piece.King = 1
         "p", // Piece.Pawn = 2
@@ -37,7 +37,7 @@ export class FEN {
                 cell += Number(char);
             } else {
                 const pieceColor = char.toUpperCase() === char ? Piece.White : Piece.Black; 
-                const pieceType = this.#symbolToType[char.toLowerCase()];
+                const pieceType = this.symbolToType[char.toLowerCase()];
 
                 const rank = 7 - (cell >> 3);
                 const file = cell & 0b111;
@@ -91,7 +91,7 @@ export class FEN {
                     const type = Piece.getType(cell);
                     const casing = Piece.getColor(cell) === Piece.White ? "toUpperCase" : "toLowerCase";
 
-                    fen += this.#typeToSymbol[type][casing]();
+                    fen += this.typeToSymbol[type][casing]();
                 }
             }
 

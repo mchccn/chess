@@ -1,4 +1,4 @@
-import { Board, BoardRepresentation, Piece } from "./index.js";
+import { Board, BoardRepresentation, FEN, MoveGenerator, Piece } from "./index.js";
 
 export class Move {
     static readonly Flag = {
@@ -84,7 +84,7 @@ export class Move {
     // board is needed for context (for castling/en passant/double pawn push)
     /** format: `[a-8][1-8][a-h][1-8](q|b|n|r)?` */
     static parseMove(move: string, board: Board) {
-        if (!this.#moveRegex.test(move)) return this.invalidMove();
+        if (!this.#moveRegex.test(move)) throw new SyntaxError("invalid move");
 
         const { start, target, promotion } = move.match(this.#moveRegex)!.groups!;
 
@@ -127,8 +127,87 @@ export class Move {
         return new Move(startIndex, targetIndex, moveFlag);
     }
 
+    static #notationRegex = /^(?<pieceType>K|N|B|R|Q)?(?<departure>[a-h]?[1-8]?)?(?<isCapture>x)?(?<destination>[a-h][1-8])(?<promotionType>=(?:Q|B|N|R))?(?<isCheck>\+)?(?<isCheckmate>#)?$/;
+    // this definitely needs cleanup lol i wrote it at 1:00 am
+    // board is definitely needed for context
+    /** tries to parse a move in chess algebraic notation */
     static parseAlgebraicNotation(move: string, board: Board) {
+        // scorings aren't moves
+        if (
+            ["1-0"    , "0-1" ,
+             "1/2-1/2", "0-0" ,
+             "1/2-0"  , "0-1/2"
+            ].includes(move)
+        ) throw new SyntaxError("scorings are not valid moves");
+
+        // check for queenside castle first since O-O-O starts with O-O and that messes things up
         
+        // queenside castle (using includes because O-O-O+ or O-O-O# are possible)
+        if (move.startsWith("O-O-O")) {
+            const from = board.colorToMove === Piece.White ? 4 : 60;
+            const to   = board.colorToMove === Piece.White ? 2 : 58;
+
+            return new Move(from, to, Move.Flag.Castling);
+        }
+
+        // kingside castle (using includes because O-O+ or O-O# are possible)
+        if (move.startsWith("O-O")) {
+            const from = board.colorToMove === Piece.White ? 4 : 60;
+            const to   = board.colorToMove === Piece.White ? 6 : 62;
+
+            return new Move(from, to, Move.Flag.Castling);
+        }
+
+        if (!this.#notationRegex.test(move)) throw new SyntaxError("invalid move");
+
+        const { pieceType, departure, destination, promotionType } = move.match(this.#notationRegex)!.groups!;
+
+        const type = pieceType ? FEN.symbolToType[pieceType.toLowerCase()] : Piece.Pawn;
+
+        const friendlyColorIndex = board.colorToMove === Piece.White ? Board.whiteIndex : Board.blackIndex;
+
+        const legalMoves = new MoveGenerator(board).generateMoves();
+
+        const pieceList = type === Piece.King ? { squares: [board.kingSquare[friendlyColorIndex]] } : board.getPieceList(type, friendlyColorIndex);
+
+        const promotion = promotionType ? {
+            "=Q": Move.Flag.PromoteToQueen,
+            "=R": Move.Flag.PromoteToRook,
+            "=B": Move.Flag.PromoteToBishop,
+            "=N": Move.Flag.PromoteToKnight,
+        }[promotionType] : undefined;
+
+        const departureFile = departure && BoardRepresentation.fileNames.includes(departure[0]) ? BoardRepresentation.fileNames.indexOf(departure) : undefined;
+        const departureRank = departure
+            ? BoardRepresentation.rankNames.includes(departure[0])
+                ? BoardRepresentation.rankNames.indexOf(departure[0])
+                : BoardRepresentation.rankNames.includes(departure[1])
+                    ? BoardRepresentation.rankNames.indexOf(departure[1])
+                    : undefined
+            : undefined;
+
+        const destinationFile = BoardRepresentation.fileNames.indexOf(destination[0]);
+        const destinationRank = BoardRepresentation.rankNames.indexOf(destination[1]);
+
+        const destinationIndex = destinationRank * 8 + destinationFile;
+
+        const legal = legalMoves.find((move) => {
+            if (move.targetSquare !== destinationIndex) return false;
+
+            if (typeof promotion !== "undefined" && move.moveFlag !== promotion) return false;
+
+            if (!pieceList.squares.includes(move.startSquare)) return false;
+
+            if (typeof departureFile !== "undefined" && BoardRepresentation.fileIndex(move.startSquare) !== departureFile) return false;
+
+            if (typeof departureRank !== "undefined" && BoardRepresentation.rankIndex(move.startSquare) !== departureRank) return false;
+
+            return true;
+        });
+
+        if (!legal) throw new ReferenceError("impossible move for given board");
+
+        return legal;
     }
 
     static equals(a: Move, b: Move) {
