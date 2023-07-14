@@ -1,8 +1,7 @@
+import ZobristBookValues from "./ZobristBookValues.js";
 import { Bitboard, Board, Piece } from "./index.js";
 
 export class Zobrist {
-    static filename = "zobrist.txt";
-
     // piece type, piece color, square index (8, 2, 64)
     static readonly piecesArray: [bigint[], bigint[]][] = [];
     // 16 possible states of castling rights
@@ -25,6 +24,10 @@ export class Zobrist {
         for (let i = 0; i < 16; i++) this.castlingRights.push(Bitboard.randomU64());
 
         for (let i = 0; i < 9; i++) this.enPassantFile.push(Bitboard.randomU64());
+    }
+
+    static openingBookKey(board: Board) {
+        return this.calculateZobristKey.bind(ZobristBookValues)(board);
     }
 
     static calculateZobristKey(board: Board) {
