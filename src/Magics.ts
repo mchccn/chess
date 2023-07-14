@@ -187,10 +187,6 @@ export class Magics {
     static getRookMoves(square: number, blockers: bigint) {
         if (!this.#initialized) throw new Error("magics data hasn't been initialized yet");
 
-        // blockers were generated in reverse... oops
-        // if this line is removed, the magics must be re-generated
-        blockers = Bitboard.reverse(blockers);
-
         blockers &= this.rookAttackBitboards[square];
 
         const index = Bitboard.overflowMultU64(blockers, this.rookMagics[square]) >> this.rookShifts[square];
@@ -200,10 +196,6 @@ export class Magics {
 
     static getBishopMoves(square: number, blockers: bigint) {
         if (!this.#initialized) throw new Error("magics data hasn't been initialized yet");
-
-        // blockers were generated in reverse... oops
-        // if this line is removed, the magics must be re-generated
-        blockers = Bitboard.reverse(blockers);
 
         blockers &= this.bishopAttackBitboards[square];
 
