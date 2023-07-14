@@ -7,7 +7,8 @@
         "test:parse_move": "ts-node-esm tests/parse_move.ts",
         "perft": "ts-node-esm tests/perft.ts",
         "perft:divide": "ts-node-esm tests/perft_divide.ts",
-        "perft:bench": "ts-node-esm tests/perft_bench.ts"
+        "perft:bench": "ts-node-esm tests/perft_bench.ts",
+        "versus": "ts-node-esm tests/versus.ts"
     },
     "keywords": [
         "chess"

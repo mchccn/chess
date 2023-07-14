@@ -1,7 +1,13 @@
 app/
 
+docs/
+
 src/
+
+tests/
 
 wiki.xml
 
 rules.pdf
+
+book.txt

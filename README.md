@@ -1,6 +1,8 @@
 # chess
 
 chess
+
+todo: convert everything to use bigints and use (magic) bitboards
  
 ### resources used
 
