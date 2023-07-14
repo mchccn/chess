@@ -17,8 +17,14 @@ export class Move {
 
     readonly #bits: number;
 
-    constructor(start: number, target: number, flag = 0) {
-        this.#bits = start | target << 6 | flag << 12;
+    constructor(value: number);
+    constructor(start: number, target: number, flag?: number);
+    constructor(start: number, target?: number, flag = 0) {
+        if (typeof target !== "undefined") {
+            this.#bits = start | target << 6 | flag << 12;
+        } else {
+            this.#bits = start;
+        }
     }
 
     get startSquare() {
@@ -76,6 +82,7 @@ export class Move {
     static #moveRegex = /^(?<start>[a-h][1-8])(?<target>[a-h][1-8])(?<promotion>q|r|b|n)?$/
 
     // board is needed for context (for castling/en passant/double pawn push)
+    /** format: `[a-8][1-8][a-h][1-8](q|b|n|r)?` */
     static parseMove(move: string, board: Board) {
         if (!this.#moveRegex.test(move)) return this.invalidMove();
 
@@ -118,6 +125,10 @@ export class Move {
         }
 
         return new Move(startIndex, targetIndex, moveFlag);
+    }
+
+    static parseAlgebraicNotation(move: string, board: Board) {
+        
     }
 
     static equals(a: Move, b: Move) {

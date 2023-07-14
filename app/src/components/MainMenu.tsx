@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Piece } from "../../../dist/index";
+import { Piece } from "../../../src/index";
 import AdversariesMap from "../AdversariesMap";
 import { TransitioningElementProps } from "../App";
 import "./MainMenu.css";

@@ -1,4 +1,4 @@
-import { Piece } from "../../dist/index.js";
+import { Piece } from "../../src/index.js";
 
 const IconMap = {
     [Piece.None                ]: "none.svg"        ,

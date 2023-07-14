@@ -1,5 +1,5 @@
 import { MouseEvent, useContext } from "react";
-import { BoardRepresentation, Move, Piece } from "../../../dist/index";
+import { BoardRepresentation, Move, Piece } from "../../../src/index";
 import { BoardContext } from "../BoardContext";
 import IconMap from "../IconMap";
 import "./Board.css";

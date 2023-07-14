@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom/client";
 import { HashRouter } from "react-router-dom";
-import { Board } from "../../dist/index";
+import { Board } from "../../src/index";
 import App from "./App.tsx";
 import { BoardContext } from "./BoardContext.ts";
 import "./index.css";

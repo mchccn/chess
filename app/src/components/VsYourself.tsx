@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { GameState, Move, MoveGenerator, Piece } from "../../../dist/index";
+import { GameState, Move, MoveGenerator, Piece } from "../../../src/index";
 import { TransitioningElementProps } from "../App";
 import { BoardContext } from "../BoardContext";
 import BoardWrapper from "./BoardWrapper";
