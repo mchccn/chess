@@ -4,10 +4,10 @@ import { Adversary, Board, GameState, Piece } from "../src/index.js";
 const alreadyPlayed = readFileSync("tests/versus.txt", "utf8").split("\n").map((match) => match.split(":")[0]);
 
 const engines = await Promise.all(
-    readdirSync("src/adversaries", "utf8")
-        .filter((name) => name !== "Adversary.ts")
-        .map((name) => import(`../src/adversaries/${name}`)
-            .then((mod) => mod[name.slice(0, -".ts".length)])
+    readdirSync("src/adversaries", { encoding: "utf8", withFileTypes: true })
+        .filter((dirent) => !dirent.isDirectory() || dirent.name !== "Adversary.ts")
+        .map((dirent) => import(`../src/adversaries/${dirent.name}`)
+            .then((mod) => mod[dirent.name.slice(0, -".ts".length)])
         )
 );
 
