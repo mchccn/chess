@@ -1,1 +1,1 @@
-v00_Random vs v00_Random: 84 wins | 824 draws | 92 losses
+v00_Random vs v00_Random: 92 wins | 843 draws | 65 losses
