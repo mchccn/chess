@@ -22,6 +22,26 @@ export default function VsYourself(props: VsYourselfProps) {
     return (
         <BoardWrapper
             transitioningElementRef={props.transitioningElementRef}
+            left={
+                <>
+                    <p>{board.plyCount} ply</p>
+                    <p>
+                        {(board.currentGameState & 0b0001 ? "K" : "") +
+                            (board.currentGameState & 0b0010 ? "Q" : "") +
+                            (board.currentGameState & 0b0100 ? "k" : "") +
+                            (board.currentGameState & 0b1000 ? "q" : "") ||
+                            "no"}{" "}
+                        castling rights
+                    </p>
+                    <p>
+                        {board.colorToMove === Piece.White ? "white" : "black"}{" "}
+                        to move
+                    </p>
+                </>
+            }
+            right={`${
+                GameState.isDraw(board.gameState()) ? "draw by " : ""
+            }${GameState.getName(board.gameState())}`}
             boardProps={{
                 playingAs,
                 legalMoves,
@@ -113,7 +133,7 @@ export default function VsYourself(props: VsYourselfProps) {
                             audio = new Audio("sounds/game-end.mp3");
 
                         setLegalMoves(new MoveGenerator(board).generateMoves());
-                        
+
                         await audio.play();
                     } else if (
                         !Piece.isColor(board.squares[index], board.colorToMove)
