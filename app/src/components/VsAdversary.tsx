@@ -17,7 +17,7 @@ export default function VsAdversary(props: VsAdversaryProps) {
         params.adversary && params.adversary in AdversariesMap
             ? new AdversariesMap[
                   params.adversary as keyof typeof AdversariesMap
-              ]()
+              ](board)
             : null,
     );
 
@@ -36,14 +36,14 @@ export default function VsAdversary(props: VsAdversaryProps) {
 
         if (playingAs === Piece.Black) {
             if (board.gameState() === GameState.Playing && board.colorToMove === Piece.White) {
-                playMove(adversary.current!.bestMove(board));
+                setTimeout(() => playMove(adversary.current!.bestMove()));
             }
         }
     }, []);
 
     if (invalidParams) return null;
 
-    function playMove(move: Move) {
+    async function playMove(move: Move) {
         if (board.gameState() !== GameState.Playing) return;
 
         setSelected(-1);
@@ -107,9 +107,10 @@ export default function VsAdversary(props: VsAdversaryProps) {
         if (gameState !== GameState.Playing)
             audio = new Audio("sounds/game-end.mp3");
 
-        audio.play();
-
+            
         setLegalMoves(new MoveGenerator(board).generateMoves());
+
+        await audio.play();
     }
 
     return (
@@ -119,7 +120,7 @@ export default function VsAdversary(props: VsAdversaryProps) {
                 playingAs,
                 legalMoves,
                 selected,
-                squareOnClick(index) {
+                async squareOnClick(index) {
                     if (gameState !== GameState.Playing) return;
 
                     if (selected === index) return setSelected(-1);
@@ -131,10 +132,10 @@ export default function VsAdversary(props: VsAdversaryProps) {
                     );
 
                     if (move) {
-                        playMove(move);
+                        await playMove(move);
 
                         if (board.gameState() === GameState.Playing)
-                            playMove(adversary.current!.bestMove(board));
+                            playMove(adversary.current!.bestMove());
                     } else if (
                         !Piece.isColor(board.squares[index], board.colorToMove)
                     ) {

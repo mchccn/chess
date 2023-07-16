@@ -16,14 +16,14 @@ export default function SpectateMatch(props: SpectateMatchProps) {
         params.playerOne && params.playerOne in AdversariesMap
             ? new AdversariesMap[
                   params.playerOne as keyof typeof AdversariesMap
-              ]()
+              ](board)
             : null,
     );
     const playerTwo = useRef(
         params.playerTwo && params.playerTwo in AdversariesMap
             ? new AdversariesMap[
                   params.playerTwo as keyof typeof AdversariesMap
-              ]()
+              ](board)
             : null,
     );
 
@@ -39,7 +39,7 @@ export default function SpectateMatch(props: SpectateMatchProps) {
         if (invalidParams) navigate("/", { replace: true });
     }, []);
 
-    function playMove(move: Move) {
+    async function playMove(move: Move) {
         if (board.gameState() !== GameState.Playing) return;
 
         let audio: HTMLAudioElement;
@@ -78,19 +78,19 @@ export default function SpectateMatch(props: SpectateMatchProps) {
         if (gameState !== GameState.Playing)
             audio = new Audio("sounds/game-end.mp3");
 
-        audio.play();
+        await audio.play();
     }
 
     useEffect(() => {
         if (board.gameState() !== GameState.Playing) return;
 
-        const timeout = setTimeout(() => {
+        const timeout = setTimeout(async () => {
             board.colorToMove === Piece.White
-                ? playMove(playerOne.current!.bestMove(board))
-                : playMove(playerTwo.current!.bestMove(board));
+                ? await playMove(playerOne.current!.bestMove())
+                : await playMove(playerTwo.current!.bestMove());
 
             setSelected((s) => s - 1);
-        }, 10);
+        }, 100);
 
         return () => clearTimeout(timeout);
     });

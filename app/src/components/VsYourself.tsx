@@ -26,7 +26,7 @@ export default function VsYourself(props: VsYourselfProps) {
                 playingAs,
                 legalMoves,
                 selected,
-                squareOnClick(index) {
+                async squareOnClick(index) {
                     if (gameState !== GameState.Playing) return;
 
                     if (selected === index) return setSelected(-1);
@@ -112,9 +112,9 @@ export default function VsYourself(props: VsYourselfProps) {
                         if (gameState !== GameState.Playing)
                             audio = new Audio("sounds/game-end.mp3");
 
-                        audio.play();
-
                         setLegalMoves(new MoveGenerator(board).generateMoves());
+                        
+                        await audio.play();
                     } else if (
                         !Piece.isColor(board.squares[index], board.colorToMove)
                     ) {
