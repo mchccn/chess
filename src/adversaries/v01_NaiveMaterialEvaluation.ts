@@ -1,4 +1,5 @@
 import { Adversary, Bitboard, Board, GameState, Move, MoveGenerator, Piece } from "../index.js";
+import { AdversaryBestMoveConfig } from "./Adversary.js";
 
 const PawnValue = 100;
 const KnightValue = 300;
@@ -16,27 +17,57 @@ const NegativeInf = -PositiveInf;
 /** evaluates positions solely based on material, uses alpha-beta pruning and mvv-lva */
 export class v01_NaiveMaterialEvaluation extends Adversary {
     #bestMove = Move.invalidMove();
+    #bestEval = NegativeInf;
+    #bestMoveThisIteration = Move.invalidMove();
+    #bestEvalThisIteration = NegativeInf;
     #generator: MoveGenerator;
+    #signal: AbortSignal | undefined;
+    #repetitionHistory: bigint[];
 
     constructor (readonly board: Board) {
         super(board);
 
         this.#generator = new MoveGenerator(this.board);
+        this.#repetitionHistory = [...board.repetitionHistory];
     }
 
-    bestMove(): Move {
-        this.#bestMove = Move.invalidMove();
+    bestMove({ signal, maxDepth }: AdversaryBestMoveConfig = {}): Move {
+        this.#repetitionHistory = [...this.board.repetitionHistory];
 
-        this.#search(4, 0, NegativeInf, PositiveInf);
+        const depth = maxDepth ?? 4;
+
+        this.#signal = signal;
+        
+        for (let d = 1; d <= depth; d++) {
+            this.#bestMoveThisIteration = Move.invalidMove();
+            this.#bestEvalThisIteration = NegativeInf;
+            
+            this.#search(d, 0, NegativeInf, PositiveInf);
+
+            this.#bestMove = this.#bestMoveThisIteration;
+            this.#bestEval = this.#bestEvalThisIteration;
+
+            if (this.#isMateScore(this.#bestEval)) break;
+
+            if (this.#signal?.aborted) break;
+        }
 
         return this.#bestMove;
     }
 
+    getDiagnostics(): Record<string, unknown> {
+        return {};
+    }
+
     #search(depth: number, plyFromRoot: number, alpha: number, beta: number): number {
+        if (this.#signal?.aborted) return 0;
+
         this.#generator = new MoveGenerator(this.board);
 
         if (plyFromRoot > 0) {
             if (this.board.repetitionHistory.includes(this.board.zobristKey)) return 0;
+
+            if (this.board.fiftyMoveCounter >= 100) return 0;
 
             alpha = Math.max(alpha, -immediateMateScore + plyFromRoot);
             beta = Math.min(beta, immediateMateScore - plyFromRoot);
@@ -46,9 +77,11 @@ export class v01_NaiveMaterialEvaluation extends Adversary {
 
         if (depth <= 0) return this.#evaluate(this.board);
 
+        const moveToSearchFirst = plyFromRoot === 0 ? this.#bestMove : Move.invalidMove(); // use tt later
+
         const moves = this.#generator.generateMoves()
             .map((move) => [move, this.#orderScore(move)] as const)
-            .sort(([, a], [, b]) => a - b)
+            .sort(([am, a], [bm, b]) => Move.equals(am, moveToSearchFirst) ? PositiveInf : Move.equals(bm, moveToSearchFirst) ? NegativeInf : a - b)
             .map(([move]) => move);
 
         const gameState = this.board.gameState();
@@ -67,17 +100,22 @@ export class v01_NaiveMaterialEvaluation extends Adversary {
 
         for (const move of moves) {
             this.board.makeMove(move, true);
+            this.#repetitionHistory.push(this.board.zobristKey);
 
             const evaluation = -this.#search(depth - 1, plyFromRoot + 1, -beta, -alpha);
+
+            if (this.#signal?.aborted) return 0;
 
             if (evaluation > bestEvaluation) {
                 bestEvaluation = evaluation;
 
                 if (plyFromRoot === 0) {
-                    this.#bestMove = move;
+                    this.#bestMoveThisIteration = move;
+                    this.#bestEvalThisIteration = evaluation;
                 }
             }
 
+            this.#repetitionHistory.pop();
             this.board.unmakeMove(move, true);
         }
 
@@ -107,6 +145,12 @@ export class v01_NaiveMaterialEvaluation extends Adversary {
         }
 
         return score;
+    }
+
+    #isMateScore(score: number) {
+        const maxDepth = 1000;
+
+        return Math.abs(score) > immediateMateScore - maxDepth;
     }
 
     #evaluate(board: Board) {

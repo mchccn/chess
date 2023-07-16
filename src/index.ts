@@ -18,5 +18,4 @@ export { Magics, type ComputeMagicsOptions } from "./Magics.js";
 export { Move } from "./Move.js";
 export { MoveGenerator, type MoveGeneratorOptions } from "./MoveGenerator.js";
 export { Zobrist } from "./Zobrist.js";
-export { Adversary } from "./adversaries/Adversary.js";
-
+export { Adversary, type AdversaryBestMoveConfig } from "./adversaries/Adversary.js";

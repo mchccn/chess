@@ -13,4 +13,8 @@ export class v00_Random extends Adversary {
 
         return move;
     }
+
+    getDiagnostics(): Record<string, unknown> {
+        return {};
+    }
 }
