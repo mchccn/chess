@@ -16,7 +16,6 @@ const NegativeInf = -PositiveInf;
 /** evaluates positions solely based on material, uses alpha-beta pruning and mvv-lva */
 export class v01_NaiveMaterialEvaluation extends Adversary {
     #bestMove = Move.invalidMove();
-    #bestEvaluation = NegativeInf;
     #generator: MoveGenerator;
 
     constructor (readonly board: Board) {
@@ -27,31 +26,30 @@ export class v01_NaiveMaterialEvaluation extends Adversary {
 
     bestMove(): Move {
         this.#bestMove = Move.invalidMove();
-        this.#bestEvaluation = NegativeInf;
 
-        this.#search(4, 0);
+        this.#search(4, 0, NegativeInf, PositiveInf);
 
         return this.#bestMove;
     }
 
-    #search(depth: number, plyFromRoot: number): number {
+    #search(depth: number, plyFromRoot: number, alpha: number, beta: number): number {
         this.#generator = new MoveGenerator(this.board);
 
-        // if (plyFromRoot > 0) {
-        //     if (this.board.repetitionHistory.includes(this.board.zobristKey)) return 0;
+        if (plyFromRoot > 0) {
+            if (this.board.repetitionHistory.includes(this.board.zobristKey)) return 0;
 
-            // alpha = Math.max(alpha, -immediateMateScore + plyFromRoot);
-            // beta = Math.min(beta, immediateMateScore - plyFromRoot);
+            alpha = Math.max(alpha, -immediateMateScore + plyFromRoot);
+            beta = Math.min(beta, immediateMateScore - plyFromRoot);
 
-            // if (alpha >= beta) return alpha;
-        // }
+            if (alpha >= beta) return alpha;
+        }
 
         if (depth <= 0) return this.#evaluate(this.board);
 
         const moves = this.#generator.generateMoves()
-            // .map((move) => [move, this.#orderScore(move)] as const)
-            // .sort(([, a], [, b]) => a - b)
-            // .map(([move]) => move);
+            .map((move) => [move, this.#orderScore(move)] as const)
+            .sort(([, a], [, b]) => a - b)
+            .map(([move]) => move);
 
         const gameState = this.board.gameState();
 
@@ -65,18 +63,17 @@ export class v01_NaiveMaterialEvaluation extends Adversary {
             }
         }
 
-        let bestEvaluationThisIteration = NegativeInf;
+        let bestEvaluation = NegativeInf;
 
         for (const move of moves) {
             this.board.makeMove(move, true);
 
-            const evaluation = -this.#search(depth - 1, plyFromRoot + 1);
+            const evaluation = -this.#search(depth - 1, plyFromRoot + 1, -beta, -alpha);
 
-            if (evaluation > bestEvaluationThisIteration) {
-                bestEvaluationThisIteration = evaluation;
+            if (evaluation > bestEvaluation) {
+                bestEvaluation = evaluation;
 
                 if (plyFromRoot === 0) {
-                    this.#bestEvaluation = evaluation;
                     this.#bestMove = move;
                 }
             }
@@ -84,7 +81,7 @@ export class v01_NaiveMaterialEvaluation extends Adversary {
             this.board.unmakeMove(move, true);
         }
 
-        return this.#bestEvaluation;
+        return bestEvaluation;
     }
 
     #orderScore(move: Move) {
