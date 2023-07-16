@@ -1,5 +1,7 @@
 import { Board, Move } from "../index.js";
 
 export abstract class Adversary {
-    abstract bestMove(board: Board): Move;
+    constructor(readonly board: Board) {}
+
+    abstract bestMove(): Move;
 }

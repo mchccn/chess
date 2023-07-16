@@ -75,7 +75,7 @@ export class Board {
         return this.#allPieceLists[colorIndex * 8 + pieceType];
     }
 
-    makeMove(move: Move) {
+    makeMove(move: Move, inSearch = false) {
         const oldEnPassantFile   = (this.#currentGameState >> 4) & 0b1111;
         const oldCastlingRights  = (this.#currentGameState >> 0) & 0b1111;
         let   newCastlingRights  = oldCastlingRights;
@@ -201,13 +201,13 @@ export class Board {
 
         // update en passant file
         if (newEnPassantFile !== oldEnPassantFile) {
-            this.#zobristKey ^= Zobrist.enPassantFile[oldEnPassantFile   ];
+            this.#zobristKey ^= Zobrist.enPassantFile[oldEnPassantFile];
             this.#zobristKey ^= Zobrist.enPassantFile[newEnPassantFile];
         }
 
         // update castling rights
         if (newCastlingRights !== oldCastlingRights) {
-            this.#zobristKey ^= Zobrist.castlingRights[oldCastlingRights   ];
+            this.#zobristKey ^= Zobrist.castlingRights[oldCastlingRights];
             this.#zobristKey ^= Zobrist.castlingRights[newCastlingRights];
         }
 
@@ -226,16 +226,18 @@ export class Board {
         this.#plyCount++;
         this.#fiftyMoveCounter++;
         
-        // reset fifty move counter if a pawn was moved or if a capture was made
-        if (pieceOnStartType === Piece.Pawn || pieceOnTargetType !== Piece.None || isEnPassant) {
-            this.#repetitionHistory.length = 0;
-            this.#fiftyMoveCounter = 0;
-        } else {
-            this.#repetitionHistory.push(this.#zobristKey);
+        if (!inSearch) {
+            // reset fifty move counter if a pawn was moved or if a capture was made
+            if (pieceOnStartType === Piece.Pawn || pieceOnTargetType !== Piece.None) {
+                this.#repetitionHistory.length = 0;
+                this.#fiftyMoveCounter = 0;
+            } else {
+                this.#repetitionHistory.push(this.#zobristKey);
+            }
         }
     }
 
-    unmakeMove(move: Move) {
+    unmakeMove(move: Move, inSearch = false) {
         const unmakingWhiteMove  = this.#colorToMove === Piece.Black;
         const friendlyColorIndex = unmakingWhiteMove ? Board.whiteIndex : Board.blackIndex;
         const opponentColorIndex = (1 - friendlyColorIndex) as 0 | 1;
@@ -337,7 +339,7 @@ export class Board {
 
         // update en passant file
         if (newEnPassantFile !== oldEnPassantFile)  {
-            this.#zobristKey ^= Zobrist.enPassantFile[oldEnPassantFile   ];
+            this.#zobristKey ^= Zobrist.enPassantFile[oldEnPassantFile];
             this.#zobristKey ^= Zobrist.enPassantFile[newEnPassantFile];
         }
 
@@ -345,13 +347,13 @@ export class Board {
 
         // update castling rights
         if (newCastlingRights !== oldCastlingRights) {
-            this.#zobristKey ^= Zobrist.castlingRights[oldCastlingRights   ];
+            this.#zobristKey ^= Zobrist.castlingRights[oldCastlingRights];
             this.#zobristKey ^= Zobrist.castlingRights[newCastlingRights];
         }
 
         this.#plyCount--;
 
-        this.#repetitionHistory.pop();
+        if (!inSearch) this.#repetitionHistory.pop();
     }
 
     gameState() {
@@ -410,6 +412,10 @@ export class Board {
 
     get zobristKey() {
         return this.#zobristKey;
+    }
+    
+    get repetitionHistory() {
+        return this.#repetitionHistory;
     }
 
     loadStartingPosition() {

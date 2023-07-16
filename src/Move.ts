@@ -128,6 +128,7 @@ export class Move {
     }
 
     static #notationRegex = /^(?<pieceType>K|N|B|R|Q)?(?<departure>[a-h]?[1-8]?)?(?<isCapture>x)?(?<destination>[a-h][1-8])(?<promotionType>=(?:Q|B|N|R))?(?<isCheck>\+)?(?<isCheckmate>#)?$/;
+
     // this definitely needs cleanup lol i wrote it at 1:00 am
     // board is definitely needed for context
     /** tries to parse a move in chess algebraic notation */
@@ -142,7 +143,7 @@ export class Move {
 
         // check for queenside castle first since O-O-O starts with O-O and that messes things up
         
-        // queenside castle (using includes because O-O-O+ or O-O-O# are possible)
+        // queenside castle (using startsWith because O-O-O+ or O-O-O# are possible)
         if (move.startsWith("O-O-O")) {
             const from = board.colorToMove === Piece.White ? 4 : 60;
             const to   = board.colorToMove === Piece.White ? 2 : 58;
@@ -150,7 +151,7 @@ export class Move {
             return new Move(from, to, Move.Flag.Castling);
         }
 
-        // kingside castle (using includes because O-O+ or O-O# are possible)
+        // kingside castle (using startsWith because O-O+ or O-O# are possible)
         if (move.startsWith("O-O")) {
             const from = board.colorToMove === Piece.White ? 4 : 60;
             const to   = board.colorToMove === Piece.White ? 6 : 62;

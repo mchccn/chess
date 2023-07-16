@@ -32,6 +32,7 @@ export class MoveGenerator {
     get checkRayBitmask() { return this.#checkRayBitmask; }
     get pinRayBitmask() { return this.#pinRayBitmask; }
     get opponentAttackMap() { return this.#opponentAttackMap; }
+    get opponentPawnAttackMap() { return this.#opponentPawnAttackMap; }
 
     static get #defaultOptions() {
         return { excludeQuietMoves: false };

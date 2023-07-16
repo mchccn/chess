@@ -5,7 +5,7 @@ const alreadyPlayed = readFileSync("tests/versus.txt", "utf8").split("\n").map((
 
 const engines = await Promise.all(
     readdirSync("src/adversaries", { encoding: "utf8", withFileTypes: true })
-        .filter((dirent) => !dirent.isDirectory() || dirent.name !== "Adversary.ts")
+        .filter((dirent) => !dirent.isDirectory() && dirent.name !== "Adversary.ts")
         .map((dirent) => import(`../src/adversaries/${dirent.name}`)
             .then((mod) => mod[dirent.name.slice(0, -".ts".length)])
         )
@@ -16,22 +16,22 @@ const toAppend: string[] = [];
 for (const white of engines) {
     for (const black of engines) {
         if (alreadyPlayed.includes(`${white.name} vs ${black.name}`)) continue;
-
-        const playerWhite = new white() as Adversary;
-        const playerBlack = new black() as Adversary;
-
+        
         const gameResults: number[] = [];
-
+        
         for (let gameNumber = 0; gameNumber < 1000; gameNumber++) {
             console.log(`playing game: #${gameNumber + 1}`);
-
+            
             const board = new Board().loadStartingPosition();
+    
+            const playerWhite = new white(board) as Adversary;
+            const playerBlack = new black(board) as Adversary;
 
             while (board.gameState() === GameState.Playing) {
                 board.makeMove(
                     board.colorToMove === Piece.White
-                        ? playerWhite.bestMove(board)
-                        : playerBlack.bestMove(board)
+                        ? playerWhite.bestMove()
+                        : playerBlack.bestMove()
                 );
             }
 
