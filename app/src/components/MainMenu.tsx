@@ -36,7 +36,10 @@ export default function MainMenu({ transitioningElementRef }: MainMenuProps) {
             <h3>or play against an engine</h3>
             <p>
                 play vs{" "}
-                <select value={against} onChange={(e) => setAgainst(e.target.value)}>
+                <select
+                    value={against}
+                    onChange={(e) => setAgainst(e.target.value)}
+                >
                     {Object.keys(AdversariesMap).map((name) => (
                         <option key={name} value={name}>
                             {name.split("_")[1]}
@@ -54,22 +57,29 @@ export default function MainMenu({ transitioningElementRef }: MainMenuProps) {
             </p>
             <h3>spectate an engine match</h3>
             <div>
-                <select value={white} onChange={(e) => setWhite(e.target.value)}>
+                <select
+                    value={white}
+                    onChange={(e) => setWhite(e.target.value)}
+                >
                     {Object.keys(AdversariesMap).map((white) => (
                         <option key={white} value={white}>
                             {white.split("_")[1]}
                         </option>
                     ))}
                 </select>
-                vs
-                <select value={black} onChange={(e) => setBlack(e.target.value)}>
+                {" vs "}
+                <select
+                    value={black}
+                    onChange={(e) => setBlack(e.target.value)}
+                >
                     {Object.keys(AdversariesMap).map((black) => (
                         <option key={black} value={black}>
                             {black.split("_")[1]}
                         </option>
                     ))}
                 </select>
-                <Link to={`spectate/${white}/vs/${black}`}>go</Link>
+                {" "}
+                <Link className="go-btn" to={`spectate/${white}/vs/${black}`}>go</Link>
             </div>
         </div>
     );

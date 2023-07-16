@@ -11,6 +11,8 @@
     display: flex;
     align-items: center;
 
+    justify-content: center;
+
     font-size: 2.25rem;
 }
 
@@ -46,4 +48,26 @@ a {
     color: #222222;
 
     text-decoration: none;
+}
+
+.go-btn {
+    font-size: 0.75rem;
+
+    padding: 0.125rem 0.325rem;
+
+    border-radius: 2px;
+
+    border: 1px solid #222222;
+
+    transition: all 0.1s ease-in-out;
+}
+
+.go-btn:hover {
+    color: #fafafa;
+
+    background-color: #222222;
+}
+
+select {
+    font-family: "Poppins", sans-serif;
 }
