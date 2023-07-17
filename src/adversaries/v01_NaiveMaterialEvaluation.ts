@@ -31,10 +31,12 @@ export class v01_NaiveMaterialEvaluation extends Adversary {
         this.#repetitionHistory = [...board.repetitionHistory];
     }
 
-    bestMove({ signal, maxDepth }: AdversaryBestMoveConfig = {}): Move {
+    bestMove({ signal, maxDepth, debug }: AdversaryBestMoveConfig = {}): Move {
+        if (debug) console.time("bestMove");
+
         this.#repetitionHistory = [...this.board.repetitionHistory];
 
-        const depth = maxDepth ?? 4;
+        const depth = maxDepth ?? 4; // 5 is 11x slower
 
         this.#signal = signal;
         
@@ -51,6 +53,8 @@ export class v01_NaiveMaterialEvaluation extends Adversary {
 
             if (this.#signal?.aborted) break;
         }
+
+        if (debug) console.timeEnd("bestMove");
 
         return this.#bestMove;
     }

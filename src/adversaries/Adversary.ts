@@ -1,6 +1,6 @@
 import { Board, Move } from "../index.js";
 
-export type AdversaryBestMoveConfig = { signal?: AbortSignal, maxDepth?: number };
+export type AdversaryBestMoveConfig = { signal?: AbortSignal, maxDepth?: number, debug?: boolean };
 
 export abstract class Adversary {
     constructor(readonly board: Board) {}
