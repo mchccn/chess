@@ -9,3 +9,5 @@ dist/
 !webpack.config.js
 
 logs/
+
+games.pgn
