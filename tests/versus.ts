@@ -78,7 +78,7 @@ for (let aIndex = 0; aIndex < engines.length - 1; aIndex++) {
         let losses = 0;
 
         for (let matchNumber = 0; matchNumber < games / 2; matchNumber++) {
-            console.log(`playing game: #${matchNumber * 2}`);
+            console.log(`playing game: #${matchNumber * 2 + 1}`);
 
             const gameOne = playGame(matches[matchNumber], a, b);
 
@@ -90,7 +90,7 @@ for (let aIndex = 0; aIndex < engines.length - 1; aIndex++) {
                 ? losses++
                 : 0;
 
-            console.log(`playing game: #${matchNumber * 2 + 1}`);
+            console.log(`playing game: #${(matchNumber + 1) * 2}`);
 
             const gameTwo = playGame(matches[matchNumber], b, a);
 
