@@ -18,9 +18,13 @@ const engines = await Promise.all(
         ),
 );
 
+// even number, divide by 2 to get the number of positions to play
+const games = 1000;
+
 const matches = readFileSync("matches.txt", "utf8")
     .split("\n")
-    .map((line) => line.split(" ")[2]);
+    .map((line) => line.split(" ").slice(2).join(" "))
+    .slice(0, games / 2);
 
 const toAppend: string[] = [];
 
@@ -67,11 +71,13 @@ for (let aIndex = 0; aIndex < engines.length - 1; aIndex++) {
         )
             continue;
 
+        console.log(`--- ${a.name} vs ${b.name} ---`);
+
         let wins = 0;
         let draws = 0;
         let losses = 0;
 
-        for (let matchNumber = 0; matchNumber < 500; matchNumber++) {
+        for (let matchNumber = 0; matchNumber < games / 2; matchNumber++) {
             console.log(`playing game: #${matchNumber * 2}`);
 
             const gameOne = playGame(matches[matchNumber], a, b);
