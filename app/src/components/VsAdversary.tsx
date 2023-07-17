@@ -29,6 +29,8 @@ export default function VsAdversary(props: VsAdversaryProps) {
 
     const [adversaryTurn, setAdversaryTurn] = useState(false);
 
+    const [diagnostics, setDiagnostics] = useState<Record<string, unknown>>({});
+
     const playingAs = state?.playingAs ?? Piece.White;
     const invalidParams =
         !params.adversary || !(params.adversary in AdversariesMap);
@@ -38,7 +40,11 @@ export default function VsAdversary(props: VsAdversaryProps) {
 
         if (playingAs === Piece.Black) {
             if (board.gameState() === GameState.Playing && board.colorToMove === Piece.White) {
-                setTimeout(() => playMove(adversary.current!.bestMove()));
+                setTimeout(() => {
+                    playMove(adversary.current!.bestMove({ debug: true, useBook: true }))
+
+                    setDiagnostics(adversary.current!.getDiagnostics());
+                });
             }
         }
     }, []);
@@ -46,8 +52,10 @@ export default function VsAdversary(props: VsAdversaryProps) {
     useEffect(() => {
         if (adversaryTurn) {
             setTimeout(() => {
-                playMove(adversary.current!.bestMove({ debug: true }))
+                playMove(adversary.current!.bestMove({ debug: true, useBook: true }))
     
+                setDiagnostics(adversary.current!.getDiagnostics());
+
                 setAdversaryTurn(false);
             }, 50);
         }
@@ -143,6 +151,11 @@ export default function VsAdversary(props: VsAdversaryProps) {
                         {board.colorToMove === Piece.White ? "white" : "black"}{" "}
                         to move
                     </p>
+                    <br />
+                    <p>diagnostics:</p>
+                    <p>best move: {(diagnostics.bestMove instanceof Move ? diagnostics.bestMove.name : diagnostics.bestMove as string) || "n/a"}</p>
+                    <p>best eval: {diagnostics.bestEval as number ?? "n/a"}</p>
+                    <p>is book move: {(diagnostics.isBookEval as boolean ?? "n/a").toString()}</p>
                 </>
             }
             right={`${

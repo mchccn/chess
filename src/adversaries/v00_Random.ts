@@ -15,6 +15,10 @@ export class v00_Random extends Adversary {
     }
 
     getDiagnostics(): Record<string, unknown> {
-        return {};
+        return {
+            bestMove: "??",
+            bestEval: "??",
+            isBookEval: false,
+        };
     }
 }

@@ -11,7 +11,6 @@ export { PieceList } from "./PieceList.js";
 export { Board, type BoardOptions } from "./Board.js";
 export { MoveData } from "./MoveData.js";
 
-
 // yes dependencies
 export { FEN, type FENInfo } from "./FEN.js";
 export { Magics, type ComputeMagicsOptions } from "./Magics.js";

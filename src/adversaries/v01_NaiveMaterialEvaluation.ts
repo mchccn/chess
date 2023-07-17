@@ -1,4 +1,5 @@
-import { Adversary, Bitboard, Board, GameState, Move, MoveGenerator, Piece } from "../index.js";
+import OpeningBook from "../book/dynamic.js";
+import { Adversary, Bitboard, Board, GameState, Move, MoveGenerator, Piece, Zobrist } from "../index.js";
 import { AdversaryBestMoveConfig } from "./Adversary.js";
 
 const PawnValue = 100;
@@ -23,6 +24,7 @@ export class v01_NaiveMaterialEvaluation extends Adversary {
     #generator: MoveGenerator;
     #signal: AbortSignal | undefined;
     #repetitionHistory: bigint[];
+    #isBookEval = false;
 
     constructor (readonly board: Board) {
         super(board);
@@ -31,8 +33,25 @@ export class v01_NaiveMaterialEvaluation extends Adversary {
         this.#repetitionHistory = [...board.repetitionHistory];
     }
 
-    bestMove({ signal, maxDepth, debug }: AdversaryBestMoveConfig = {}): Move {
+    bestMove({ signal, maxDepth, debug, useBook }: AdversaryBestMoveConfig = {}): Move {
         if (debug) console.time("bestMove");
+
+        this.#isBookEval = false;
+
+        if (useBook) {
+            const moves = OpeningBook[Zobrist.openingBookKey(this.board).toString()]
+
+            if (moves) {
+                const bookMove = moves[Math.floor(Math.random() * moves.length)];
+
+                this.#bestMove = new Move(bookMove);
+                this.#bestEval = 0;
+
+                this.#isBookEval = true;
+
+                return this.#bestMove;
+            }
+        }
 
         this.#repetitionHistory = [...this.board.repetitionHistory];
 
@@ -60,7 +79,14 @@ export class v01_NaiveMaterialEvaluation extends Adversary {
     }
 
     getDiagnostics(): Record<string, unknown> {
-        return {};
+        if (Move.equals(this.#bestMove, Move.invalidMove()))
+            throw new Error("bestMove must be called before getDiagnostics");
+
+        return {
+            bestMove: this.#bestMove,
+            bestEval: this.#bestEval,
+            isBookEval: this.#isBookEval,
+        };
     }
 
     #search(depth: number, plyFromRoot: number, alpha: number, beta: number): number {
