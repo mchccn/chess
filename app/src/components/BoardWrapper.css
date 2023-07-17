@@ -14,7 +14,11 @@
 
     box-shadow: inset 0px 0px 20px 0px #e0e0e0;
 
-    padding: 0.5rem 1rem;
+    padding: 1rem;
 
     font-size: 0.8rem;
+
+    max-height: 512px;
+
+    overflow: scroll;
 }

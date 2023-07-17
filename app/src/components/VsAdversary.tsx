@@ -27,6 +27,8 @@ export default function VsAdversary(props: VsAdversaryProps) {
     const [gameState, setGameState] = useState(board.gameState());
     const [selected, setSelected] = useState(-1);
 
+    const [adversaryTurn, setAdversaryTurn] = useState(false);
+
     const playingAs = state?.playingAs ?? Piece.White;
     const invalidParams =
         !params.adversary || !(params.adversary in AdversariesMap);
@@ -40,6 +42,16 @@ export default function VsAdversary(props: VsAdversaryProps) {
             }
         }
     }, []);
+
+    useEffect(() => {
+        if (adversaryTurn) {
+            setTimeout(() => {
+                playMove(adversary.current!.bestMove({ debug: true }))
+    
+                setAdversaryTurn(false);
+            }, 50);
+        }
+    }, [adversaryTurn])
 
     if (invalidParams) return null;
 
@@ -140,6 +152,7 @@ export default function VsAdversary(props: VsAdversaryProps) {
                 playingAs,
                 legalMoves,
                 selected,
+                style: { cursor: adversaryTurn ? "wait" : "auto" },
                 async squareOnClick(index) {
                     if (gameState !== GameState.Playing) return;
 
@@ -155,7 +168,7 @@ export default function VsAdversary(props: VsAdversaryProps) {
                         await playMove(move);
 
                         if (board.gameState() === GameState.Playing)
-                            playMove(adversary.current!.bestMove());
+                            setAdversaryTurn(true);
                     } else if (
                         !Piece.isColor(board.squares[index], board.colorToMove)
                     ) {

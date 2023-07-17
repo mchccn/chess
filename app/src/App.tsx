@@ -4,6 +4,7 @@ import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { BoardContext } from "./BoardContext";
 import Documentation from "./components/Documentation";
 import MainMenu from "./components/MainMenu";
+import PlayBoard from "./components/PlayBoard";
 import SpectateMatch from "./components/SpectateMatch";
 import VsAdversary from "./components/VsAdversary";
 import VsYourself from "./components/VsYourself";
@@ -42,6 +43,16 @@ function App() {
                         path="/docs"
                         element={
                             <Documentation
+                                transitioningElementRef={
+                                    transitioningElementRef
+                                }
+                            />
+                        }
+                    />
+                    <Route
+                        path="/board"
+                        element={
+                            <PlayBoard
                                 transitioningElementRef={
                                     transitioningElementRef
                                 }

@@ -1,0 +1,58 @@
+.selection {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    place-items: center;
+
+    height: 100%;
+}
+
+.selection img {
+    width: 64px;
+    height: 64px;
+
+    border: 2px solid transparent;
+    border-radius: 4px;
+
+    user-select: none;
+}
+
+.selection .selected {
+    border: 2px solid #aaaaaa;
+}
+
+.board-menu {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 1rem;
+}
+
+.board-menu {
+    text-align: center;
+}
+
+.board-menu button {
+    display: block;
+
+    font-size: 0.75rem;
+
+    padding: 0.25rem 0.325rem;
+
+    border-radius: 2px;
+
+    border: 1px solid #222222;
+
+    transition: all 0.1s ease-in-out;
+
+    cursor: pointer;
+
+    background-color: transparent;
+}
+
+.board-menu button:hover {
+    color: #fafafa;
+
+    background-color: #222222;
+}

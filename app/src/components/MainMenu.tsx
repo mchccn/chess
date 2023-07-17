@@ -23,6 +23,7 @@ export default function MainMenu({ transitioningElementRef }: MainMenuProps) {
                 read the <Link to="docs">documentation</Link>
             </p>
             <h3>test it out below</h3>
+            <p>with a <Link to="board">playground</Link> board</p>
             <p>
                 play as{" "}
                 <Link to="vs/yourself" state={{ playingAs: Piece.White }}>

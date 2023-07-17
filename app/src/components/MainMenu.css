@@ -19,6 +19,8 @@
 .main-menu h1 img {
     width: 3.25rem;
     height: 3.25rem;
+
+    user-select: none;
 }
 
 .main-menu h2 {

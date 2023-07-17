@@ -1,4 +1,4 @@
-import { MouseEvent, useContext } from "react";
+import { CSSProperties, MouseEvent, useContext } from "react";
 import { BoardRepresentation, Move, Piece } from "../../../src/index";
 import { BoardContext } from "../BoardContext";
 import IconMap from "../IconMap";
@@ -39,6 +39,7 @@ export interface BoardProps {
     legalMoves: Move[];
     selected: number;
     squareOnClick?: (index: number, event: MouseEvent) => void;
+    style?: CSSProperties;
 }
 
 export default function BoardComponent(props: BoardProps) {
@@ -49,7 +50,7 @@ export default function BoardComponent(props: BoardProps) {
             <div
                 className={`board playing-as-${
                     props.playingAs === Piece.White ? "white" : "black"
-                }`}
+                }`} style={props.style}
             >
                 <div className="ranks">
                     {(props.playingAs === Piece.White
