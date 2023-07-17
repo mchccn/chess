@@ -1,1 +1,4 @@
-v00_Random vs v00_Random: 92 wins | 843 draws | 65 losses
+# this file records game results between engines
+# with this format:
+# white vs black: x wins | y draws | z losses
+# wins/draws/losses from white's perspective
