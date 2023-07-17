@@ -8,65 +8,98 @@ const alreadyPlayed = readFileSync("tests/versus.txt", "utf8")
 
 const engines = await Promise.all(
     readdirSync("src/adversaries", { encoding: "utf8", withFileTypes: true })
-        .filter((dirent) => !dirent.isDirectory() && dirent.name !== "Adversary.ts")
-        .map((dirent) => import(`../src/adversaries/${dirent.name}`)
-            .then((mod) => mod[dirent.name.slice(0, -".ts".length)])
+        .filter(
+            (dirent) => !dirent.isDirectory() && dirent.name !== "Adversary.ts",
         )
+        .map((dirent) =>
+            import(`../src/adversaries/${dirent.name}`).then(
+                (mod) => mod[dirent.name.slice(0, -".ts".length)],
+            ),
+        ),
 );
 
-const matches = readFileSync("matches.txt", "utf8").split("\n").map((line) => line.split(" ")[2]);
+const matches = readFileSync("matches.txt", "utf8")
+    .split("\n")
+    .map((line) => line.split(" ")[2]);
 
 const toAppend: string[] = [];
 
-function playGame(fen: string, playerWhite: Adversary, playerBlack: Adversary) {
+function playGame(
+    fen: string,
+    playerWhite: new (board: Board) => Adversary,
+    playerBlack: new (board: Board) => Adversary,
+) {
     const board = new Board().loadPosition(fen);
-    
-    while (board.gameState() === GameState.Playing) {
+
+    const white = new playerWhite(board);
+    const black = new playerBlack(board);
+
+    // sometimes engines get stuck in a never-ending game... so we stop at 300 ply and move on
+    while (board.gameState() === GameState.Playing && board.plyCount < 300) {
         board.makeMove(
             board.colorToMove === Piece.White
-                ? playerWhite.bestMove()
-                : playerBlack.bestMove()
+                ? white.bestMove()
+                : black.bestMove(),
         );
     }
 
     const state = board.gameState();
 
-    console.log(`${playerWhite.constructor.name} vs ${playerBlack.constructor.name} result: ${GameState.getName(state)}`);
+    const result = state === GameState.Playing ? GameState.Timeout : state;
 
-    return state;
+    console.log(
+        `${playerWhite.constructor.name} vs ${
+            playerBlack.constructor.name
+        } result: ${GameState.getName(result)}`,
+    );
+
+    return result;
 }
 
 for (let aIndex = 0; aIndex < engines.length - 1; aIndex++) {
-    for (let bIndex = aIndex + 1; bIndex < engines.length; bIndex ++) {
+    for (let bIndex = aIndex + 1; bIndex < engines.length; bIndex++) {
         const a = engines[aIndex];
         const b = engines[bIndex];
 
-        if (alreadyPlayed.includes(`${a.name} vs ${b.name}`) ||
-            alreadyPlayed.includes(`${b.name} vs ${a.name}`)) continue;
-        
+        if (
+            alreadyPlayed.includes(`${a.name} vs ${b.name}`) ||
+            alreadyPlayed.includes(`${b.name} vs ${a.name}`)
+        )
+            continue;
+
         let wins = 0;
         let draws = 0;
         let losses = 0;
 
         for (let matchNumber = 0; matchNumber < 500; matchNumber++) {
             console.log(`playing game: #${matchNumber * 2}`);
- 
-            const gameOne = playGame(matches[matchNumber], new a() as Adversary, new b() as Adversary);
 
-            GameState.isDraw(gameOne) ? draws++ :
-            gameOne === GameState.WhiteCheckmatedBlack ? wins++ :
-            gameOne === GameState.BlackCheckmatedWhite ? losses++ : 0;
+            const gameOne = playGame(matches[matchNumber], a, b);
+
+            GameState.isDraw(gameOne)
+                ? draws++
+                : gameOne === GameState.WhiteCheckmatedBlack
+                ? wins++
+                : gameOne === GameState.BlackCheckmatedWhite
+                ? losses++
+                : 0;
 
             console.log(`playing game: #${matchNumber * 2 + 1}`);
- 
-            const gameTwo = playGame(matches[matchNumber], new b() as Adversary, new a() as Adversary);
 
-            GameState.isDraw(gameTwo) ? draws++ :
-            gameTwo === GameState.WhiteCheckmatedBlack ? wins++ :
-            gameTwo === GameState.BlackCheckmatedWhite ? losses++ : 0;
+            const gameTwo = playGame(matches[matchNumber], b, a);
+
+            GameState.isDraw(gameTwo)
+                ? draws++
+                : gameTwo === GameState.WhiteCheckmatedBlack
+                ? wins++
+                : gameTwo === GameState.BlackCheckmatedWhite
+                ? losses++
+                : 0;
         }
 
-        toAppend.push(`${a.name} vs ${b.name}: ${wins} wins | ${draws} draws | ${losses} losses`);
+        toAppend.push(
+            `${a.name} vs ${b.name}: ${wins} wins | ${draws} draws | ${losses} losses`,
+        );
     }
 }
 

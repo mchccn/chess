@@ -10,6 +10,8 @@ export class GameState {
     static readonly FiftyMoveRule        = 0b11000;
     static readonly InsufficientMaterial = 0b11100;
 
+    static readonly Timeout              = 0b10001;
+
     static isWinLose(state: number) {
         return ((state >> 1) & 1) !== 0;
     }
