@@ -5,6 +5,8 @@
 *::after {
     box-sizing: content-box;
     margin: 0;
+
+    font-weight: 500;
 }
 
 html {
@@ -24,6 +26,7 @@ html {
     --board-debug-2: #982cf0;
     --board-debug-3: #e95aeb;
     --board-debug-4: #59ea61;
+
 }
 
 body {
@@ -34,7 +37,6 @@ body {
 
     font-family: "Poppins", sans-serif;
 }
-
 
 .fade-out-appear,
 .fade-out-enter {
