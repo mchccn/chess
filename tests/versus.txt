@@ -2,3 +2,4 @@
 # with this format:
 # white vs black: x wins | y draws | z losses
 # wins/draws/losses from white's perspective
+v00_Random vs v01_NaiveMaterialEvaluation: 0 wins | 8 draws | 992 losses

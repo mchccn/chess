@@ -52,8 +52,8 @@ function playGame(
     const result = state === GameState.Playing ? GameState.Timeout : state;
 
     console.log(
-        `${playerWhite.constructor.name} vs ${
-            playerBlack.constructor.name
+        `${playerWhite.name} vs ${
+            playerBlack.name
         } result: ${GameState.getName(result)}`,
     );
 
@@ -97,9 +97,9 @@ for (let aIndex = 0; aIndex < engines.length - 1; aIndex++) {
             GameState.isDraw(gameTwo)
                 ? draws++
                 : gameTwo === GameState.WhiteCheckmatedBlack
-                ? wins++
-                : gameTwo === GameState.BlackCheckmatedWhite
                 ? losses++
+                : gameTwo === GameState.BlackCheckmatedWhite
+                ? wins++
                 : 0;
         }
 
@@ -109,4 +109,4 @@ for (let aIndex = 0; aIndex < engines.length - 1; aIndex++) {
     }
 }
 
-appendFileSync("tests/versus.txt", toAppend.join("\n"), "utf8");
+appendFileSync("tests/versus.txt", "\n" + toAppend.join("\n"), "utf8");
