@@ -26,7 +26,7 @@ export class v01_NaiveMaterialEvaluation extends Adversary {
     #repetitionHistory: bigint[];
     #isBookEval = false;
 
-    constructor (readonly board: Board) {
+    constructor(readonly board: Board) {
         super(board);
 
         this.#generator = new MoveGenerator(this.board);
@@ -39,7 +39,7 @@ export class v01_NaiveMaterialEvaluation extends Adversary {
         this.#isBookEval = false;
 
         if (useBook) {
-            const moves = OpeningBook[Zobrist.openingBookKey(this.board).toString()]
+            const moves = OpeningBook[Zobrist.openingBookKey(this.board).toString()];
 
             if (moves) {
                 const bookMove = moves[Math.floor(Math.random() * moves.length)];
@@ -58,11 +58,11 @@ export class v01_NaiveMaterialEvaluation extends Adversary {
         const depth = maxDepth ?? 4; // 5 is 11x slower
 
         this.#signal = signal;
-        
+
         for (let d = 1; d <= depth; d++) {
             this.#bestMoveThisIteration = Move.invalidMove();
             this.#bestEvalThisIteration = NegativeInf;
-            
+
             this.#search(d, 0, NegativeInf, PositiveInf);
 
             this.#bestMove = this.#bestMoveThisIteration;
@@ -79,8 +79,7 @@ export class v01_NaiveMaterialEvaluation extends Adversary {
     }
 
     getDiagnostics(): Record<string, unknown> {
-        if (Move.equals(this.#bestMove, Move.invalidMove()))
-            throw new Error("bestMove must be called before getDiagnostics");
+        if (Move.equals(this.#bestMove, Move.invalidMove())) throw new Error("bestMove must be called before getDiagnostics");
 
         return {
             bestMove: this.#bestMove,
@@ -109,9 +108,10 @@ export class v01_NaiveMaterialEvaluation extends Adversary {
 
         const moveToSearchFirst = plyFromRoot === 0 ? this.#bestMove : Move.invalidMove(); // use tt later
 
-        const moves = this.#generator.generateMoves()
+        const moves = this.#generator
+            .generateMoves()
             .map((move) => [move, this.#orderScore(move)] as const)
-            .sort(([am, a], [bm, b]) => Move.equals(am, moveToSearchFirst) ? PositiveInf : Move.equals(bm, moveToSearchFirst) ? NegativeInf : a - b)
+            .sort(([am, a], [bm, b]) => (Move.equals(am, moveToSearchFirst) ? PositiveInf : Move.equals(bm, moveToSearchFirst) ? NegativeInf : a - b))
             .map(([move]) => move);
 
         const gameState = this.board.gameState();
@@ -134,6 +134,9 @@ export class v01_NaiveMaterialEvaluation extends Adversary {
 
             const evaluation = -this.#search(depth - 1, plyFromRoot + 1, -beta, -alpha);
 
+            this.#repetitionHistory.pop();
+            this.board.unmakeMove(move, true);
+
             if (this.#signal?.aborted) return 0;
 
             if (evaluation > bestEvaluation) {
@@ -144,9 +147,6 @@ export class v01_NaiveMaterialEvaluation extends Adversary {
                     this.#bestEvalThisIteration = evaluation;
                 }
             }
-
-            this.#repetitionHistory.pop();
-            this.board.unmakeMove(move, true);
         }
 
         return bestEvaluation;
@@ -206,16 +206,7 @@ export class v01_NaiveMaterialEvaluation extends Adversary {
         return material;
     }
 
-    readonly #pieceValueLookup = [
-        0,
-        0,
-        PawnValue,
-        KnightValue,
-        0,
-        BishopValue,
-        RookValue,
-        QueenValue,
-    ];
+    readonly #pieceValueLookup = [0, 0, PawnValue, KnightValue, 0, BishopValue, RookValue, QueenValue];
 
     #getPieceValue(piece: number) {
         return this.#pieceValueLookup[piece];
