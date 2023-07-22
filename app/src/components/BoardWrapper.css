@@ -21,4 +21,49 @@
     max-height: 512px;
 
     overflow: scroll;
+
+    box-sizing: border-box;
+}
+
+@media (max-width: 1200px) {
+    .board-wrapper {
+        gap: 1.5rem;
+    }
+
+    .board-wrapper .left,
+    .board-wrapper .right {
+        width: 180px;
+
+        font-size: 0.625rem;
+
+        max-height: 360px;
+
+        padding: 0.8rem;
+    }
+}
+
+@media (max-width: 900px) {
+    .board-wrapper {
+        flex-direction: column;
+    }
+
+    .board-wrapper .left,
+    .board-wrapper .right {
+        width: 360px;
+
+        height: 180px;
+    }
+}
+
+@media (max-width: 400px) {
+    .board-wrapper {
+        flex-direction: column;
+    }
+
+    .board-wrapper .left,
+    .board-wrapper .right {
+        width: 320px;
+
+        height: 160px;
+    }
 }
